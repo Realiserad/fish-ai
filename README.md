@@ -1,65 +1,38 @@
-<h1 align="center">⌨️ 🦾  codex.fish 🐟</h1>
+# About
 
-<p align="center">
-    AI in the command line.
-</p>
+`fish-ai` adds AI functionality to [Fish shell](https://fishshell.com).
 
-<p align="center">
-    <a href="https://github.com/tom-doerr/codex.fish/stargazers"
-        ><img
-            src="https://img.shields.io/github/stars/tom-doerr/codex.fish?colorA=2c2837&colorB=c9cbff&style=for-the-badge&logo=starship style=flat-square"
-            alt="Repository's starts"
-    /></a>
-    <a href="https://github.com/tom-doerr/codex.fish/issues"
-        ><img
-            src="https://img.shields.io/github/issues-raw/tom-doerr/codex.fish?colorA=2c2837&colorB=f2cdcd&style=for-the-badge&logo=starship style=flat-square"
-            alt="Issues"
-    /></a>
-    <a href="https://github.com/tom-doerr/codex.fish/blob/main/LICENSE"
-        ><img
-            src="https://img.shields.io/github/license/tom-doerr/codex.fish?colorA=2c2837&colorB=b5e8e0&style=for-the-badge&logo=starship style=flat-square"
-            alt="License"
-    /><br />
-    <a href="https://github.com/tom-doerr/codex.fish/commits/main"
-		><img
-			src="https://img.shields.io/github/last-commit/tom-doerr/codex.fish/main?colorA=2c2837&colorB=ddb6f2&style=for-the-badge&logo=starship style=flat-square"
-			alt="Latest commit"
-    /></a>
-    <a href="https://github.com/tom-doerr/codex.fish"
-        ><img
-            src="https://img.shields.io/github/repo-size/tom-doerr/codex.fish?colorA=2c2837&colorB=89DCEB&style=for-the-badge&logo=starship style=flat-square"
-            alt="GitHub repository size"
-    /></a>
-</p>
+This is a fork of [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish).
+It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
+and is powered by a self-hosted LLM. It has been tested against
+[Llama GPT](https://github.com/getumbrel/llama-gpt) but should work with other models as well.
 
-## What is it?
+## How to install
 
-This is a fish plugin that enables you to use OpenAI's powerful Codex AI in the command line. OpenAI Codex is the AI that also powers GitHub Copilot.
-To use this plugin you need to get access to OpenAI's [Codex API](https://openai.com/blog/openai-codex/).
+1. Create a configuration file called `.config/fish-ai.ini`. It should look something like this:
 
-
-## How do I install it?
-1. Install the OpenAI package.
+```ini
+[fish-ai]
+server = https://your-server/v1
+api_key = sk-XXXXXXXXXXXX
+model = code-llama-13b-chat.gguf
 ```
+
+2. Install the OpenAI package.
+
+```shell
 pip3 install openai
 ```
 
-2. Install the plugin itself.
-You can install it using [fisher](https://github.com/jorgebucaran/fisher):
-```
-fisher install tom-doerr/codex.fish
-```
+3. Install the plugin itself. You can install it using [fisher](https://github.com/jorgebucaran/fisher).
 
-3. Create a file called `openaiapirc` in `~/.config` with your ORGANIZATION_ID and SECRET_KEY.
-
-```
-[openai]
-organization_id = ...
-secret_key = ...
+```shell
+fisher install realiserad/fish-ai
 ```
 
-4. Run `fish`, start typing and complete it using `^X`!
+## How to use
 
----
+Type a comment, and press `^X` to turn it into shell command!
 
-[ZSH version](https://github.com/tom-doerr/zsh_codex)
+You can also run it in reverse. Type a command and press `^X` to turn it into a comment explaining what the
+command does.
