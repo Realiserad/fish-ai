@@ -2,10 +2,12 @@
 
 `fish-ai` adds AI functionality to [Fish shell](https://fishshell.com).
 
-This is a fork of [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish).
-It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
+Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish) which
+is now outdated, this repository uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
 and is powered by a self-hosted LLM. It has been tested against
 [Llama GPT](https://github.com/getumbrel/llama-gpt) but should work with other models as well.
+
+If you like it, please add a ⭐.
 
 ## How to install
 
