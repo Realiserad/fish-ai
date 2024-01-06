@@ -34,7 +34,7 @@ fisher install realiserad/fish-ai
 
 ## How to use
 
-Type a comment, and press `^X` to turn it into shell command!
+Type a comment, and press `^P` to turn it into shell command!
 
-You can also run it in reverse. Type a command and press `^X` to turn it into a comment explaining what the
+You can also run it in reverse. Type a command and press `^P` to turn it into a comment explaining what the
 command does.

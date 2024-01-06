@@ -1,1 +1,1 @@
-bind \cx _fish_ai
+bind \cp _fish_ai
