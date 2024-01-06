@@ -5,6 +5,7 @@ from os import path
 def get_config():
     config = ConfigParser()
     config.read(path.expanduser('~/.config/fish-ai.ini'))
+    return config
 
 def get_response(messages):
     config = get_config()
@@ -20,4 +21,4 @@ def get_response(messages):
         temperature = 0.2,
         n = 1,
     )
-    return completions.choices[0].message.content
+    return completions.choices[0].message.content.strip(' `')
