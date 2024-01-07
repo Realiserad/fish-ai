@@ -5,7 +5,7 @@
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish) which
 is now outdated, this repository uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
 and can be hooked up to a self-hosted LLM behind any OpenAI-compatible API. It has been optimised against
-[Llama GPT](https://github.com/getumbrel/llama-gpt) but should work with other capable LLMs as well.
+[LLaMA](https://github.com/getumbrel/llama-gpt) but should work with other capable LLMs as well.
 
 If you like it, please add a ⭐.
 
