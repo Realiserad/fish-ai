@@ -16,20 +16,22 @@ user_prompt = {
 
     Examples:
 
-    Command: df -h
-    Respond with: List all disks on the system.
+    [INST] df -h [/INST]
+    List all disks on the system.
 
-    Command: docker pull alpine:3
-    Respond with: Pull the Alpine 3 container from DockerHub.
+    [INST] docker pull alpine:3 [/INST]
+    Pull the Alpine 3 container from DockerHub.
 
-    Command: sed -i 's/foo/bar/g' docker-compose.yml
-    Respond with: Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml'.
+    [INST] sed -i 's/foo/bar/g' docker-compose.yml [/INST]
+    Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml'.
     '''.format(commandline)
 }
 
 try:
+    ai.get_logger().debug('Explaining commandline: ' + commandline)
     response = ai.get_response(messages = [ai.get_system_prompt(), user_prompt])
     print(response)
-except:
+except Exception as e:
+    ai.get_logger().exception(e)
     # Leave the commandline untouched
     print(commandline)

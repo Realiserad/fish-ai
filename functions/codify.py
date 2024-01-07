@@ -10,29 +10,31 @@ if commandline.startswith('# '):
 user_prompt = {
     'role': 'user',
     'content': '''
-    RESPOND WITH A COMMAND WHICH DOES THE FOLLOWING:
+    Respond with a shell command which does the following:
 
-    {}
+    [INST] {} [/INST]
 
-    Only respond with the command. Only respond with a single line. Do not explain.
-    The command must be compatible with Fish shell.
+    Only respond with a command. Only respond with a single line.
+    Do not use markdown formatting.
 
     Examples:
 
-    User input: List all disks on the system.
-    Respond with: df -h
+    [INST] List all disks on the system. [/INST]
+    df -h
 
-    User input: Pull the Alpine 3 container from DockerHub.
-    Respond with: docker pull alpine:3
+    [INST] Pull the Alpine 3 container from DockerHub. [/INST]
+    docker pull alpine:3
 
-    User input: Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml'
-    Respond with: sed -i 's/foo/bar/g' docker-compose.yml
+    [INST] Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml' [/INST]
+    sed -i 's/foo/bar/g' docker-compose.yml
     '''.format(commandline)
 }
 
 try:
+    ai.get_logger().debug('Codifying commandline: ' + commandline)
     response = ai.get_response(messages = [ai.get_system_prompt(), user_prompt])
     print(response)
-except:
+except Exception as e:
+    ai.get_logger().exception(e)
     # Leave the commandline untouched
     print(commandline)
