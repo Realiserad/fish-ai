@@ -19,10 +19,10 @@ user_prompt = {
 
     Examples:
 
-    [INST] List all disks on the system. [/INST]
+    [INST] List all disks on the system [/INST]
     df -h
 
-    [INST] Pull the Alpine 3 container from DockerHub. [/INST]
+    [INST] Pull the Alpine 3 container from DockerHub [/INST]
     docker pull alpine:3
 
     [INST] Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml' [/INST]

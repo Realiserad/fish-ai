@@ -17,13 +17,13 @@ user_prompt = {
     Examples:
 
     [INST] df -h [/INST]
-    List all disks on the system.
+    List all disks on the system
 
     [INST] docker pull alpine:3 [/INST]
-    Pull the Alpine 3 container from DockerHub.
+    Pull the Alpine 3 container from DockerHub
 
     [INST] sed -i 's/foo/bar/g' docker-compose.yml [/INST]
-    Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml'.
+    Substitute all occurrences of the string 'foo' with the string 'bar' in the file 'docker-compose.yml'
     '''.format(commandline)
 }
 
