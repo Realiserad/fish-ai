@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-function _fish_ai --description "Transforms the current commandline using AI."
+function _fish_ai_transform --description "Transforms the current commandline using AI."
     set input (commandline -b)
     if test -z "$input"
         # Not clear what should happen here, let's just return the last executed command
