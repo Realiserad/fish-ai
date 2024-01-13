@@ -4,7 +4,7 @@
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish) which
 is now outdated, this repository uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
-and can be hooked up to Azure OpenAI or a self-hosted LLM behind any OpenAI-compatible API.
+and can be hooked up to OpenAI, Azure OpenAI or a self-hosted LLM behind any OpenAI-compatible API.
 
 Continuous integration is performed against Azure OpenAI.
 
@@ -57,7 +57,7 @@ api_key = <your API key>
 python3 -m pip install -U openai
 ```
 
-3. Install the plugin itself. You can install it using [fisher](https://github.com/jorgebucaran/fisher).
+3. Install the plugin itself. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
 
 ```shell
 fisher install realiserad/fish-ai@stable
@@ -79,7 +79,7 @@ Begin typing your command and press **Ctrl + Space** to autocomplete at the curs
 ### Suggest fixes
 
 If a command fails, you can immediately press **Ctrl + Space** at the command prompt to let
-fish-ai suggest a fix.
+`fish-ai` suggest a fix!
 
 ## Development
 
