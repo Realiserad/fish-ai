@@ -8,9 +8,14 @@ RUN pip install --break-system-packages openai
 USER nemo
 WORKDIR /home/nemo
 
-COPY test/config.ini .config/fish-ai.ini
+COPY test/fish-ai.ini .config
 COPY . .
 
 SHELL ["/usr/bin/fish", "-c"]
+
 RUN fisher install .
-RUN fishtape test/tape.fish
+
+RUN fishtape test/tapes/codify.fish
+RUN fishtape test/tapes/explain.fish
+RUN fishtape test/tapes/autocomplete.fish
+RUN fishtape test/tapes/fix.fish

@@ -1,9 +1,7 @@
 #!/usr/bin/env fish
 
-function _fish_ai_autocomplete --description "Autocomplete a shell command using AI."
-    set input (commandline -b)
-    set cursor_position (commandline --cursor)
+function _fish_ai_autocomplete --description "Autocomplete the current command using AI." --argument-names "command" "cursor_position"
     set dir (dirname (status -f))
-    set output (echo -n "$input" | "$dir/autocomplete.py" $cursor_position)
-    commandline --insert "$output"
+    set output ("$dir/_fish_ai_autocomplete.py" "$command" "$cursor_position")
+    echo -n "$output"
 end

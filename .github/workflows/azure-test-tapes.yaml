@@ -1,0 +1,27 @@
+name: Azure test tapes
+on:
+  push:
+    branches:
+    - main
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Create configuration file
+        run: |
+            [fish-ai]
+            configuration = test
+
+            [test]
+            provider = azure
+            server = ${{ secrets.SERVER }}
+            azure_deployment = ${{ secrets.AZURE_DEPLOYMENT }}
+            api_key = ${{ secrets.API_KEY }}
+      - name: Build container
+        uses: docker/build-push-action@v5
+        with:
+            context: .
+            push: false
