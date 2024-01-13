@@ -12,6 +12,7 @@ jobs:
           fetch-depth: 0
       - name: Create configuration file
         run: |
+            cat >test/fish-ai.ini <<EOF
             [fish-ai]
             configuration = test
 
@@ -20,6 +21,7 @@ jobs:
             server = ${{ secrets.SERVER }}
             azure_deployment = ${{ secrets.AZURE_DEPLOYMENT }}
             api_key = ${{ secrets.API_KEY }}
+            EOF
       - name: Build container
         uses: docker/build-push-action@v5
         with:
