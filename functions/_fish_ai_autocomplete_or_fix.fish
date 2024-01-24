@@ -14,6 +14,6 @@ function _fish_ai_autocomplete_or_fix --description "Autocomplete the current co
         set input (commandline --current-buffer)
         set cursor_position (commandline --cursor)
         set output (_fish_ai_autocomplete "$input" "$cursor_position")
-        commandline --insert $output
+        commandline --insert "$output"
     end
 end
