@@ -14,7 +14,7 @@ If you like it, please add a ⭐.
 
 1. Create a configuration file called `.config/fish-ai.ini`.
 
-If you use [a self-hosted LLM](https://github.com/getumbrel/llama-gpt), e.g. `code-llama-13b-chat.gguf`:
+If you use [a self-hosted LLM](https://github.com/ollama/ollama), e.g. [`codellama`](https://ollama.com/library/codellama):
 
 ```ini
 [fish-ai]
@@ -22,8 +22,8 @@ configuraton = self-hosted
 
 [self-hosted]
 provider = self-hosted
-server = https://your-server/v1
-model = code-llama-13b-chat.gguf
+server = http://localhost:11434/v1
+model = codellama
 ```
 
 If you use [OpenAI](https://platform.openai.com/login):
