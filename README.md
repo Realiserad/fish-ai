@@ -10,7 +10,11 @@ Continuous integration is performed against Azure OpenAI.
 
 If you like it, please add a ⭐.
 
-## How to install
+## 🎥 Demo
+
+[![Demo of fish-ai](https://asciinema.org/a/646966.svg)](https://asciinema.org/a/646966)
+
+## 👨‍🔧 How to install
 
 1. Create a configuration file called `.config/fish-ai.ini`.
 
@@ -63,7 +67,7 @@ python3 -m pip install -U openai
 fisher install realiserad/fish-ai@stable
 ```
 
-## How to use
+## 🙉 How to use
 
 ### Transform comments into commands and vice versa
 
@@ -81,7 +85,7 @@ Begin typing your command and press **Ctrl + Space** to autocomplete at the curs
 If a command fails, you can immediately press **Ctrl + Space** at the command prompt to let
 `fish-ai` suggest a fix!
 
-## Development
+## 🔨 Development
 
 Clone the code and install directly from the repository using `fisher`.
 
