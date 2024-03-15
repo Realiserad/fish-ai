@@ -12,7 +12,7 @@ If you like it, please add a ⭐.
 
 ## 🎥 Demo
 
-[![Demo of fish-ai](https://asciinema.org/a/646966.svg)](https://asciinema.org/a/646966)
+![demo](https://github.com/Realiserad/fish-ai/assets/6617918/14584dc9-f47d-45ca-93a3-c650301b7d99)
 
 ## 👨‍🔧 How to install
 
