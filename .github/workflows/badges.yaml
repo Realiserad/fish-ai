@@ -13,7 +13,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22.1'
-          cache-dependency-path: '**/go.sum'
       - name: Estimate time spent
         run: |
           git clone https://github.com/luigitni/git-estimate.git /tmp/git-estimate
