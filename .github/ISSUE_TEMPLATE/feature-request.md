@@ -16,5 +16,5 @@ Try to explain your usecase, what you are trying to achieve and how `fish-ai` ca
 
 **📚 References**
 
-[1] <paste link here>
-[2] <paste another link here>
+[1] paste link here
+[2] paste another link here

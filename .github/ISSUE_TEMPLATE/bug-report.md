@@ -47,7 +47,7 @@ assignees: Realiserad
 
 Follow these steps to reproduce the bug.
 
-1. Open the terminal <name of terminal>.
+1. Open the terminal `put name of terminal`.
 
 2. Type the following:
 
@@ -55,9 +55,9 @@ Follow these steps to reproduce the bug.
 <paste command here>
 ```
 
-3. Press <keyboard combination>.
+3. Press `put keyboard combination`.
 
-4. <describe what happens>
+4. *Describe what happens*
 
 **🕊 Expected behavior**
 
@@ -66,6 +66,6 @@ A clear and concise description of what you expected to happen.
 **🖥 Log output (optional)**
 
 ```shell
-> journalctl -f | grep --line-buffered "python3"
+> journalctl -f | grep --line-buffered 'python3'
 <paste relevant log lines here>
 ```
