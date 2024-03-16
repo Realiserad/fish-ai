@@ -4,7 +4,7 @@ on:
     branches:
     - main
 jobs:
-  docker:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
             azure_deployment = ${{ secrets.AZURE_DEPLOYMENT }}
             api_key = ${{ secrets.API_KEY }}
             EOF
-      - name: Build container
+      - name: Run containerised tests
         uses: docker/build-push-action@v5
         with:
             context: .

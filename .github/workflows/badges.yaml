@@ -1,0 +1,37 @@
+name: Badges
+on:
+  push:
+    branches:
+    - main
+jobs:
+  git-estimate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.1'
+          cache-dependency-path: '**/go.sum'
+      - name: Estimate time spent
+        run: |
+          git clone https://github.com/luigitni/git-estimate.git /tmp/git-estimate
+          cd /tmp/git-estimate
+          go build git-estimate
+          go install
+          cd -
+          sudo apt install jq jo
+          HOURS=$(git-estimate -json | jq '.overall.hours | round')
+          jo -p \
+            "schemaVersion=1" \
+            "label=⏳ Time spent" \
+            "message=$HOURS hours" \
+            "color=blue" \
+            "style=for-the-badge" > fish-ai-badge-git-estimate.json
+      - name: Store result
+        uses: exuanbo/actions-deploy-gist@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          gist_id: e6c5166b6c0e77febe5cbd719c6c236a
+          file_path: fish-ai-badge-git-estimate.json
