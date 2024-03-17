@@ -1,4 +1,4 @@
-![Badge with time spent](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2FRealiserad%2Fe6c5166b6c0e77febe5cbd719c6c236a%2Fraw%2Ffish-ai-badge-git-estimate.json)
+![Badge with time spent](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2FRealiserad%2Fd3ec7fdeecc35aeeb315b4efba493326%2Fraw%2Ffish-ai-git-estimate.json)
 
 # About
 

@@ -28,10 +28,10 @@ jobs:
             "label=⏳ Time spent" \
             "message=$HOURS hours" \
             "color=blue" \
-            "style=for-the-badge" > fish-ai-badge-git-estimate.json
+            "style=for-the-badge" > fish-ai-git-estimate.json
       - name: Store result
         uses: realiserad/actions-deploy-gist@main
         with:
           token: ${{ secrets.TOKEN }}
-          gist_id: e6c5166b6c0e77febe5cbd719c6c236a
-          file_path: fish-ai-badge-git-estimate.json
+          gist_id: d3ec7fdeecc35aeeb315b4efba493326
+          file_path: fish-ai-git-estimate.json
