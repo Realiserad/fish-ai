@@ -30,7 +30,7 @@ jobs:
             "color=blue" \
             "style=for-the-badge" > fish-ai-badge-git-estimate.json
       - name: Store result
-        uses: exuanbo/actions-deploy-gist@v1
+        uses: realiserad/actions-deploy-gist@main
         with:
           token: ${{ secrets.TOKEN }}
           gist_id: e6c5166b6c0e77febe5cbd719c6c236a
