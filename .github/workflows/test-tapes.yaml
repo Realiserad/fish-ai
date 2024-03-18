@@ -1,10 +1,10 @@
-name: Azure test tapes
+name: Test tapes
 on:
   push:
     branches:
     - main
 jobs:
-  test:
+  azure-openai:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,18 +12,19 @@ jobs:
           fetch-depth: 0
       - name: Create configuration file
         run: |
-            cat >test/fish-ai.ini <<EOF
+            cat > tests/azure-openai/fish-ai.ini <<EOF
             [fish-ai]
             configuration = test
 
             [test]
             provider = azure
-            server = ${{ secrets.SERVER }}
+            server = ${{ secrets.AZURE_SERVER }}
             azure_deployment = ${{ secrets.AZURE_DEPLOYMENT }}
-            api_key = ${{ secrets.API_KEY }}
+            api_key = ${{ secrets.AZURE_API_KEY }}
             EOF
-      - name: Run containerised tests
+      - name: Run test tapes for Azure OpenAI
         uses: docker/build-push-action@v5
         with:
             context: .
+            file: tests/azure-openai/Dockerfile
             push: false

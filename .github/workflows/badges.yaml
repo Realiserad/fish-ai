@@ -33,5 +33,5 @@ jobs:
         uses: realiserad/actions-deploy-gist@main
         with:
           token: ${{ secrets.TOKEN }}
-          gist_id: d3ec7fdeecc35aeeb315b4efba493326
+          gist_id: ${{ vars.GIST_ID }}
           file_path: fish-ai-git-estimate.json

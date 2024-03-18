@@ -96,4 +96,15 @@ git clone git@github.com:Realiserad/fish-ai.git
 fisher install .
 ```
 
-Enable debugging to syslog by putting `debug = True` in your `fish-ai.ini`.
+### Enable debug logging
+
+Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
+
+### Run the tests
+
+The tests are packaged into a container and can be executed locally with e.g. `docker`.
+
+```shell
+cp ~/.config/fish-ai.ini tests/azure-openai
+docker build -f tests/azure-openai/Dockerfile .
+```
