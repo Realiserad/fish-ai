@@ -21,7 +21,7 @@ def get_system_prompt():
     return {
         'role': 'system',
         'content': '''
-        You are a programming assistant working inside a fish shell. You may consult
+        You are a shell scripting assistant working inside a fish shell. You may consult
         Stack Overflow and the official Fish shell documentation for answers.
         '''
     }
