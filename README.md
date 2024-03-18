@@ -102,7 +102,8 @@ Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
 
 ### Run the tests
 
-The tests are packaged into a container and can be executed locally with e.g. `docker`.
+[The tests](https://github.com/Realiserad/fish-ai/actions/workflows/test-tapes.yaml) are packaged
+into a container and can be executed locally with e.g. `docker`.
 
 ```shell
 cp ~/.config/fish-ai.ini tests/azure-openai
