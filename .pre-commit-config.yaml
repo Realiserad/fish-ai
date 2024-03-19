@@ -32,3 +32,6 @@ repos:
   rev: '7.0.0'
   hooks:
   - id: flake8
+ci:
+  autofix_commit_msg: 'style: modified by hook'
+  autoupdate_commit_msg: 'ci: pre-commit autoupdate'

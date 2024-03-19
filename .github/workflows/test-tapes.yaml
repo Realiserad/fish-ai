@@ -1,12 +1,13 @@
 name: Test tapes
 on:
+  pull_request:
   push:
     branches:
     - main
 jobs:
   azure-openai:
     runs-on: ubuntu-latest
-    if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') }}"
+    if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
     steps:
     - uses: actions/checkout@v4
       with:
