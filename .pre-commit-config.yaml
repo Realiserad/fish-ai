@@ -1,0 +1,35 @@
+exclude: ^(\.vscode/.+)$
+repos:
+- repo: https://github.com/hugoh/pre-commit-fish.git
+  rev: v1.2
+  hooks:
+  - id: fish_syntax
+  - id: fish_indent
+- repo: https://github.com/igorshubovych/markdownlint-cli
+  rev: v0.39.0
+  hooks:
+  - id: markdownlint
+    args: [--fix]
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.5.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-ast
+  - id: check-case-conflict
+  - id: check-docstring-first
+  - id: check-executables-have-shebangs
+  - id: check-shebang-scripts-are-executable
+  - id: check-symlinks
+  - id: debug-statements
+  - id: destroyed-symlinks
+  - id: double-quote-string-fixer
+  - id: end-of-file-fixer
+  - id: fix-encoding-pragma
+  - id: mixed-line-ending
+  - id: no-commit-to-branch
+    args: [--branch, stable]
+  - id: trailing-whitespace
+- repo: https://github.com/pycqa/flake8
+  rev: '7.0.0'
+  hooks:
+  - id: flake8
