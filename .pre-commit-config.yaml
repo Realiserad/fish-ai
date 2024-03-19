@@ -35,3 +35,7 @@ repos:
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'
+  skip:
+  - fish_indent
+  - fish_syntax
+  - no-commit-to-branch
