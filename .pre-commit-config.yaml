@@ -1,6 +1,6 @@
 exclude: ^(\.vscode/.+)$
 repos:
-- repo: https://github.com/hugoh/pre-commit-fish.git
+- repo: https://github.com/hugoh/pre-commit-fish
   rev: v1.2
   hooks:
   - id: fish_syntax
@@ -9,12 +9,11 @@ repos:
   rev: v0.39.0
   hooks:
   - id: markdownlint
-    args: [--fix]
+    args: [--fix, --disable=MD041]
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0
   hooks:
   - id: check-added-large-files
-  - id: check-ast
   - id: check-case-conflict
   - id: check-docstring-first
   - id: check-executables-have-shebangs

@@ -6,64 +6,73 @@ labels: type/bug
 assignees: Realiserad
 ---
 
-**📝 Environment**
+### 📝 Environment
 
-1. Operating system
+1.
+    Operating system
 
-```shell
-> cat /etc/os-release | grep PRETTY
-<paste output here>
-```
+    ```shell
+    > cat /etc/os-release | grep PRETTY
+    <paste output here>
+    ```
 
-2. Version of `fish`
+2.
+    Version of `fish`
 
-```shell
-> fish --version
-<paste output here>
-```
+    ```shell
+    > fish --version
+    <paste output here>
+    ```
 
-3. Version of `openai`
+3.
+    Version of `openai`
 
-```shell
-> openai --version
-<paste output here>
-```
+    ```shell
+    > openai --version
+    <paste output here>
+    ```
 
-4. Version of `python`
+4.
+    Version of `python`
 
-```shell
-> python3 --version
-<paste output here>
-```
+    ```shell
+    > python3 --version
+    <paste output here>
+    ```
 
-5. `fish-ai` configuration
+5.
+    `fish-ai` configuration
 
-```shell
-> sed '/api_key/d' ~/.config/fish-ai.ini
-<paste output here>
-```
+    ```shell
+    > sed '/api_key/d' ~/.config/fish-ai.ini
+    <paste output here>
+    ```
 
-**🙉 To reproduce**
+### 🙉 To reproduce
 
 Follow these steps to reproduce the bug.
 
-1. Open the terminal `put name of terminal`.
+1.
+    Open the terminal `put name of terminal`.
 
-2. Type the following:
+2.
+    Type the following:
 
-```shell
-<paste command here>
-```
+    ```shell
+    <paste command here>
+    ```
 
-3. Press `put keyboard combination`.
+3.
+    Press `put keyboard combination`.
 
-4. *Describe what happens*
+4.
+    *Describe what happens*
 
-**🕊 Expected behavior**
+### 🕊 Expected behavior
 
 A clear and concise description of what you expected to happen.
 
-**🖥 Log output (optional)**
+### 🖥 Log output (optional)
 
 ```shell
 > journalctl -f | grep --line-buffered 'python3'

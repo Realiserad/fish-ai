@@ -6,15 +6,16 @@ labels: type/feature
 assignees: Realiserad
 ---
 
-**💡 Summary**
+### 💡 Summary
 
 A clear and concise summary of what this feature request is about.
 
-**🗨 Details**
+### 🗨 Details
 
-Try to explain your usecase, what you are trying to achieve and how `fish-ai` can help.
+Try to explain your usecase, what you are trying to achieve and how
+`fish-ai` can help.
 
-**📚 References**
+### 📚 References
 
 [1] paste link here
 [2] paste another link here

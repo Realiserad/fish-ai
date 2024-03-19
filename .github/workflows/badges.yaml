@@ -7,31 +7,31 @@ jobs:
   git-estimate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.22.1'
-          cache: false
-      - name: Estimate time spent
-        run: |
-          git clone https://github.com/luigitni/git-estimate.git /tmp/git-estimate
-          cd /tmp/git-estimate
-          go build git-estimate
-          go install
-          cd -
-          sudo apt install jq jo
-          HOURS=$(git-estimate -json | jq '.overall.hours | round')
-          jo -p \
-            "schemaVersion=1" \
-            "label=⏳ Time spent" \
-            "message=$HOURS hours" \
-            "color=blue" \
-            "style=for-the-badge" > fish-ai-git-estimate.json
-      - name: Store result
-        uses: realiserad/actions-deploy-gist@main
-        with:
-          token: ${{ secrets.TOKEN }}
-          gist_id: ${{ vars.GIST_ID }}
-          file_path: fish-ai-git-estimate.json
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.22.1'
+        cache: false
+    - name: Estimate time spent
+      run: |
+        git clone https://github.com/luigitni/git-estimate.git /tmp/git-estimate
+        cd /tmp/git-estimate
+        go build git-estimate
+        go install
+        cd -
+        sudo apt install jq jo
+        HOURS=$(git-estimate -json | jq '.overall.hours | round')
+        jo -p \
+          "schemaVersion=1" \
+          "label=⏳ Time spent" \
+          "message=$HOURS hours" \
+          "color=blue" \
+          "style=for-the-badge" > fish-ai-git-estimate.json
+    - name: Store result
+      uses: realiserad/actions-deploy-gist@main
+      with:
+        token: ${{ secrets.TOKEN }}
+        gist_id: ${{ vars.GIST_ID }}
+        file_path: fish-ai-git-estimate.json
