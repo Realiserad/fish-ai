@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from sys import argv
+from os.path import isfile
+from re import match
 import _fish_ai_engine as engine
 
 
 def get_instructions(commandline):
-    return [
+    instructions = [
         {
             'role': 'system',
             'content': '''
@@ -42,9 +44,36 @@ def get_instructions(commandline):
         {
             'role': 'user',
             'content': commandline
-        }
-
+        },
     ]
+    (filename, file_contents) = get_file_info(commandline)
+    if filename:
+        instructions.append({
+            'role': 'user',
+            'content': '''
+            The content of the file {} is'
+
+            {}
+            '''.format(filename, '\n'.join(file_contents))
+        })
+    return instructions
+
+
+def get_file_info(commandline):
+    """
+    If the user is mentioning a file in the instructions, return the
+    filename and its file contents.
+    """
+    for word in commandline.split():
+        filename = word.strip('"\'')
+        if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
+            continue
+        if not isfile(filename):
+            continue
+        with open(filename, 'r') as file:
+            engine.get_logger().debug('Loading file: ' + filename)
+            return filename, file.readlines(3072)
+    return None, None
 
 
 def get_messages():
