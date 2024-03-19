@@ -105,6 +105,11 @@ git clone git@github.com:Realiserad/fish-ai.git
 fisher install .
 ```
 
+### Install the hooks
+
+This repository ships with [pre-commit hooks](https://pre-commit.com) which can
+prevent some faulty commits from being pushed.
+
 ### Enable debug logging
 
 Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
