@@ -27,7 +27,8 @@ def get_system_prompt():
         'content': '''
         You are a shell scripting assistant working inside a fish shell.
         You may consult Stack Overflow and the official Fish shell
-        documentation for answers.
+        documentation for answers. If you are unable to fulfill the request,
+        respond with a short message starting with "error: ".
         '''
     }
 
@@ -77,4 +78,6 @@ def get_response(messages):
     get_logger().debug('Response received from backend: ' + response)
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')
+    if response.startswith('error: '):
+        raise Exception(response)
     return response
