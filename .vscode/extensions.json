@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "lunaryorn.fish-ide",
+        "skyapps.fish-vscode",
+        "ms-python.flake8",
+        "ms-python.python",
+        "github.vscode-github-actions"
+    ]
+}
