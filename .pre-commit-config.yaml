@@ -32,6 +32,12 @@ repos:
   rev: '7.0.0'
   hooks:
   - id: flake8
+- repo: https://github.com/compilerla/conventional-pre-commit
+  rev: v3.1.0
+  hooks:
+  - id: conventional-pre-commit
+    stages: [commit-msg]
+    args: []
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'
