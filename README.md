@@ -96,15 +96,6 @@ position.
 If a command fails, you can immediately press **Ctrl + Space** at the command prompt
 to let `fish-ai` suggest a fix!
 
-## 🔨 Development
-
-Clone the code and install directly from the repository using `fisher`.
-
-```shell
-git clone git@github.com:Realiserad/fish-ai.git
-fisher install .
-```
-
 ## 🤸 Additional options
 
 You can tweak the behaviour of `fish-ai` by putting additional options in the
@@ -139,6 +130,15 @@ configuration = foo
 temperature = 0.5
 ```
 
+## 🔨 Development
+
+Clone the code and install directly from the repository using `fisher`.
+
+```shell
+git clone git@github.com:Realiserad/fish-ai.git
+fisher install .
+```
+
 ### Install the hooks
 
 This repository ships with [pre-commit hooks](https://pre-commit.com) which can
@@ -147,6 +147,14 @@ prevent some faulty commits from being pushed.
 ### Enable debug logging
 
 Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+debug = True
+```
 
 ### Run the tests
 
