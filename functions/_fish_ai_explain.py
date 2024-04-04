@@ -10,11 +10,12 @@ def get_instructions(commandline):
         {
             'role': 'system',
             'content': '''
-            Respond with a single sentence which explains the fish shell ' +
-                    'command given by the user.
+            Respond with a single sentence which explains the fish shell
+            command given by the user.
 
-            The sentence must begin with a verb.
-            '''
+            The sentence must begin with a verb. The sentence should be
+            written in {language}.
+            '''.format(language=engine.get_config('language') or 'English')
         },
         {
             'role': 'user',

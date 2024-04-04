@@ -105,6 +105,24 @@ git clone git@github.com:Realiserad/fish-ai.git
 fisher install .
 ```
 
+## 🤸 Additional options
+
+You can tweak the behaviour of `fish-ai` by putting additional options in the
+active section of your `fish-ai.ini` file.
+
+### Explain in a different language
+
+To explain shell commands in a different language, set the `language` option
+to the name of the language. For example:
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+language = Swedish
+```
+
 ### Install the hooks
 
 This repository ships with [pre-commit hooks](https://pre-commit.com) which can
