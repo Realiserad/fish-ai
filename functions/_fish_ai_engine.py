@@ -79,7 +79,7 @@ def get_response(messages):
         max_tokens=4096,
         messages=messages,
         stream=False,
-        temperature=0.2,
+        temperature=float(get_config('temperature') or '0.2'),
         n=1,
     )
     end_time = time_ns()

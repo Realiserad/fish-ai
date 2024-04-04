@@ -123,6 +123,22 @@ configuration = foo
 language = Swedish
 ```
 
+### Change temperature
+
+Temperature is a decimal number between 0 and 1 controlling the randomness of
+the output. Higher values make the LLM more creative, but may impact accuracy.
+The default value is `0.2`.
+
+Here is an example of how to increase the temperature to `0.5`.
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+temperature = 0.5
+```
+
 ### Install the hooks
 
 This repository ships with [pre-commit hooks](https://pre-commit.com) which can
