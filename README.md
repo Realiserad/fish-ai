@@ -4,8 +4,8 @@
 
 `fish-ai` adds AI functionality to [Fish shell](https://fishshell.com).
 
-Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish)
-which is now outdated, this repository uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
+Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish), but with some
+additional functionality. It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
 and can be hooked up to OpenAI, Azure OpenAI or a self-hosted LLM behind any
 OpenAI-compatible API.
 
