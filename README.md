@@ -15,7 +15,7 @@ If you like it, please add a ⭐.
 
 ## 🎥 Demo
 
-![demo](https://github.com/Realiserad/fish-ai/assets/6617918/14584dc9-f47d-45ca-93a3-c650301b7d99)
+![demo](https://github.com/Realiserad/fish-ai/assets/6617918/49d8a959-8f6c-48d8-b788-93c560617c28)
 
 ## 👨‍🔧 How to install
 
