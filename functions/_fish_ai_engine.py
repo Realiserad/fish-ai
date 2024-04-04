@@ -21,15 +21,24 @@ def get_logger():
     return logger
 
 
+def get_os():
+    with open('/etc/os-release') as f:
+        for line in f:
+            if line.startswith('PRETTY_NAME='):
+                return line.split('=')[1].strip('"')
+    return 'unknown'
+
+
 def get_system_prompt():
     return {
         'role': 'system',
         'content': '''
         You are a shell scripting assistant working inside a fish shell.
+        The operating system is {os}.
         You may consult Stack Overflow and the official Fish shell
         documentation for answers. If you are unable to fulfill the request,
         respond with a short message starting with "error: ".
-        '''
+        '''.format(os=get_os())
     }
 
 
