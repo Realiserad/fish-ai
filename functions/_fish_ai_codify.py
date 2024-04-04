@@ -65,7 +65,7 @@ def get_file_info(commandline):
     filename and its file contents.
     """
     for word in commandline.split():
-        filename = word.strip('"\'')
+        filename = word.rstrip(',.!').strip('"\'')
         if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
             continue
         if not isfile(filename):
