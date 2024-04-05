@@ -8,45 +8,10 @@ assignees: Realiserad
 
 ### 📝 Environment
 
-1.
-    Operating system
-
-    ```shell
-    > cat /etc/os-release | grep PRETTY
-    <paste output here>
-    ```
-
-2.
-    Version of `fish`
-
-    ```shell
-    > fish --version
-    <paste output here>
-    ```
-
-3.
-    Version of `openai`
-
-    ```shell
-    > openai --version
-    <paste output here>
-    ```
-
-4.
-    Version of `python`
-
-    ```shell
-    > python3 --version
-    <paste output here>
-    ```
-
-5.
-    `fish-ai` configuration
-
-    ```shell
-    > sed '/api_key/d' ~/.config/fish-ai.ini
-    <paste output here>
-    ```
+```shell
+> fish_ai_bug_report
+<paste output here>
+```
 
 ### 🙉 To reproduce
 
