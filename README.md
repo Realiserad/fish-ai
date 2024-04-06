@@ -6,8 +6,8 @@
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality. It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
-and can be hooked up to OpenAI, Azure OpenAI or a self-hosted LLM behind any
-OpenAI-compatible API.
+and can be hooked up to Google, OpenAI, Azure OpenAI or a self-hosted LLM
+behind any OpenAI-compatible API.
 
 Continuous integration is performed against Azure OpenAI.
 
@@ -57,6 +57,17 @@ configuration = azure
 provider = azure
 server = https://<your instance>.openai.azure.com
 model = <your deployment name>
+api_key = <your API key>
+```
+
+If you use [Gemini](https://deepmind.google/technologies/gemini):
+
+```ini
+[fish-ai]
+configuration = gemini
+
+[gemini]
+provider = google
 api_key = <your API key>
 ```
 

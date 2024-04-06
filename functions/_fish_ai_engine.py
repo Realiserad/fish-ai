@@ -2,6 +2,7 @@
 
 from openai import OpenAI
 from openai import AzureOpenAI
+import google.generativeai as genai
 from configparser import ConfigParser
 from os import path
 import logging
@@ -49,7 +50,7 @@ def get_config(key):
     return config.get(section=active_section, option=key)
 
 
-def get_client():
+def get_openai_client():
     if (get_config('provider') == 'azure'):
         return AzureOpenAI(
             azure_endpoint=get_config('server'),
@@ -72,18 +73,55 @@ def get_client():
                         .format(get_config('provider')))
 
 
+def create_message_history(messages):
+    """
+    Create message history which can be used with Gemini.
+    Google uses a different chat history format than OpenAI.
+    The message content should be put in a parts array and
+    system messages are not supported.
+    """
+    outputs = []
+    system_messages = []
+    for message in messages:
+        if message.get('role') == 'system':
+            system_messages.append(message.get('content'))
+    for i in range(len(messages) - 1):
+        message = messages[i]
+        if message.get('role') == 'user':
+            outputs.append({
+                'role': 'user',
+                'parts': system_messages + [message.get('content')] if i == 0
+                else [message.get('content')]
+            })
+        elif message.get('role') == 'assistant':
+            outputs.append({
+                'role': 'model',
+                'parts': [message.get('content')]
+            })
+    return outputs
+
+
 def get_response(messages):
     start_time = time_ns()
-    completions = get_client().chat.completions.create(
-        model=get_config('model'),
-        max_tokens=4096,
-        messages=messages,
-        stream=False,
-        temperature=float(get_config('temperature') or '0.2'),
-        n=1,
-    )
+
+    if get_config('provider') == 'google':
+        genai.configure(api_key=get_config('api_key'))
+        model = genai.GenerativeModel(get_config('model') or 'gemini-pro')
+        chat = model.start_chat(history=create_message_history(messages))
+        response = (chat.send_message(messages[-1].get('content'))
+                    .text.strip(' `'))
+    else:
+        completions = get_openai_client().chat.completions.create(
+            model=get_config('model'),
+            max_tokens=4096,
+            messages=messages,
+            stream=False,
+            temperature=float(get_config('temperature') or '0.2'),
+            n=1,
+        )
+        response = completions.choices[0].message.content.strip(' `')
+
     end_time = time_ns()
-    response = completions.choices[0].message.content.strip(' `')
     get_logger().debug('Response received from backend: ' + response)
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')

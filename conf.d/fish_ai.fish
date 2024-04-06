@@ -24,11 +24,11 @@ end
 ##
 function _fish_ai_install --on-event fish_ai_install
     python3 -m venv ~/.fish-ai
-    ~/.fish-ai/bin/pip install -qq openai
+    ~/.fish-ai/bin/pip install -qq openai google-generativeai
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    ~/.fish-ai/bin/pip install -qq --upgrade openai
+    ~/.fish-ai/bin/pip install -qq --upgrade openai google-generativeai
 end
 
 function __fish_ai_uninstall --on-event fish_ai_uninstall
