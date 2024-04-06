@@ -2,6 +2,7 @@
 
 from sys import argv
 from os.path import isfile
+from os import access, R_OK
 from re import match
 import _fish_ai_engine as engine
 
@@ -68,6 +69,8 @@ def get_file_info(commandline):
         if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
             continue
         if not isfile(filename):
+            continue
+        if not access(filename, R_OK):
             continue
         with open(filename, 'r') as file:
             engine.get_logger().debug('Loading file: ' + filename)
