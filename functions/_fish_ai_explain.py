@@ -57,7 +57,7 @@ commandline = argv[1]
 try:
     engine.get_logger().debug('Explaining commandline: ' + commandline)
     response = engine.get_response(messages=get_messages())
-    print(response)
+    print('# ' + response)
 except KeyboardInterrupt:
     pass
 except Exception as e:

@@ -13,11 +13,11 @@ function _fish_ai_codify_or_explain --description "Transform a command into a co
 
     if test (string sub --length 2 "$input") = "# "
         set output (_fish_ai_codify "$input")
-        commandline --replace "$output"
     else
         set output (_fish_ai_explain "$input")
-        commandline --replace "# $output"
     end
+
+    commandline --replace "$output"
 
     if test "$output" = "$input"
         set -g status_emoji '❌'
