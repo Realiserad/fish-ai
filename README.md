@@ -6,8 +6,8 @@
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality. It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
-and can be hooked up to Google, OpenAI, Azure OpenAI or a self-hosted LLM
-behind any OpenAI-compatible API.
+(or equivalent endpoint) and can be hooked up to Google, OpenAI, Azure OpenAI
+or a self-hosted LLM behind any OpenAI-compatible API.
 
 Continuous integration is performed against Azure OpenAI.
 
@@ -132,6 +132,20 @@ configuration = foo
 [foo]
 temperature = 0.5
 ```
+
+## 🐾 Data privacy
+
+When using the plugin, `fish-ai` submits the name of your OS and the
+commandline buffer to the LLM. When you codify a command, it also
+sends the contents of any files you mention (as long as the file is
+readable).
+
+Finally, to fix the previous command, the previous commandline buffer,
+along with any terminal output and the corresponding exit code is sent
+to the LLM.
+
+If you are concerned with data privacy, you should use a self-hosted
+LLM. When hosted locally, no data ever leaves your machine.
 
 ## 🔨 Development
 
