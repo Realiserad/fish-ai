@@ -111,7 +111,7 @@ def get_response(messages):
         chat = model.start_chat(history=create_message_history(messages))
         generation_config = GenerationConfig(
             candidate_count=1,
-            temperature=float(config.get('temperature') or '0.2'))
+            temperature=float(get_config('temperature') or '0.2'))
         response = (chat.send_message(generation_config=generation_config,
                                       content=messages[-1].get('content'),
                                       stream=False)
