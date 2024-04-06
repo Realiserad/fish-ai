@@ -60,17 +60,9 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
-### Install `openai`
-
-Install the `openai` Python package.
-
-```shell
-python3 -m pip install -U openai
-```
-
 ### Install `fish-ai`
 
-Install the plugin itself. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
+Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
 
 ```shell
 fisher install realiserad/fish-ai@stable

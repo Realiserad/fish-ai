@@ -3,7 +3,6 @@ FROM purefish/docker-fish
 USER 0
 
 RUN apk add python3 py3-pip
-RUN pip install --break-system-packages openai
 
 USER nemo
 
