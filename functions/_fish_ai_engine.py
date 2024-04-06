@@ -3,6 +3,7 @@
 from openai import OpenAI
 from openai import AzureOpenAI
 import google.generativeai as genai
+from google.generativeai.types import GenerationConfig
 from configparser import ConfigParser
 from os import path
 import logging
@@ -108,7 +109,12 @@ def get_response(messages):
         genai.configure(api_key=get_config('api_key'))
         model = genai.GenerativeModel(get_config('model') or 'gemini-pro')
         chat = model.start_chat(history=create_message_history(messages))
-        response = (chat.send_message(messages[-1].get('content'))
+        generation_config = GenerationConfig(
+            candidate_count=1,
+            temperature=float(config.get('temperature') or '0.2'))
+        response = (chat.send_message(generation_config=generation_config,
+                                      content=messages[-1].get('content'),
+                                      stream=False)
                     .text.strip(' `'))
     else:
         completions = get_openai_client().chat.completions.create(
