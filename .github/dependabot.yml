@@ -2,7 +2,7 @@
 version: 2
 updates:
 - package-ecosystem: "github-actions"
-  directory: "/" # Location of package manifests
+  directory: "/"
   schedule:
     interval: "weekly"
 - package-ecosystem: "pip"
@@ -10,6 +10,6 @@ updates:
   schedule:
     interval: "weekly"
 - package-ecosystem: "docker"
-  directory: "/"
+  directory: "/tests/azure-openai"
   schedule:
     interval: "weekly"
