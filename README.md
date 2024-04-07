@@ -162,11 +162,13 @@ fisher install .
 ### Install the hooks
 
 This repository ships with [pre-commit hooks](https://pre-commit.com) which can
-prevent some faulty commits from being pushed.
+prevent some faulty commits from being pushed. They also take care of bumping
+the version number in `pyproject.toml`.
 
 ```shell
+cargo install what-bump
 pip3 install pre-commit
-pre-commit install -t pre-commit -t commit-msg
+pre-commit install -t pre-commit -t commit-msg -t pre-push
 ```
 
 ### Enable debug logging
@@ -180,6 +182,8 @@ configuration = foo
 [foo]
 debug = True
 ```
+
+You can tail the log using `journalctl -f | grep --line-buffered python3`.
 
 ### Run the tests
 
