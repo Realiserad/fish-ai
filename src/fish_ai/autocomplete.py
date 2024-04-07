@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import _fish_ai_engine as engine
+from fish_ai import engine
 from sys import argv
 
 
@@ -44,16 +44,18 @@ def get_messages(commandline, cursor_position):
                                                            cursor_position)
 
 
-commandline = argv[1]
-cursor_position = int(argv[2])
+def autocomplete():
+    commandline = argv[1]
+    cursor_position = int(argv[2])
 
-try:
-    engine.get_logger().debug('Autocompleting commandline: {}'.format(
-        commandline[:cursor_position] + '█' + commandline[cursor_position:]))
-    response = engine.get_response(messages=get_messages(commandline,
-                                                         cursor_position))
-    print(response)
-except KeyboardInterrupt:
-    pass
-except Exception as e:
-    engine.get_logger().exception(e)
+    try:
+        engine.get_logger().debug('Autocompleting commandline: {}'.format(
+            commandline[:cursor_position] + '█' +
+            commandline[cursor_position:]))
+        response = engine.get_response(messages=get_messages(commandline,
+                                                             cursor_position))
+        print(response)
+    except KeyboardInterrupt:
+        pass
+    except Exception as e:
+        engine.get_logger().exception(e)

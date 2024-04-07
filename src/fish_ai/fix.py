@@ -2,7 +2,7 @@
 
 from sys import argv
 import subprocess
-import _fish_ai_engine as engine
+from fish_ai import engine
 
 
 def get_instructions(command, error_message):
@@ -84,14 +84,15 @@ def get_error_message(previous_command):
                           .split('\n')[-10:]])
 
 
-previous_command = argv[1]
-error_message = get_error_message(previous_command)
+def fix():
+    previous_command = argv[1]
+    error_message = get_error_message(previous_command)
 
-try:
-    engine.get_logger().debug('Fixing command: ' + previous_command)
-    engine.get_logger().debug('Command output: ' + error_message)
-    response = engine.get_response(
-        messages=get_messages(previous_command, error_message))
-    print(response)
-except Exception as e:
-    engine.get_logger().exception(e)
+    try:
+        engine.get_logger().debug('Fixing command: ' + previous_command)
+        engine.get_logger().debug('Command output: ' + error_message)
+        response = engine.get_response(
+            messages=get_messages(previous_command, error_message))
+        print(response)
+    except Exception as e:
+        engine.get_logger().exception(e)

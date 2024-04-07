@@ -23,14 +23,29 @@ end
 ## manager.
 ##
 function _fish_ai_install --on-event fish_ai_install
+    echo "🥡 Setting up a virtual environment..."
     python3 -m venv ~/.fish-ai
-    ~/.fish-ai/bin/pip install -qq openai google-generativeai
+    echo "🍬 Installing dependencies. This may take a few seconds..."
+    ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    ~/.fish-ai/bin/pip install -qq --upgrade openai google-generativeai
+    echo "🍬 Upgrading dependencies. This may take a few seconds..."
+    ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
 end
 
 function __fish_ai_uninstall --on-event fish_ai_uninstall
+    echo "💣 Nuking the virtual environment..."
     rm -r ~/.fish-ai
+end
+
+function get_installation_url
+    set plugin (fisher list "fish-ai")
+    if string sub -q --start 1 --length 1 "$plugin" = /
+        # Install from local folder
+        echo -n "$plugin"
+    else
+        # Install from git
+        echo -n "pip@git+https://github.com/$plugin"
+    end
 end

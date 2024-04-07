@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fish_ai"
+version = "0.1.0"
+authors = [
+    { name="Bastian Fredriksson", email="realiserad@gmail.com" },
+]
+description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "openai==1.16.2",
+  "google-generativeai==0.4.1"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/realiserad/fish-ai"
+"Bug Tracker" = "https://github.com/realiserad/fish-ai/issues"
+
+[project.scripts]
+fix = "fish_ai.fix:fix"
+codify = "fish_ai.codify:codify"
+explain = "fish_ai.explain:explain"
+autocomplete = "fish_ai.autocomplete:autocomplete"

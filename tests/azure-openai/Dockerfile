@@ -1,4 +1,4 @@
-FROM purefish/docker-fish
+FROM purefish/docker-fish:3.7.0
 
 USER 0
 
@@ -15,7 +15,4 @@ SHELL ["/usr/bin/fish", "-c"]
 
 RUN fisher install .
 
-RUN fishtape tests/azure-openai/tapes/codify.fish
-RUN fishtape tests/azure-openai/tapes/explain.fish
-RUN fishtape tests/azure-openai/tapes/autocomplete.fish
-RUN fishtape tests/azure-openai/tapes/fix.fish
+RUN fishtape tests/azure-openai/tape.fish

@@ -1,1 +1,4 @@
 fish-ai.ini
+
+*.egg-info/
+build/

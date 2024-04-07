@@ -155,6 +155,7 @@ Clone the code and install directly from the repository using `fisher`.
 
 ```shell
 git clone git@github.com:Realiserad/fish-ai.git
+cd fish-ai
 fisher install .
 ```
 

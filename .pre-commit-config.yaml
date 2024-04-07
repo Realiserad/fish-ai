@@ -14,11 +14,13 @@ repos:
   rev: v4.5.0
   hooks:
   - id: check-added-large-files
+    args: [--maxkb=50]
   - id: check-case-conflict
   - id: check-docstring-first
   - id: check-executables-have-shebangs
   - id: check-shebang-scripts-are-executable
   - id: check-symlinks
+  - id: check-toml
   - id: debug-statements
   - id: destroyed-symlinks
   - id: double-quote-string-fixer
@@ -37,7 +39,6 @@ repos:
   hooks:
   - id: conventional-pre-commit
     stages: [commit-msg]
-    args: []
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'

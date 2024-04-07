@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sys import argv
-import _fish_ai_engine as engine
+from fish_ai import engine
 
 
 def get_instructions(commandline):
@@ -48,19 +48,20 @@ def get_instructions(commandline):
     ]
 
 
-def get_messages():
+def get_messages(commandline):
     return [engine.get_system_prompt()] + get_instructions(commandline)
 
 
-commandline = argv[1]
+def explain():
+    commandline = argv[1]
 
-try:
-    engine.get_logger().debug('Explaining commandline: ' + commandline)
-    response = engine.get_response(messages=get_messages())
-    print('# ' + response)
-except KeyboardInterrupt:
-    pass
-except Exception as e:
-    engine.get_logger().exception(e)
-    # Leave the commandline untouched
-    print(commandline)
+    try:
+        engine.get_logger().debug('Explaining commandline: ' + commandline)
+        response = engine.get_response(messages=get_messages(commandline))
+        print('# ' + response)
+    except KeyboardInterrupt:
+        pass
+    except Exception as e:
+        engine.get_logger().exception(e)
+        # Leave the commandline untouched
+        print(commandline)
