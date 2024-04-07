@@ -5,8 +5,10 @@
 `fish-ai` adds AI functionality to [Fish shell](https://fishshell.com).
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
-but with some additional functionality. It uses the [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
-(or equivalent endpoint) and can be hooked up to Google, OpenAI, Azure OpenAI
+but with some additional functionality. It uses the [`generateContent`](https://ai.google.dev/api/rest/v1/models/generateContent)
+or
+[chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
+and can be hooked up to Google, OpenAI, Azure OpenAI
 or a self-hosted LLM behind any OpenAI-compatible API.
 
 Continuous integration is performed against Azure OpenAI.
@@ -60,7 +62,7 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
-If you use [Gemini](https://deepmind.google/technologies/gemini):
+If you use [Gemini](https://ai.google.dev):
 
 ```ini
 [fish-ai]
@@ -117,7 +119,7 @@ configuration = foo
 language = Swedish
 ```
 
-### Change temperature
+### Change the temperature
 
 Temperature is a decimal number between 0 and 1 controlling the randomness of
 the output. Higher values make the LLM more creative, but may impact accuracy.
