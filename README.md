@@ -183,7 +183,8 @@ configuration = foo
 debug = True
 ```
 
-You can tail the log using `journalctl -f | grep --line-buffered python3`.
+You can tail the log using `journalctl -f | grep --line-buffered <name of script>`
+where `<name of script>` is [one of the scripts listed in `pyproject.toml`](https://github.com/Realiserad/fish-ai/blob/main/pyproject.toml#L28).
 
 ### Run the tests
 
