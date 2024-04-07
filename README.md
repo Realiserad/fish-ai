@@ -163,6 +163,11 @@ fisher install .
 This repository ships with [pre-commit hooks](https://pre-commit.com) which can
 prevent some faulty commits from being pushed.
 
+```shell
+pip3 install pre-commit
+pre-commit install -t pre-commit -t commit-msg
+```
+
 ### Enable debug logging
 
 Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
