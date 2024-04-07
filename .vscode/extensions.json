@@ -4,6 +4,7 @@
         "skyapps.fish-vscode",
         "ms-python.flake8",
         "ms-python.python",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "DavidAnson.vscode-markdownlint"
     ]
 }
