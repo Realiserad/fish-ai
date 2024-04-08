@@ -1,0 +1,29 @@
+{
+    "name": "fish-ai",
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "lunaryorn.fish-ide",
+                "skyapps.fish-vscode",
+                "ms-python.flake8",
+                "ms-python.python",
+                "github.vscode-github-actions",
+                "DavidAnson.vscode-markdownlint",
+                "tamasfe.even-better-toml"
+            ]
+        }
+    },
+    "features": {
+        "docker-in-docker": {},
+        "ghcr.io/meaningful-ooo/devcontainer-features/fish:1.2.2": {},
+        "ghcr.io/devcontainers/features/rust:1": {}
+    },
+    "mounts": [
+        "source=${localEnv:HOME}/.config/fish-ai.ini,target=/home/vscode/.config/fish-ai.ini,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "cargo install what-bump && pre-commit install -t pre-commit -t commit-msg -t pre-push"
+}

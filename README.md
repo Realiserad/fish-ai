@@ -151,25 +151,9 @@ LLM. When hosted locally, no data ever leaves your machine.
 
 ## 🔨 Development
 
-Clone the code and install directly from the repository using `fisher`.
-
-```shell
-git clone git@github.com:Realiserad/fish-ai.git
-cd fish-ai
-fisher install .
-```
-
-### Install the hooks
-
-This repository ships with [pre-commit hooks](https://pre-commit.com) which can
-prevent some faulty commits from being pushed. They also take care of bumping
-the version number in `pyproject.toml`.
-
-```shell
-cargo install what-bump
-pip3 install pre-commit
-pre-commit install -t pre-commit -t commit-msg -t pre-push
-```
+This repository ships with a `.devcontainer.json` which can be used with
+GitHub Codespaces or Visual Studio Code with
+[the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 ### Enable debug logging
 
@@ -182,9 +166,6 @@ configuration = foo
 [foo]
 debug = True
 ```
-
-You can tail the log using `journalctl -f | grep --line-buffered <name of script>`
-where `<name of script>` is [one of the scripts listed in `pyproject.toml`](https://github.com/Realiserad/fish-ai/blob/main/pyproject.toml#L28).
 
 ### Run the tests
 
