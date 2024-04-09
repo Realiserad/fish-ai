@@ -25,13 +25,13 @@ end
 function _fish_ai_install --on-event fish_ai_install
     echo "🥡 Setting up a virtual environment..."
     python3 -m venv ~/.fish-ai
-    echo "🍬 Installing dependencies for $(get_installation_url). This may take a few seconds..."
-    ~/.fish-ai/bin/pip install "$(get_installation_url)"
+    echo "🍬 Installing dependencies. This may take a few seconds..."
+    ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    echo "🍬 Upgrading dependencies for $(get_installation_url). This may take a few seconds..."
-    ~/.fish-ai/bin/pip install --upgrade "$(get_installation_url)"
+    echo "🍬 Upgrading dependencies. This may take a few seconds..."
+    ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -43,11 +43,11 @@ end
 
 function get_installation_url
     set plugin (fisher list "fish-ai")
-    if string sub -q --start 1 --length 1 "$plugin" = /
-        # Install from local folder
+    if test (string sub --start 1 --length 1 "$plugin") = /
+        # Install from a local folder
         echo -n "$plugin"
     else
-        # Install from git
+        # Install from GitHub
         echo -n "fish-ai@git+https://github.com/$plugin"
     end
 end
