@@ -34,7 +34,7 @@ function _fish_ai_update --on-event fish_ai_update
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
 end
 
-function __fish_ai_uninstall --on-event fish_ai_uninstall
+function _fish_ai_uninstall --on-event fish_ai_uninstall
     echo "💣 Nuking the virtual environment..."
     rm -r ~/.fish-ai
 end
@@ -46,6 +46,6 @@ function get_installation_url
         echo -n "$plugin"
     else
         # Install from git
-        echo -n "pip@git+https://github.com/$plugin"
+        echo -n "fish-ai@git+https://github.com/$plugin"
     end
 end
