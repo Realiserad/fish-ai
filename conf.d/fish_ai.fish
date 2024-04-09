@@ -25,18 +25,20 @@ end
 function _fish_ai_install --on-event fish_ai_install
     echo "🥡 Setting up a virtual environment..."
     python3 -m venv ~/.fish-ai
-    echo "🍬 Installing dependencies. This may take a few seconds..."
-    ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
+    echo "🍬 Installing dependencies for $(get_installation_url). This may take a few seconds..."
+    ~/.fish-ai/bin/pip install "$(get_installation_url)"
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    echo "🍬 Upgrading dependencies. This may take a few seconds..."
-    ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
+    echo "🍬 Upgrading dependencies for $(get_installation_url). This may take a few seconds..."
+    ~/.fish-ai/bin/pip install --upgrade "$(get_installation_url)"
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
-    echo "💣 Nuking the virtual environment..."
-    rm -r ~/.fish-ai
+    if test -d ~/.fish-ai
+        echo "💣 Nuking the virtual environment..."
+        rm -r ~/.fish-ai
+    end
 end
 
 function get_installation_url
