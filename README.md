@@ -151,7 +151,7 @@ LLM. When hosted locally, no data ever leaves your machine.
 
 ## 🔨 Development
 
-This repository ships with a `.devcontainer.json` which can be used with
+This repository ships with a `devcontainer.json` which can be used with
 GitHub Codespaces or Visual Studio Code with
 [the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
