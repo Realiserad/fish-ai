@@ -7,7 +7,7 @@ from google.generativeai.types import GenerationConfig
 from configparser import ConfigParser
 from os import path
 import logging
-from logging.handlers import SysLogHandler
+from logging.handlers import SysLogHandler, RotatingFileHandler
 from time import time_ns
 
 config = ConfigParser()
@@ -16,8 +16,22 @@ config.read(path.expanduser('~/.config/fish-ai.ini'))
 
 def get_logger():
     logger = logging.getLogger()
-    handler = SysLogHandler(address='/dev/log')
-    logger.addHandler(handler)
+
+    if path.exists('/dev/log'):
+        # Syslog on GNU/Linux
+        handler = SysLogHandler(address='/dev/log')
+        logger.addHandler(handler)
+    elif path.exists('/var/run/syslog'):
+        # Syslog on OS X
+        handler = SysLogHandler(address='/var/run/syslog')
+        logger.addHandler(handler)
+
+    if get_config('log'):
+        handler = RotatingFileHandler(path.expanduser(get_config('log')),
+                                      backupCount=0,
+                                      maxBytes=1024*1024)
+        logger.addHandler(handler)
+
     if get_config('debug') == 'True':
         logger.setLevel(logging.DEBUG)
     return logger

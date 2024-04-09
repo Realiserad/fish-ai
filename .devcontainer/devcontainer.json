@@ -14,7 +14,12 @@
                 "github.vscode-github-actions",
                 "DavidAnson.vscode-markdownlint",
                 "tamasfe.even-better-toml"
-            ]
+            ],
+            "settings": {
+                "terminal.integrated.commandsToSkipShell": [
+                    "-workbench.action.quickOpen"
+                ]
+            }
         }
     },
     "features": {
@@ -25,5 +30,5 @@
     "mounts": [
         "source=${localEnv:HOME}/.config/fish-ai.ini,target=/home/vscode/.config/fish-ai.ini,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "cargo install what-bump && pre-commit install -t pre-commit -t commit-msg -t pre-push"
+    "postCreateCommand": "cargo install what-bump && pre-commit install -t pre-commit -t commit-msg"
 }

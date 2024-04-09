@@ -157,7 +157,9 @@ GitHub Codespaces or Visual Studio Code with
 
 ### Enable debug logging
 
-Enable debug logging to syslog by putting `debug = True` in your `fish-ai.ini`.
+Enable debug logging by putting `debug = True` in your `fish-ai.ini`.
+Logging is done to syslog by default (if available). You can also enable
+logging to file using `log = <path to file>`, for example:
 
 ```ini
 [fish-ai]
@@ -165,6 +167,7 @@ configuration = foo
 
 [foo]
 debug = True
+log = ~/.fish-ai/log.txt
 ```
 
 ### Run the tests
