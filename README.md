@@ -2,7 +2,8 @@
 
 # About
 
-`fish-ai` adds AI functionality to [Fish shell](https://fishshell.com).
+`fish-ai` adds AI functionality to [Fish shell](https://fishshell.com). It
+should run on any system with Python installed.
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality. It uses the [`generateContent`](https://ai.google.dev/api/rest/v1/models/generateContent)
@@ -159,6 +160,12 @@ LLM. When hosted locally, no data ever leaves your machine.
 This repository ships with a `devcontainer.json` which can be used with
 GitHub Codespaces or Visual Studio Code with
 [the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
+To install `fish-ai` from a local copy, use `fisher`:
+
+```shell
+fisher install .
+```
 
 ### Enable debug logging
 
