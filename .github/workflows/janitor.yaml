@@ -1,7 +1,7 @@
 name: Janitor
 on:
   schedule:
-    - cron: "30 1 * * *"
+  - cron: "30 1 * * *"
 jobs:
   close-issues:
     runs-on: ubuntu-latest
@@ -9,15 +9,15 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v5
-        with:
-          days-before-issue-stale: 30
-          days-before-issue-close: 14
-          stale-issue-label: lifecycle/stale
-          stale-issue-message: >
-            This issue has been inactive for 30 days. It will be automatically closed after 14 days if no further activity occurs.
-          close-issue-message: >
-            This issue was closed because of inactivity.
-          days-before-pr-stale: -1
-          days-before-pr-close: -1
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/stale@v5
+      with:
+        days-before-issue-stale: 30
+        days-before-issue-close: 14
+        stale-issue-label: lifecycle/stale
+        stale-issue-message: >
+          This issue has been inactive for 30 days. It will be automatically closed after 14 days if no further activity occurs.
+        close-issue-message: >
+          This issue was closed because of inactivity.
+        days-before-pr-stale: -1
+        days-before-pr-close: -1
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
