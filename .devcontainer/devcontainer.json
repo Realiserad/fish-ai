@@ -24,11 +24,10 @@
     },
     "features": {
         "docker-in-docker": {},
-        "ghcr.io/meaningful-ooo/devcontainer-features/fish:1.2.2": {},
-        "ghcr.io/devcontainers/features/rust:1": {}
+        "ghcr.io/meaningful-ooo/devcontainer-features/fish:1.2.2": {}
     },
     "mounts": [
         "source=${localEnv:HOME}/.config/fish-ai.ini,target=/home/vscode/.config/fish-ai.ini,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "cargo install what-bump && pre-commit install -t pre-commit -t commit-msg"
+    "postCreateCommand": "pre-commit install -t pre-commit -t commit-msg"
 }
