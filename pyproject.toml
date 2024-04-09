@@ -18,7 +18,8 @@ classifiers = [
 ]
 dependencies = [
   "openai==1.16.2",
-  "google-generativeai==0.4.1"
+  "google-generativeai==0.4.1",
+  "simple-term-menu==1.6.4"
 ]
 
 [project.urls]
@@ -30,3 +31,4 @@ fix = "fish_ai.fix:fix"
 codify = "fish_ai.codify:codify"
 explain = "fish_ai.explain:explain"
 autocomplete = "fish_ai.autocomplete:autocomplete"
+switch_context = "fish_ai.switch_context:switch_context"

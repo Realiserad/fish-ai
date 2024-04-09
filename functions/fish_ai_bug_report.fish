@@ -1,3 +1,5 @@
+#!/usr/bin/env fish
+
 function fish_ai_bug_report
     echo "Environment:"
     set_color normal

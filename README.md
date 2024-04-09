@@ -135,6 +135,11 @@ configuration = foo
 temperature = 0.5
 ```
 
+### Switch between contexts
+
+You can switch between different sections in the configuration using the
+`fish_ai_switch_context` command.
+
 ## 🐾 Data privacy
 
 When using the plugin, `fish-ai` submits the name of your OS and the
