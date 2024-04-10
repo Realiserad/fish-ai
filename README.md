@@ -24,7 +24,7 @@ If you like it, please add a ⭐.
 
 ### Create a configuration
 
-Create a configuration file called `.config/fish-ai.ini`.
+Create a configuration file `~/.config/fish-ai.ini`.
 
 If you use [a self-hosted LLM](https://github.com/ollama/ollama), e.g. [`codellama`](https://ollama.com/library/codellama):
 
