@@ -45,7 +45,8 @@ If you use [OpenAI](https://platform.openai.com/login):
 configuration = openai
 
 [openai]
-model = gpt-3.5-turbo
+provider = openai
+model = gpt-4-turbo
 api_key = <your API key>
 organization = <your organization>
 ```
