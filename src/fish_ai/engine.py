@@ -6,6 +6,8 @@ import google.generativeai as genai
 from google.generativeai.types import GenerationConfig
 from configparser import ConfigParser
 from os import path
+from os.path import isfile
+import platform
 import logging
 from logging.handlers import SysLogHandler, RotatingFileHandler
 from time import time_ns
@@ -38,11 +40,16 @@ def get_logger():
 
 
 def get_os():
-    with open('/etc/os-release') as f:
-        for line in f:
-            if line.startswith('PRETTY_NAME='):
-                return line.split('=')[1].strip('"')
-    return 'unknown'
+    if platform.system() == 'Linux':
+        if isfile('/etc/os-release'):
+            with open('/etc/os-release') as f:
+                for line in f:
+                    if line.startswith('PRETTY_NAME='):
+                        return line.split('=')[1].strip('"')
+        return 'GNU/Linux'
+    if platform.system() == 'Darwin':
+        return 'Mac OS X ' + platform.mac_ver()[0]
+    return 'Unknown'
 
 
 def get_system_prompt():

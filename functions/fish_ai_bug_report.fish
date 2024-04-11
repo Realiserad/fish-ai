@@ -5,7 +5,12 @@ function fish_ai_bug_report
     set_color normal
     echo ""
     set_color blue
-    cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"'
+    if test -f /etc/os-release
+        cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"'
+    end
+    if type -q sw_vers
+        echo "Mac OS X $(sw_vers --productVersion)"
+    end
     ~/.fish-ai/bin/python3 --version
     fish --version
     set_color normal
