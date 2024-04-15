@@ -5,11 +5,17 @@ updates:
   directory: "/"
   schedule:
     interval: "weekly"
+  labels:
+  - "dependencies/ci"
 - package-ecosystem: "pip"
   directory: "/"
   schedule:
     interval: "weekly"
+  labels:
+  - "dependencies/python"
 - package-ecosystem: "docker"
   directory: "/tests/azure-openai"
   schedule:
     interval: "weekly"
+  labels:
+  - "dependencies/docker"
