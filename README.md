@@ -26,7 +26,7 @@ If you like it, please add a ⭐.
 
 Create a configuration file `~/.config/fish-ai.ini`.
 
-If you use [a self-hosted LLM](https://github.com/ollama/ollama), e.g. [`codellama`](https://ollama.com/library/codellama):
+If you use a self-hosted LLM:
 
 ```ini
 [fish-ai]
@@ -34,8 +34,23 @@ configuraton = self-hosted
 
 [self-hosted]
 provider = self-hosted
+server = https://<your server>:<port>/v1
+model = <your model>
+api_key = <your API key>
+```
+
+If you are self-hosting, my recommendation is to use
+[Ollama](https://github.com/ollama/ollama) with
+[Llama 3 70B](https://ollama.com/library/llama3). An out of the box
+configuration  running on `localhost` could then look something like this:
+
+```ini
+[fish-ai]
+configuraton = local-llama
+
+[local-llama]
+provider = self-hosted
 server = http://localhost:11434/v1
-model = codellama
 ```
 
 If you use [OpenAI](https://platform.openai.com/login):
