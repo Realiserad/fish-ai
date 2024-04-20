@@ -27,6 +27,9 @@ function _fish_ai_install --on-event fish_ai_install
     python3 -m venv ~/.fish-ai
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
+    if ! test -f ~/.config/fish-ai.ini
+        echo "👨‍🏫 You must create a configuration file before the plugin can be used!"
+    end
 end
 
 function _fish_ai_update --on-event fish_ai_update
