@@ -30,7 +30,7 @@ If you use a self-hosted LLM:
 
 ```ini
 [fish-ai]
-configuraton = self-hosted
+configuration = self-hosted
 
 [self-hosted]
 provider = self-hosted
@@ -46,7 +46,7 @@ configuration  running on `localhost` could then look something like this:
 
 ```ini
 [fish-ai]
-configuraton = local-llama
+configuration = local-llama
 
 [local-llama]
 provider = self-hosted
