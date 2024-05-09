@@ -4,18 +4,18 @@ updates:
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: "weekly"
+    interval: "monthly"
   labels:
   - "dependencies/ci"
 - package-ecosystem: "pip"
   directory: "/"
   schedule:
-    interval: "weekly"
+    interval: "monthly"
   labels:
   - "dependencies/python"
 - package-ecosystem: "docker"
   directory: "/tests/azure-openai"
   schedule:
-    interval: "weekly"
+    interval: "monthly"
   labels:
   - "dependencies/docker"
