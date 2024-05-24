@@ -152,7 +152,7 @@ configuration = foo
 temperature = 0.5
 ```
 
-### Switch between contexts
+## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
 `fish_ai_switch_context` command.
@@ -160,9 +160,11 @@ You can switch between different sections in the configuration using the
 ## 🐾 Data privacy
 
 When using the plugin, `fish-ai` submits the name of your OS and the
-commandline buffer to the LLM. When you codify a command, it also
-sends the contents of any files you mention (as long as the file is
-readable).
+commandline buffer to the LLM.
+
+When you codify a command, it also sends the contents of any files you
+mention (as long as the file is readable), and when you explain a command,
+the manpage of the current command is provided to the LLM for reference.
 
 Finally, to fix the previous command, the previous commandline buffer,
 along with any terminal output and the corresponding exit code is sent
