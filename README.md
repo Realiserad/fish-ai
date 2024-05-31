@@ -136,6 +136,9 @@ configuration = foo
 language = Swedish
 ```
 
+This will only work well if the LLM you are using has been trained on a dataset
+with the chosen language.
+
 ### Change the temperature
 
 Temperature is a decimal number between 0 and 1 controlling the randomness of
