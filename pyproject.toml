@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
   "openai==1.27.0",
-  "google-generativeai==0.5.2",
+  "google-generativeai==0.5.4",
   "simple-term-menu==1.6.4"
 ]
 
