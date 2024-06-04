@@ -4,22 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "0.3.0"
-authors = [
-    { name="Bastian Fredriksson", email="realiserad@gmail.com" },
-]
+version = "0.4.0"
+authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
 ]
 dependencies = [
   "openai==1.27.0",
   "google-generativeai==0.5.2",
-  "simple-term-menu==1.6.4"
+  "simple-term-menu==1.6.4",
+  "iterfzf==1.4.0.51.0",
 ]
 
 [project.urls]

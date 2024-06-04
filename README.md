@@ -112,8 +112,9 @@ into a comment explaining what the command does.
 
 ### Autocomplete commands
 
-Begin typing your command and press **Ctrl + Space** to autocomplete at the cursor
-position.
+Begin typing your command and press **Ctrl + Space** to display a list of completions
+in [`fzf`](https://github.com/junegunn/fzf). Completions load in the background and
+show up as they become available.
 
 ### Suggest fixes
 
@@ -155,6 +156,19 @@ configuration = foo
 
 [foo]
 temperature = 0.5
+```
+
+### Number of completions
+
+To change the number of completions suggested by the LLM when pressing
+**Ctrl + Space**, set the `completions` option. The default value is `5`.
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+completions = 5
 ```
 
 ## 🎭 Switch between contexts

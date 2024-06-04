@@ -2,7 +2,6 @@
 
 from sys import argv
 from fish_ai import engine
-import subprocess
 
 
 def get_instructions(commandline):
@@ -20,7 +19,7 @@ def get_instructions(commandline):
 
             {manpage}
             '''.format(language=engine.get_config('language') or 'English',
-                       manpage=get_manpage(commandline.split()[0]))
+                       manpage=engine.get_manpage(commandline.split()[0]))
         },
         {
             'role': 'user',
@@ -52,16 +51,6 @@ def get_instructions(commandline):
             'content': commandline
         }
     ]
-
-
-def get_manpage(command):
-    manpage = subprocess.run(['man', command], stdout=subprocess.PIPE)
-    if manpage.returncode == 0:
-        return manpage.stdout.decode('utf-8')
-    helppage = subprocess.run([command, '--help'], stdout=subprocess.PIPE)
-    if helppage.returncode == 0:
-        return helppage.stdout.decode('utf-8')
-    return 'No manpage available.'
 
 
 def get_messages(commandline):

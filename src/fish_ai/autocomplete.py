@@ -2,6 +2,7 @@
 
 from fish_ai import engine
 from sys import argv
+from iterfzf import iterfzf
 
 
 def get_instructions(commandline, cursor_position):
@@ -11,9 +12,13 @@ def get_instructions(commandline, cursor_position):
             'content': '''
             Autocomplete a fish shell command given by the user.
             The █ character in the command marks the position of the cursor
-            where the user is typing. The completion must contain at least one
-            word. The completion must not contain more than three words.
-            '''
+            where the user is typing. Respond with only the autocompleted
+            command.
+
+            You may use the following manpage to assist with autocompletion:
+
+            {manpage}
+            '''.format(manpage=engine.get_manpage(commandline.split()[0]))
         },
         {
             'role': 'user',
@@ -39,9 +44,34 @@ def get_instructions(commandline, cursor_position):
     ]
 
 
+def get_another_completion_message(commandline, cursor_position):
+    return {
+        'role': 'user',
+        'content': 'Provide a different completion of the command: {}█{}'
+        .format(commandline[:cursor_position],
+                commandline[cursor_position:])
+    }
+
+
 def get_messages(commandline, cursor_position):
     return [engine.get_system_prompt()] + get_instructions(commandline,
                                                            cursor_position)
+
+
+def yield_completions(commandline, cursor_position, completions_count):
+    yield commandline
+    messages = get_messages(commandline, cursor_position)
+    for _ in range(completions_count):
+        response = engine.get_response(
+            messages=messages)
+        engine.get_logger().debug('Created completion: ' + response)
+        yield response
+        messages.append({
+            'role': 'assistant',
+            'content': response
+        })
+        messages.append(get_another_completion_message(
+            commandline, cursor_position))
 
 
 def autocomplete():
@@ -52,9 +82,22 @@ def autocomplete():
         engine.get_logger().debug('Autocompleting commandline: {}'.format(
             commandline[:cursor_position] + '█' +
             commandline[cursor_position:]))
-        response = engine.get_response(messages=get_messages(commandline,
-                                                             cursor_position))
-        print(response)
+        completions_count = int(engine.get_config('completions') or '5')
+        engine.get_logger().debug('Creating {} completions'
+                                  .format(completions_count))
+
+        completions_generator = yield_completions(
+            commandline, cursor_position, completions_count)
+
+        selected_completion = iterfzf(
+            completions_generator,
+            prompt='🤖 ',
+            cycle=True,
+            __extra__=['--height=20%', '--layout=reverse', '--margin=1,1'])
+        if selected_completion:
+            print(selected_completion)
+        else:
+            print(commandline)
     except KeyboardInterrupt:
         pass
     except Exception as e:

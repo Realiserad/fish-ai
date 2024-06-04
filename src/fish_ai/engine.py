@@ -11,6 +11,7 @@ import platform
 import logging
 from logging.handlers import SysLogHandler, RotatingFileHandler
 from time import time_ns
+import subprocess
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -50,6 +51,28 @@ def get_os():
     if platform.system() == 'Darwin':
         return 'Mac OS X ' + platform.mac_ver()[0]
     return 'Unknown'
+
+
+def get_manpage(command):
+    try:
+        manpage = subprocess.run(
+            ['man', command],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL)
+        if manpage.returncode == 0:
+            return manpage.stdout.decode('utf-8')
+        helppage = subprocess.run(
+            [command, '--help'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL)
+        if helppage.returncode == 0:
+            return helppage.stdout.decode('utf-8')
+        return 'No manpage available.'
+    except Exception as e:
+        get_logger().debug(
+            'Failed to get manpage for command "{}". Reason: {}'.format(
+                command, str(e)))
+        return 'No manpage available.'
 
 
 def get_system_prompt():
