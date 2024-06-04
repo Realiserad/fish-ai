@@ -9,4 +9,4 @@ if test "$current_version" = "$next_version"
 end
 sed -i -E "s/version = .+/version = \"$next_version\"/" pyproject.toml
 git add pyproject.toml
-git commit --no-verify -C HEAD --amend
+git commit --no-verify -m "chore: bump version $current_version -> $next_version"
