@@ -112,8 +112,10 @@ into a comment explaining what the command does.
 
 ### Autocomplete commands
 
-Begin typing your command and press **Ctrl + Space** to autocomplete at the cursor
-position.
+Begin typing your command and press **Ctrl + Space** to display a list of
+completions in [`fzf`](https://github.com/junegunn/fzf) (it is bundled
+with the plugin, no need to install it separately). Completions load in the
+background and show up as they become available.
 
 ### Suggest fixes
 
@@ -157,6 +159,19 @@ configuration = foo
 temperature = 0.5
 ```
 
+### Number of completions
+
+To change the number of completions suggested by the LLM when pressing
+**Ctrl + Space**, set the `completions` option. The default value is `5`.
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+completions = 5
+```
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
@@ -168,8 +183,9 @@ When using the plugin, `fish-ai` submits the name of your OS and the
 commandline buffer to the LLM.
 
 When you codify a command, it also sends the contents of any files you
-mention (as long as the file is readable), and when you explain a command,
-the manpage of the current command is provided to the LLM for reference.
+mention (as long as the file is readable), and when you explain or
+autocomplete a command, the manpage of the current command is provided
+to the LLM for reference.
 
 Finally, to fix the previous command, the previous commandline buffer,
 along with any terminal output and the corresponding exit code is sent
