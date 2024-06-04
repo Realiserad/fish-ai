@@ -184,7 +184,7 @@ commandline buffer to the LLM.
 
 When you codify a command, it also sends the contents of any files you
 mention (as long as the file is readable), and when you explain or
-autocompelte a command, the manpage of the current command is provided
+autocomplete a command, the manpage of the current command is provided
 to the LLM for reference.
 
 Finally, to fix the previous command, the previous commandline buffer,
