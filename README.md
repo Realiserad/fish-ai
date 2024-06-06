@@ -164,12 +164,14 @@ temperature = 0.5
 To change the number of completions suggested by the LLM when pressing
 **Ctrl + Space**, set the `completions` option. The default value is `5`.
 
+Here is an example of how you can increase the number of completions to `10`:
+
 ```ini
 [fish-ai]
 configuration = foo
 
 [foo]
-completions = 5
+completions = 10
 ```
 
 ## 🎭 Switch between contexts
