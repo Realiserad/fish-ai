@@ -18,7 +18,14 @@ def get_instructions(commandline, cursor_position):
             You may use the following manpage to assist with autocompletion:
 
             {manpage}
-            '''.format(manpage=engine.get_manpage(commandline.split()[0]))
+
+            You may use the following commandline history to personalise
+            the output:
+
+            {commandline_history}'''.format(
+                manpage=engine.get_manpage(commandline.split()[0]),
+                commandline_history=engine.get_commandline_history(
+                    commandline))
         },
         {
             'role': 'user',

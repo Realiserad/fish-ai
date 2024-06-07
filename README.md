@@ -174,6 +174,23 @@ configuration = foo
 completions = 10
 ```
 
+### Personalise completions using commandline history
+
+You can personalise completions suggested by the LLM by sending
+an excerpt of your commandline history.
+
+To enable it, specify the maximum number of commands from the history
+to send to the LLM using the `history_size` option. The default value
+is `0` (do not send any commandline history).
+
+```ini
+[fish-ai]
+configuration = foo
+
+[foo]
+history_size = 5
+```
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
@@ -188,6 +205,9 @@ When you codify a command, it also sends the contents of any files you
 mention (as long as the file is readable), and when you explain or
 autocomplete a command, the manpage of the current command is provided
 to the LLM for reference.
+
+`fish-ai` can also send an exerpt of your command line history
+when autocompleting a command. This is disabled by default.
 
 Finally, to fix the previous command, the previous commandline buffer,
 along with any terminal output and the corresponding exit code is sent

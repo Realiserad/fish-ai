@@ -75,6 +75,21 @@ def get_manpage(command):
         return 'No manpage available.'
 
 
+def get_commandline_history(commandline):
+    history_size = get_config('history_size') or '0'
+    commandline_history = subprocess.check_output(
+        [
+            'fish', '-c',
+            'history search --max {history_size} --prefix {commandline}'
+            .format(history_size=history_size,
+                    commandline=commandline,
+                    )
+        ]).decode('utf-8')
+    if commandline_history.strip() == '':
+        return 'No commandline history available.'
+    return commandline_history
+
+
 def get_system_prompt():
     return {
         'role': 'system',
