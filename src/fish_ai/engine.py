@@ -55,12 +55,6 @@ def get_os():
 
 def get_manpage(command):
     try:
-        manpage = subprocess.run(
-            ['fish', '-c', 'man ' + command],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL)
-        if manpage.returncode == 0:
-            return manpage.stdout.decode('utf-8')
         helppage = subprocess.run(
             ['fish', '-c', command + ' --help'],
             stdout=subprocess.PIPE,
