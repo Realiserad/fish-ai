@@ -80,9 +80,9 @@ def get_commandline_history(commandline):
     commandline_history = subprocess.check_output(
         [
             'fish', '-c',
-            'history search --max {history_size} --prefix {commandline}'
+            'history search --max {history_size} --prefix "{commandline}"'
             .format(history_size=history_size,
-                    commandline=commandline,
+                    commandline=commandline.replace('"', "'")
                     )
         ]).decode('utf-8')
     if commandline_history.strip() == '':
