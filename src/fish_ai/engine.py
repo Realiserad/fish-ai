@@ -172,7 +172,7 @@ def get_response(messages):
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4',
-            max_tokens=4096,
+            max_tokens=8192,
             messages=messages,
             stream=False,
             temperature=float(get_config('temperature') or '0.2'),
