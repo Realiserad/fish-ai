@@ -2,13 +2,14 @@
 
 from sys import argv
 from fish_ai import engine
+import textwrap
 
 
 def get_instructions(commandline):
     return [
         {
             'role': 'system',
-            'content': '''
+            'content': textwrap.dedent('''\
             Respond with a maximum of three sentences which explain the fish
             shell command given by the user.
 
@@ -17,9 +18,9 @@ def get_instructions(commandline):
 
             You may use the following manpage to help explain the command:
 
-            {manpage}
-            '''.format(language=engine.get_config('language') or 'English',
-                       manpage=engine.get_manpage(commandline.split()[0]))
+            {manpage}''').format(
+                language=engine.get_config('language') or 'English',
+                manpage=engine.get_manpage(commandline.split()[0]))
         },
         {
             'role': 'user',

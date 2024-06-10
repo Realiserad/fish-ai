@@ -3,13 +3,14 @@
 from fish_ai import engine
 from sys import argv
 from iterfzf import iterfzf
+import textwrap
 
 
 def get_instructions(commandline, cursor_position):
     return [
         {
             'role': 'system',
-            'content': '''
+            'content': textwrap.dedent('''\
             Autocomplete a fish shell command given by the user.
             The █ character in the command marks the position of the cursor
             where the user is typing. Respond with only the autocompleted
@@ -22,18 +23,18 @@ def get_instructions(commandline, cursor_position):
             You may use the following commandline history to personalise
             the output:
 
-            {commandline_history}'''.format(
+            {commandline_history}''').format(
                 manpage=engine.get_manpage(commandline.split()[0]),
                 commandline_history=engine.get_commandline_history(
                     commandline))
         },
         {
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             Autocomplete the fish shell command:
 
             openssl s_client█google.com:443
-            '''
+            ''')
         },
         {
             'role': 'assistant',
@@ -41,12 +42,11 @@ def get_instructions(commandline, cursor_position):
         },
         {
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             Autocomplete the fish shell command:
 
-            {}█{}
-            '''.format(commandline[:cursor_position],
-                       commandline[cursor_position:])
+            {}█{}''').format(commandline[:cursor_position],
+                             commandline[cursor_position:])
         },
     ]
 

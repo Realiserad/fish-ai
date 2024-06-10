@@ -3,29 +3,28 @@
 from sys import argv
 import subprocess
 from fish_ai import engine
+import textwrap
 
 
 def get_instructions(command, error_message):
     return [
         {
             'role': 'system',
-            'content': '''
+            'content': textwrap.dedent('''\
             Provide a fix for the user's error message.
 
-            Output only the fish shell command that fixes the problem.
-            '''
+            Output only the fish shell command that fixes the problem.''')
         },
         {
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             Command:
 
             ./foo.sh
 
             Error message:
 
-            fish: Unknown command. './foo.sh' exists but is not executable.
-            '''
+            fish: Unknown command. './foo.sh' exists but is not executable.''')
         },
         {
             'role': 'assistant',
@@ -33,7 +32,7 @@ def get_instructions(command, error_message):
         },
         {
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             Command:
 
             tree -d 1 .
@@ -41,8 +40,7 @@ def get_instructions(command, error_message):
             Error message:
 
             Command 'tree' not found, but can be installed with:
-            sudo apt install tree
-            '''
+            sudo apt install tree''')
         },
         {
             'role': 'assistant',
@@ -50,15 +48,14 @@ def get_instructions(command, error_message):
         },
         {
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             Command:
 
             {}
 
             Error message:
 
-            {}
-            '''.format(command, error_message)
+            {}''').format(command, error_message)
         }
     ]
 

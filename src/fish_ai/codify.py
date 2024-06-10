@@ -5,16 +5,16 @@ from os.path import isfile
 from os import access, R_OK
 from re import match
 from fish_ai import engine
+import textwrap
 
 
 def get_instructions(commandline):
     instructions = [
         {
             'role': 'system',
-            'content': '''
+            'content': textwrap.dedent('''\
             Respond with a fish shell command which carries out the user's
-            task. Do not explain. Only respond with a single line.
-            '''
+            task. Do not explain. Only respond with a single line.''')
         },
         {
             'role': 'user',
@@ -50,11 +50,10 @@ def get_instructions(commandline):
     if filename:
         instructions.append({
             'role': 'user',
-            'content': '''
+            'content': textwrap.dedent('''\
             The content of the file {} is'
 
-            {}
-            '''.format(filename, '\n'.join(file_contents))
+            {}''').format(filename, '\n'.join(file_contents))
         })
     return instructions
 
