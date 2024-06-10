@@ -14,6 +14,8 @@ from time import time_ns
 import subprocess
 import textwrap
 import sys
+from hugchat import hugchat
+from hugchat.login import Login
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -168,6 +170,21 @@ def create_message_history(messages):
     return outputs
 
 
+def create_system_prompt(messages):
+    return '\n\n'.join(
+        list(
+            map(lambda message: message.get('content'),
+                list(
+                    filter(
+                        lambda message: message.get('role') == 'system',
+                        messages
+                    )
+            )
+            )
+        )
+    )
+
+
 def get_response(messages):
     start_time = time_ns()
 
@@ -183,6 +200,21 @@ def get_response(messages):
                                       content=messages[-1].get('content'),
                                       stream=False)
                     .text.strip(' `'))
+    elif get_config('provider') == 'huggingface':
+        email = get_config('email')
+        password = get_config('password')
+        cookies = Login(email, password).login(
+            cookie_dir_path=path.expanduser('~/.fish-ai/cookies/'),
+            save_cookies=True)
+
+        bot = hugchat.ChatBot(
+            cookies=cookies.get_dict(),
+            system_prompt=create_system_prompt(messages),
+            default_llm=get_config('model') or
+            'meta-llama/Meta-Llama-3-70B-Instruct')
+
+        response = bot.chat(messages[-1].get('content')).wait_until_done()
+        bot.delete_conversation(bot.get_conversation_info())
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4',

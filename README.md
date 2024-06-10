@@ -6,11 +6,10 @@
 should run on [any system with Python and git installed](https://github.com/Realiserad/fish-ai/tree/main/tests).
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
-but with some additional functionality. It uses the [`generateContent`](https://ai.google.dev/api/rest/v1/models/generateContent)
-or
-[chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
-and can be hooked up to Google, OpenAI, Azure OpenAI
-or a self-hosted LLM behind any OpenAI-compatible API.
+but with some additional functionality.
+
+It can be hooked up to OpenAI, Azure OpenAI, Google, HuggingFace, or a
+self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
@@ -90,6 +89,20 @@ provider = google
 api_key = <your API key>
 ```
 
+If you use [HuggingFace](https://huggingface.co):
+
+```ini
+[fish-ai]
+configuration = huggingface
+
+[huggingface]
+provider = huggingface
+email = <your email>
+password = <your password>
+```
+
+Note that 2FA must be disabled on the account.
+
 ### Install `fish-ai`
 
 Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
@@ -159,6 +172,8 @@ configuration = foo
 [foo]
 temperature = 0.5
 ```
+
+This option is not supported when using the `huggingface` provider.
 
 ### Number of completions
 

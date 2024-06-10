@@ -40,6 +40,6 @@ A clear and concise description of what you expected to happen.
 ### 🖥 Log output (optional)
 
 ```shell
-> journalctl -f | grep --line-buffered 'python3'
+> journalctl -f
 <paste relevant log lines here>
 ```

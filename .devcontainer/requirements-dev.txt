@@ -5,3 +5,4 @@ simple-term-menu
 pytest
 pyfakefs
 iterfzf
+hugchat
