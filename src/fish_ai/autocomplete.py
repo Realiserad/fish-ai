@@ -5,35 +5,31 @@ from iterfzf import iterfzf
 import textwrap
 
 
-def get_instructions(commandline, cursor_position):
+def get_instructions(commandline, cursor_position, completions_count):
     return [
         {
             'role': 'system',
             'content': textwrap.dedent('''\
-            Autocomplete a fish shell command given by the user.
-            The █ character in the command marks the position of the cursor
-            where the user is typing. Respond with only the autocompleted
-            command.
-
-            You may use the following manpage to assist with autocompletion:
-
-            {manpage}
+            Provide autocompletion for a fish shell commandline given by the
+            user. The █ character in the commandline marks the position of the
+            cursor where the user is typing. Respond with the number of
+            autocompleted commands given by the user. Each autocompleted
+            command should be provided on a separate line. Do not explain.
+            Only respond with the autocompleted commands.
 
             You may use the following commandline history to personalise
             the output:
 
             {commandline_history}''').format(
-                manpage=engine.get_manpage(commandline.split()[0]),
                 commandline_history=engine.get_commandline_history(
                     commandline))
         },
         {
             'role': 'user',
             'content': textwrap.dedent('''\
-            Autocomplete the fish shell command:
+            Provide 1 autocompleted commands for the commandline:
 
-            openssl s_client█google.com:443
-            ''')
+            openssl s_client█google.com:443''')
         },
         {
             'role': 'assistant',
@@ -42,42 +38,47 @@ def get_instructions(commandline, cursor_position):
         {
             'role': 'user',
             'content': textwrap.dedent('''\
-            Autocomplete the fish shell command:
+            Provide 2 autocompleted commands for the commandline:
 
-            {}█{}''').format(commandline[:cursor_position],
-                             commandline[cursor_position:])
+            docker run -it█ python:3''')
+        },
+        {
+            'role': 'assistant',
+            'content': '''\
+            docker run -it --rm python:3
+            docker run -it --rm --entrypoint /bin/sh python:3'''
+        },
+        {
+            'role': 'user',
+            'content': textwrap.dedent('''\
+            Provide {n} autocompleted commands for the commandline:
+
+            {before_cursor}█{after_cursor}''').format(
+                n=completions_count,
+                before_cursor=commandline[:cursor_position],
+                after_cursor=commandline[cursor_position:])
         },
     ]
 
 
-def get_another_completion_message(commandline, cursor_position):
-    return {
-        'role': 'user',
-        'content': 'Provide a different completion of the command: {}█{}'
-        .format(commandline[:cursor_position],
-                commandline[cursor_position:])
-    }
-
-
-def get_messages(commandline, cursor_position):
-    return [engine.get_system_prompt()] + get_instructions(commandline,
-                                                           cursor_position)
+def get_messages(commandline, cursor_position, completions_count):
+    return [engine.get_system_prompt()] + get_instructions(
+        commandline=commandline,
+        cursor_position=cursor_position,
+        completions_count=completions_count)
 
 
 def yield_completions(commandline, cursor_position, completions_count):
     yield commandline
-    messages = get_messages(commandline, cursor_position)
-    for _ in range(completions_count):
-        response = engine.get_response(
-            messages=messages)
-        engine.get_logger().debug('Created completion: ' + response)
-        yield response
-        messages.append({
-            'role': 'assistant',
-            'content': response
-        })
-        messages.append(get_another_completion_message(
-            commandline, cursor_position))
+    messages = get_messages(
+        commandline=commandline,
+        cursor_position=cursor_position,
+        completions_count=completions_count)
+
+    response = engine.get_response(messages=messages)
+    for completion in response.split('\n'):
+        engine.get_logger().debug('Created completion: ' + completion)
+        yield completion
 
 
 def autocomplete():
