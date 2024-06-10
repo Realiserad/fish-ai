@@ -97,7 +97,7 @@ api_key = <your API key>
 Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
 
 ```shell
-fisher install realiserad/fish-ai@stable
+fisher install realiserad/fish-ai
 ```
 
 ## 🙉 How to use
