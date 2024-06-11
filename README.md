@@ -99,8 +99,10 @@ configuration = huggingface
 provider = huggingface
 email = <your email>
 password = <your password>
+model = meta-llama/Meta-Llama-3-70B-Instruct
 ```
 
+Available models are listed [here](https://huggingface.co/chat/models).
 Note that 2FA must be disabled on the account.
 
 ### Install `fish-ai`
