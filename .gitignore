@@ -2,3 +2,4 @@ fish-ai.ini
 
 *.egg-info/
 build/
+__pycache__

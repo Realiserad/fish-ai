@@ -254,3 +254,6 @@ docker build -f tests/ubuntu-22/Dockerfile .
 docker build -f tests/fedora-40/Dockerfile .
 docker build -f tests/archlinux-base/Dockerfile .
 ```
+
+The Python module containing most of the business logic can be tested using
+`pytest`.

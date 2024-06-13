@@ -7,6 +7,6 @@ set next_version (what-bump --from $current_version $start_hash)
 if test "$current_version" = "$next_version"
     return
 end
-sed -i -E "s/version = .+/version = \"$next_version\"/" pyproject.toml
+sed -i -E "s/^version = .+/version = \"$next_version\"/" pyproject.toml
 git add pyproject.toml
 git commit --no-verify -m "chore: bump version $current_version -> $next_version"
