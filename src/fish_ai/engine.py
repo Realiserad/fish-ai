@@ -161,7 +161,8 @@ def get_response(messages):
 
     if get_config('provider') == 'google':
         genai.configure(api_key=get_config('api_key'))
-        model = genai.GenerativeModel(get_config('model') or 'gemini-pro')
+        model = genai.GenerativeModel(
+            get_config('model') or 'gemini-1.5-flash')
         chat = model.start_chat(history=create_message_history(messages))
         generation_config = GenerationConfig(
             candidate_count=1,
