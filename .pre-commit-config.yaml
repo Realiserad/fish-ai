@@ -43,7 +43,7 @@ repos:
     name: Bump version
     entry: bump-version.fish
     language: script
-    stages: [commit-msg]
+    stages: [pre-push]
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'
