@@ -3,7 +3,7 @@
 # About
 
 `fish-ai` adds AI functionality to [Fish shell](https://fishshell.com). It
-should run on any system with Python installed.
+should run on [any system with Python and git installed](https://github.com/Realiserad/fish-ai/tree/main/tests).
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality. It uses the [`generateContent`](https://ai.google.dev/api/rest/v1/models/generateContent)
@@ -11,8 +11,6 @@ or
 [chat completions API endpoint](https://platform.openai.com/docs/api-reference/chat/create)
 and can be hooked up to Google, OpenAI, Azure OpenAI
 or a self-hosted LLM behind any OpenAI-compatible API.
-
-Continuous integration is performed against Azure OpenAI.
 
 If you like it, please add a ⭐.
 
@@ -99,6 +97,9 @@ Install the plugin. You can install it using [`fisher`](https://github.com/jorge
 ```shell
 fisher install realiserad/fish-ai
 ```
+
+For detailed installation instructions tailored for your
+distribution, see [the installation tests](https://github.com/Realiserad/fish-ai/tree/main/tests).
 
 ## 🙉 How to use
 
@@ -245,10 +246,11 @@ log = ~/.fish-ai/log.txt
 
 ### Run the tests
 
-[The tests](https://github.com/Realiserad/fish-ai/actions/workflows/test-tapes.yaml)
-are packaged into a container and can be executed locally with e.g. `docker`.
+[The installation tests](https://github.com/Realiserad/fish-ai/actions/workflows/installation-tests.yaml)
+are packaged into containers and can be executed locally with e.g. `docker`.
 
 ```shell
-cp ~/.config/fish-ai.ini tests/azure-openai
-docker build -f tests/azure-openai/Dockerfile .
+docker build -f tests/ubuntu-22/Dockerfile .
+docker build -f tests/fedora-40/Dockerfile .
+docker build -f tests/archlinux-base/Dockerfile .
 ```

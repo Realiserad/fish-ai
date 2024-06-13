@@ -1,0 +1,27 @@
+name: Installation tests
+on:
+  pull_request:
+  push:
+    branches:
+    - main
+jobs:
+  installation-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+        - archlinux-base
+        - ubuntu-22
+        - fedora-40
+    if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Install on ${{ matrix.os }}
+      uses: docker/build-push-action@v5
+      with:
+          context: .
+          file: tests/${{ matrix.os }}/Dockerfile
+          push: false
+          build-args: SOURCE=${{ github.repository }}@${{ github.sha }}

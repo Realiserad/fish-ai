@@ -28,7 +28,7 @@ function _fish_ai_install --on-event fish_ai_install
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
     if ! test -f ~/.config/fish-ai.ini
-        echo "👨‍🏫 You must create a configuration file before the plugin can be used!"
+        echo "🤗 You must create a configuration file before the plugin can be used!"
     end
 end
 
@@ -46,8 +46,13 @@ end
 
 function get_installation_url
     set plugin (fisher list "fish-ai")
-    if test (string sub --start 1 --length 1 "$plugin") = /
-        # Install from a local folder
+    if test "$plugin" = ""
+        # fish-ai may be installed from an unknown source, assume
+        # that the Python packages can be installed from the
+        # current working directory.
+        echo -n (pwd)
+    else if test (string sub --start 1 --length 1 "$plugin") = /
+        # Install from a local folder (most likely a git clone)
         echo -n "$plugin"
     else
         # Install from GitHub
