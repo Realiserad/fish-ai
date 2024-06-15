@@ -1,0 +1,5 @@
+pre-commit
+openai
+google-generativeai
+simple-term-menu
+pytest
