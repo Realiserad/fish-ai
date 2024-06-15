@@ -34,5 +34,5 @@
     "mounts": [
         "source=${localEnv:HOME}/.config/fish-ai.ini,target=/home/vscode/.config/fish-ai.ini,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "pre-commit install -t pre-commit -t commit-msg -t pre-push"
+    "postCreateCommand": "pre-commit install -t pre-commit -t commit-msg"
 }
