@@ -21,7 +21,7 @@ def test_successful_autocomplete(capsys):
 @patch('fish_ai.engine.get_config', lambda key: {
     'completions': '1'
 }.get(key))
-@patch('fish_ai.engine.get_response',
+@patch('fish_ai.autocomplete.iterfzf',
        side_effect=Exception('crystal ball failed'))
 @patch('builtins.print')
 def test_unsuccessful_autocomplete(mock_print, _, caplog):
