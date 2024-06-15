@@ -27,11 +27,11 @@ def get_logger():
     logger = logging.getLogger()
 
     if path.exists('/dev/log'):
-        # Syslog on GNU/Linux
+        # Syslog on Linux
         handler = SysLogHandler(address='/dev/log')
         logger.addHandler(handler)
     elif path.exists('/var/run/syslog'):
-        # Syslog on OS X
+        # Syslog on macOS
         handler = SysLogHandler(address='/var/run/syslog')
         logger.addHandler(handler)
 
