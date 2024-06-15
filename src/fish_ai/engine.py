@@ -104,6 +104,8 @@ def get_system_prompt():
 
 
 def get_config(key):
+    if not config.has_section('fish-ai'):
+        return None
     active_section = config.get(section='fish-ai', option='configuration')
     if key not in config[active_section]:
         return None
