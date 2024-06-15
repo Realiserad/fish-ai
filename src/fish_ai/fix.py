@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sys import argv
 import subprocess
 from fish_ai import engine
 import textwrap
@@ -82,7 +81,7 @@ def get_error_message(previous_command):
 
 
 def fix():
-    previous_command = argv[1]
+    previous_command = engine.get_args()[0]
     error_message = get_error_message(previous_command)
 
     try:
@@ -90,6 +89,6 @@ def fix():
         engine.get_logger().debug('Command output: ' + error_message)
         response = engine.get_response(
             messages=get_messages(previous_command, error_message))
-        print(response)
+        print(response, end='')
     except Exception as e:
         engine.get_logger().exception(e)

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sys import argv
 from fish_ai import engine
 import textwrap
 
@@ -59,15 +58,15 @@ def get_messages(commandline):
 
 
 def explain():
-    commandline = argv[1]
+    commandline = engine.get_args()[0]
 
     try:
         engine.get_logger().debug('Explaining commandline: ' + commandline)
         response = engine.get_response(messages=get_messages(commandline))
-        print('# ' + response.replace('\n', ' '))
+        print('# ' + response.replace('\n', ' '), end='')
     except KeyboardInterrupt:
         pass
     except Exception as e:
         engine.get_logger().exception(e)
         # Leave the commandline untouched
-        print(commandline)
+        print(commandline, end='')

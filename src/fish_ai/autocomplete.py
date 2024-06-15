@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from fish_ai import engine
-from sys import argv
 from iterfzf import iterfzf
 import textwrap
 
@@ -82,8 +81,8 @@ def yield_completions(commandline, cursor_position, completions_count):
 
 
 def autocomplete():
-    commandline = argv[1]
-    cursor_position = int(argv[2])
+    commandline = engine.get_args()[0]
+    cursor_position = int(engine.get_args()[1])
 
     try:
         engine.get_logger().debug('Autocompleting commandline: {}'.format(
@@ -102,10 +101,11 @@ def autocomplete():
             cycle=True,
             __extra__=['--height=20%', '--layout=reverse', '--margin=1,1'])
         if selected_completion:
-            print(selected_completion)
+            print(selected_completion, end='')
         else:
-            print(commandline)
+            print(commandline, end='')
     except KeyboardInterrupt:
         pass
     except Exception as e:
         engine.get_logger().exception(e)
+        print(commandline, end='')

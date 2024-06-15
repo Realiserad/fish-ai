@@ -3,3 +3,4 @@ openai
 google-generativeai
 simple-term-menu
 pytest
+pyfakefs

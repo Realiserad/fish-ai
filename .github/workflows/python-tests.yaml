@@ -13,9 +13,9 @@ jobs:
         fetch-depth: 0
     - name: Set up Python
       uses: actions/setup-python@v5
-    - name: Install pytest
+    - name: Install requirements
       run: |
-        pip install pytest
+        pip install -r .devcontainer/requirements-dev.txt
     - name: Run tests
       run: |
         pytest

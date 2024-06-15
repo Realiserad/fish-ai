@@ -13,9 +13,14 @@ from logging.handlers import SysLogHandler, RotatingFileHandler
 from time import time_ns
 import subprocess
 import textwrap
+import sys
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
+
+
+def get_args():
+    return list.copy(sys.argv[1:])
 
 
 def get_logger():
@@ -48,9 +53,9 @@ def get_os():
                 for line in f:
                     if line.startswith('PRETTY_NAME='):
                         return line.split('=')[1].strip('"')
-        return 'GNU/Linux'
+        return 'Linux'
     if platform.system() == 'Darwin':
-        return 'Mac OS X ' + platform.mac_ver()[0]
+        return 'macOS ' + platform.mac_ver()[0]
     return 'Unknown'
 
 

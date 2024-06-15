@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from sys import argv
 from os.path import isfile
 from os import access, R_OK
 from re import match
@@ -82,17 +81,17 @@ def get_messages(commandline):
 
 
 def codify():
-    commandline = argv[1]
+    commandline = engine.get_args()[0]
     if commandline.startswith('# '):
         commandline = commandline[2:]
 
     try:
         engine.get_logger().debug('Codifying commandline: ' + commandline)
         response = engine.get_response(messages=get_messages(commandline))
-        print(response)
+        print(response, end='')
     except KeyboardInterrupt:
         pass
     except Exception as e:
         engine.get_logger().exception(e)
         # Leave the commandline untouched
-        print('# ' + commandline)
+        print('# ' + commandline, end='')
