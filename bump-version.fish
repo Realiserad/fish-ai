@@ -17,7 +17,7 @@ end
 sed -i -E "s/^version = .+/version = \"$next_version\"/" pyproject.toml
 
 echo "🎉 The version has been bumped from $current_version to $next_version."
-echo "To add the changes, run the following commands:"
+echo "To accept the change, run the following commands:"
 echo "  git add pyproject.toml"
-echo "  git commit --amend --no-edit"
+echo "  git commit --amend --no-edit --no-verify"
 exit 1
