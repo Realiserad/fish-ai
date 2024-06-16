@@ -12,7 +12,7 @@ or
 and can be hooked up to Google, OpenAI, Azure OpenAI
 or a self-hosted LLM behind any OpenAI-compatible API.
 
-If you like it, please add a ⭐.
+If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ## 🎥 Demo
 
