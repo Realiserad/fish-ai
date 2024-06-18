@@ -52,7 +52,7 @@ server = http://localhost:11434/v1
 model = llama3
 ```
 
-If you use [OpenAI](https://platform.openai.com/login):
+If you use [OpenAI](https://platform.openai.com):
 
 ```ini
 [fish-ai]
