@@ -1,0 +1,44 @@
+name: Linkspector
+on:
+  pull_request:
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: reviewdog/action-setup@v1
+      with:
+        reviewdog_version: v0.17.4
+    - name: Create a configuration file
+      uses: 1arp/create-a-file-action@0.4.5
+      with:
+        file: .linkspector.yml
+        content: |
+          dirs: ['.']
+          useGitIgnore: true
+          modifiedFilesOnly: true
+    - name: Install Linkspector
+      run: |
+        npm install -g @umbrelladocs/linkspector@v0.3.10
+    - name: Scan PR for broken links
+      env:
+        GITHUB_TOKEN: '${{ github.token }}'
+      run: |
+        set +e
+        result=$(linkspector check -c .linkspector.yml -j)
+        status=$?
+        if echo "$result" | grep -q "Skipped link checking"; then
+          exit 0
+        fi
+        export REVIEWDOG_GITHUB_API_TOKEN="$GITHUB_TOKEN"
+        echo "$result" | reviewdog \
+          -f=rdjson \
+          -name="Linkspector" \
+          -reporter="github-pr-review" \
+          -filter-mode="added" \
+          -fail-on-error="false" \
+          -level="error" \
+          -tee
+        exit $status
