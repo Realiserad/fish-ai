@@ -89,7 +89,7 @@ provider = google
 api_key = <your API key>
 ```
 
-If you use [HuggingFace](https://huggingface.co):
+If you use [Hugging Face](https://huggingface.co):
 
 ```ini
 [fish-ai]
