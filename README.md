@@ -8,7 +8,7 @@ should run on [any system with Python and git installed](https://github.com/Real
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality.
 
-It can be hooked up to OpenAI, Azure OpenAI, Google, HuggingFace, or a
+It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, or a
 self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
