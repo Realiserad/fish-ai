@@ -19,7 +19,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Install on ${{ matrix.os }}
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
           context: .
           file: tests/${{ matrix.os }}/Dockerfile
