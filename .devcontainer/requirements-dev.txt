@@ -6,3 +6,4 @@ pytest
 pyfakefs
 iterfzf
 hugchat
+mistralai

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "0.7.1"
+version = "0.8.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -20,6 +20,7 @@ dependencies = [
   "simple-term-menu==1.6.4",
   "iterfzf==1.4.0.51.0",
   "hugchat==0.4.8",
+  "mistralai==0.4.2",
 ]
 
 [project.urls]

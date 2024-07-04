@@ -8,7 +8,7 @@ should run on [any system with Python and git installed](https://github.com/Real
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality.
 
-It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, or a
+It can be hooked up to OpenAI, Azure OpenAI, Google, HuggingFace, Mistral or a
 self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
@@ -104,6 +104,17 @@ model = meta-llama/Meta-Llama-3-70B-Instruct
 
 Available models are listed [here](https://huggingface.co/chat/models).
 Note that 2FA must be disabled on the account.
+
+If you use [Mistral](https://mistral.ai):
+
+```ini
+[fish-ai]
+configuration = mistral
+
+[mistral]
+provider = mistral
+api_key = <your API key>
+```
 
 ### Install `fish-ai`
 
