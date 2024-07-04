@@ -16,6 +16,8 @@ import textwrap
 import sys
 from hugchat import hugchat
 from hugchat.login import Login
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -142,7 +144,7 @@ def get_openai_client():
                         .format(get_config('provider')))
 
 
-def create_message_history(messages):
+def get_messages_for_gemini(messages):
     """
     Create message history which can be used with Gemini.
     Google uses a different chat history format than OpenAI.
@@ -170,6 +172,15 @@ def create_message_history(messages):
     return outputs
 
 
+def get_messages_for_mistral(messages):
+    output = []
+    for message in messages:
+        output.append(
+            ChatMessage(role=message.get('role'),
+                        content=message.get('content')))
+    return output
+
+
 def create_system_prompt(messages):
     return '\n\n'.join(
         list(
@@ -192,7 +203,7 @@ def get_response(messages):
         genai.configure(api_key=get_config('api_key'))
         model = genai.GenerativeModel(
             get_config('model') or 'gemini-1.5-flash')
-        chat = model.start_chat(history=create_message_history(messages))
+        chat = model.start_chat(history=get_messages_for_gemini(messages))
         generation_config = GenerationConfig(
             candidate_count=1,
             temperature=float(get_config('temperature') or '0.2'))
@@ -215,6 +226,17 @@ def get_response(messages):
 
         response = bot.chat(messages[-1].get('content')).wait_until_done()
         bot.delete_conversation(bot.get_conversation_info())
+    elif get_config('provider') == 'mistral':
+        client = MistralClient(
+            api_key=get_config('api_key')
+        )
+        completions = client.chat(
+            model=get_config('model') or 'mistral-large-latest',
+            messages=get_messages_for_mistral(messages),
+            max_tokens=1024,
+            temperature=float(get_config('temperature') or '0.2'),
+        )
+        response = completions.choices[0].message.content.strip(' `')
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4',
