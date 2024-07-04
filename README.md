@@ -232,10 +232,10 @@ commandline buffer to the LLM.
 
 When you codify a command, it also sends the contents of any files you
 mention (as long as the file is readable), and when you explain or
-autocomplete a command, the manpage of the current command is provided
+autocomplete a command, the the ouput from `<command> --help` is provided
 to the LLM for reference.
 
-`fish-ai` can also send an exerpt of your command line history
+`fish-ai` can also send an exerpt of your commandline history
 when autocompleting a command. This is disabled by default.
 
 Finally, to fix the previous command, the previous commandline buffer,
