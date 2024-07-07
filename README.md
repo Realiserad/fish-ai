@@ -8,7 +8,7 @@ should run on [any system with Python and git installed](https://github.com/Real
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality.
 
-It can be hooked up to OpenAI, Azure OpenAI, Google, HuggingFace, Mistral or a
+It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, Mistral or a
 self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
@@ -244,6 +244,18 @@ to the LLM.
 
 If you are concerned with data privacy, you should use a self-hosted
 LLM. When hosted locally, no data ever leaves your machine.
+
+### Redaction of sensitive information
+
+The plugin attempts to redact sensitive information from the prompt
+before submitting it to the LLM. Sensitive information is replaced by
+the `<REDACTED>` placeholder.
+
+The following information is redacted:
+
+- Passwords and API keys supplied on the commandline.
+- Base64 encoded data in single or double quotes.
+- PEM-encoded private keys.
 
 ## 🔨 Development
 

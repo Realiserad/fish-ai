@@ -18,6 +18,7 @@ from hugchat import hugchat
 from hugchat.login import Login
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
+from fish_ai.redact import redact
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -197,6 +198,8 @@ def create_system_prompt(messages):
 
 
 def get_response(messages):
+    messages = redact(messages)
+
     start_time = time_ns()
 
     if get_config('provider') == 'google':
