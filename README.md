@@ -3,7 +3,8 @@
 # About
 
 `fish-ai` adds AI functionality to [Fish shell](https://fishshell.com). It
-should run on [any system with Python and git installed](https://github.com/Realiserad/fish-ai/tree/main/tests).
+has been tested with macOS and Linux, but should run on any system where
+Python and git is installed.
 
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality.
