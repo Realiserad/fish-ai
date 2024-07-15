@@ -152,8 +152,8 @@ to let `fish-ai` suggest a fix!
 
 ## 🤸 Additional options
 
-You can tweak the behaviour of `fish-ai` by putting additional options in the
-active section of your `fish-ai.ini` file.
+You can tweak the behaviour of `fish-ai` by putting additional options in your
+`fish-ai.ini` configuration file.
 
 ### Explain in a different language
 
@@ -162,9 +162,6 @@ to the name of the language. For example:
 
 ```ini
 [fish-ai]
-configuration = foo
-
-[foo]
 language = Swedish
 ```
 
@@ -181,9 +178,6 @@ Here is an example of how to increase the temperature to `0.5`.
 
 ```ini
 [fish-ai]
-configuration = foo
-
-[foo]
 temperature = 0.5
 ```
 
@@ -198,9 +192,6 @@ Here is an example of how you can increase the number of completions to `10`:
 
 ```ini
 [fish-ai]
-configuration = foo
-
-[foo]
 completions = 10
 ```
 
@@ -215,9 +206,6 @@ is `0` (do not send any commandline history).
 
 ```ini
 [fish-ai]
-configuration = foo
-
-[foo]
 history_size = 5
 ```
 

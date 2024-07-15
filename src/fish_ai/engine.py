@@ -109,17 +109,16 @@ def get_system_prompt():
 
 
 def get_config(key):
-    if config.has_section('fish-ai'):
-        active_section = config.get(section='fish-ai', option='configuration')
-    else:
+    if not config.has_section('fish-ai'):
         # There is no configuration file or the user made a mistake.
         # Just return 'None' here to simplify testing.
         return None
 
-    if key not in config[active_section]:
-        return None
+    active_section = config.get(
+        section='fish-ai', option='configuration') or 'fish-ai'
 
-    return config.get(section=active_section, option=key)
+    return config.get(section=active_section, option=key) or config.get(
+        section='fish-ai', option=key)
 
 
 def get_openai_client():
