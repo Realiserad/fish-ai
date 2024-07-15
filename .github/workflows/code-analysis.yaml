@@ -1,0 +1,28 @@
+name: Static code analysis
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+jobs:
+  analyze:
+    name: Analyze ${{ matrix.language }} code
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - language: python
+          build-mode: none
+    steps:
+    - uses: actions/checkout@v4
+    - uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+    - uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
