@@ -266,9 +266,6 @@ logging to file using `log = <path to file>`, for example:
 
 ```ini
 [fish-ai]
-configuration = foo
-
-[foo]
 debug = True
 log = ~/.fish-ai/log.txt
 ```
