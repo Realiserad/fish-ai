@@ -114,11 +114,12 @@ def get_config(key):
         # Just return 'None' here to simplify testing.
         return None
 
-    active_section = config.get(
-        section='fish-ai', option='configuration') or 'fish-ai'
+    active_section = config.get(section='fish-ai', option='configuration')
 
-    return config.get(section=active_section, option=key) or config.get(
-        section='fish-ai', option=key)
+    if config.has_option(section=active_section, option=key):
+        return config.get(section=active_section, option=key)
+
+    return config.get(section='fish-ai', option=key, fallback=None)
 
 
 def get_openai_client():
