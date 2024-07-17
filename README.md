@@ -2,7 +2,7 @@
 
 # About
 
-`fish-ai` adds AI functionality to [Fish shell](https://fishshell.com). It
+`fish-ai` adds AI functionality to [Fish](https://fishshell.com). It
 has been tested with macOS and Linux, but should run on any system where
 Python and git is installed.
 
