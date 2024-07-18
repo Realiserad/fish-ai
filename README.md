@@ -125,9 +125,6 @@ Install the plugin. You can install it using [`fisher`](https://github.com/jorge
 fisher install realiserad/fish-ai
 ```
 
-For detailed installation instructions tailored for your
-distribution, see [the installation tests](https://github.com/Realiserad/fish-ai/tree/main/tests).
-
 ## 🙉 How to use
 
 ### Transform comments into commands and vice versa
