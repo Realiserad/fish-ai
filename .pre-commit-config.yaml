@@ -42,7 +42,7 @@ repos:
   hooks:
   - id: bump-version
     name: Bump version
-    entry: bump-version.fish
+    entry: ops/bump-version.fish
     language: script
     stages: [commit-msg]
 ci:

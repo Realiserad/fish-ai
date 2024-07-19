@@ -1,0 +1,17 @@
+name: Release
+on:
+  push:
+    tags:
+    - "v[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: fish-shop/install-fish-shell@v1.0.7
+    - name: Create changelog
+      run: ops/create-changelog.fish > CHANGELOG.md
+    - uses: softprops/action-gh-release@v2.0.8
+      with:
+        body_path: CHANGELOG.md
