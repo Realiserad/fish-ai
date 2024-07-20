@@ -11,7 +11,7 @@ for commit in $commits
     set short_hash (git log --format=%h -n 1 $commit)
     set long_hash (git log --format=%H -n 1 $commit)
     set commit_link "https://github.com/realiserad/fish-ai/commit/$long_hash"
-    set message "$commit_description (in commit [#$short_hash]($commit_link))"
+    set message "$commit_description (in commit [`#$short_hash`]($commit_link))"
     if test "$commit_type" = fix || test "$commit_type" = "fix!"
         set -a fixes (echo -n $message)
     end
