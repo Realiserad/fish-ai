@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - uses: fish-shop/install-fish-shell@v1.0.7
     - name: Create changelog
       run: ops/create-changelog.fish > CHANGELOG.md
