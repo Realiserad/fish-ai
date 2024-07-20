@@ -280,3 +280,15 @@ docker build -f tests/archlinux-base/Dockerfile .
 
 The Python modules containing most of the business logic can be tested using
 `pytest`.
+
+### Create a release
+
+A release is created by GitHub Actions when a new tag is pushed.
+
+```shell
+set tag (grep '^version =' pyproject.toml | \
+    cut -d '=' -f2- | \
+    string replace -ra '[ "]' '')
+git tag -a "v$tag" -m "🚀 v$tag"
+git push origin "v$tag"
+```
