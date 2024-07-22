@@ -7,3 +7,4 @@ pyfakefs
 iterfzf
 hugchat
 mistralai
+binaryornot
