@@ -39,7 +39,7 @@ api_key = <your API key>
 
 If you are self-hosting, my recommendation is to use
 [Ollama](https://github.com/ollama/ollama) with
-[Llama 3 70B](https://ollama.com/library/llama3). An out of the box
+[Llama 3.1 70B](https://ollama.com/library/llama3.1). An out of the box
 configuration  running on `localhost` could then look something
 like this:
 
@@ -50,7 +50,6 @@ configuration = local-llama
 [local-llama]
 provider = self-hosted
 server = http://localhost:11434/v1
-model = llama3
 ```
 
 If you use [OpenAI](https://platform.openai.com):
