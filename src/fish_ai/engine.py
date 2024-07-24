@@ -227,7 +227,8 @@ def get_response(messages):
             default_llm=get_config('model') or
             'meta-llama/Meta-Llama-3.1-405B-Instruct-FP8')
 
-        response = bot.chat(messages[-1].get('content')).wait_until_done()
+        response = bot.chat(
+            messages[-1].get('content')).wait_until_done().strip(' `')
         bot.delete_conversation(bot.get_conversation_info())
     elif get_config('provider') == 'mistral':
         client = MistralClient(
