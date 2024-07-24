@@ -99,7 +99,7 @@ configuration = huggingface
 provider = huggingface
 email = <your email>
 password = <your password>
-model = meta-llama/Meta-Llama-3-70B-Instruct
+model = meta-llama/Meta-Llama-3.1-405B-Instruct-FP8
 ```
 
 Available models are listed [here](https://huggingface.co/chat/models).

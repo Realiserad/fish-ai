@@ -225,7 +225,7 @@ def get_response(messages):
             cookies=cookies.get_dict(),
             system_prompt=create_system_prompt(messages),
             default_llm=get_config('model') or
-            'meta-llama/Meta-Llama-3-70B-Instruct')
+            'meta-llama/Meta-Llama-3.1-405B-Instruct-FP8')
 
         response = bot.chat(messages[-1].get('content')).wait_until_done()
         bot.delete_conversation(bot.get_conversation_info())
