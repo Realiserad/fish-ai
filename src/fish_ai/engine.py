@@ -243,7 +243,7 @@ def get_response(messages):
         response = completions.choices[0].message.content.strip(' `')
     else:
         completions = get_openai_client().chat.completions.create(
-            model=get_config('model') or 'gpt-4',
+            model=get_config('model') or 'gpt-4o',
             max_tokens=1024,
             messages=messages,
             stream=False,

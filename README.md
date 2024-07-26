@@ -60,7 +60,7 @@ configuration = openai
 
 [openai]
 provider = openai
-model = gpt-4-turbo
+model = gpt-4o
 api_key = <your API key>
 organization = <your organization>
 ```
