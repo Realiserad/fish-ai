@@ -19,7 +19,7 @@ dependencies = [
   "google-generativeai==0.7.1",
   "simple-term-menu==1.6.4",
   "iterfzf==1.4.0.51.0",
-  "hugchat==0.4.8",
+  "hugchat==0.4.10",
   "mistralai==0.4.2",
   "binaryornot==0.4.4",
 ]
