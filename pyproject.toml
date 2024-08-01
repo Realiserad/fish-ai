@@ -15,7 +15,7 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  "openai==1.35.7",
+  "openai==1.37.1",
   "google-generativeai==0.7.1",
   "simple-term-menu==1.6.4",
   "iterfzf==1.4.0.51.0",
