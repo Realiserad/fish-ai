@@ -30,11 +30,11 @@ repos:
   - id: name-tests-test
   - id: trailing-whitespace
 - repo: https://github.com/pycqa/flake8
-  rev: '7.1.0'
+  rev: '7.1.1'
   hooks:
   - id: flake8
 - repo: https://github.com/compilerla/conventional-pre-commit
-  rev: v3.3.0
+  rev: v3.4.0
   hooks:
   - id: conventional-pre-commit
     stages: [commit-msg]
