@@ -6,5 +6,5 @@ pytest
 pyfakefs
 iterfzf
 hugchat
-mistralai
+mistralai==0.4.2
 binaryornot
