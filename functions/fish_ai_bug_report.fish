@@ -87,15 +87,15 @@ function perform_functionality_tests
 
     echo "🔥 Running functionality tests..."
 
-    set start (date +%s%3N)
+    set start (date +%s)
     set result (_fish_ai_codify 'print the current date')
-    set duration (math (date +%s%3N) - $start)
-    echo "codify 'print the current date' -> '$result' (in $duration ms)"
+    set duration (math (date +%s) - $start)
+    echo "codify 'print the current date' -> '$result' (in $duration seconds)"
 
-    set start (date +%s%3N)
+    set start (date +%s)
     set result (_fish_ai_explain 'date' | \
         string trim --chars '# ' | \
         string shorten --max 50)
-    set duration (math (date +%s%3N) - $start)
-    echo "explain 'date' -> '$result' (in $duration ms)"
+    set duration (math (date +%s) - $start)
+    echo "explain 'date' -> '$result' (in $duration seconds)"
 end
