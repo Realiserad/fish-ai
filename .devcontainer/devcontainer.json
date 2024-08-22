@@ -17,8 +17,11 @@
                 "littlefoxteam.vscode-python-test-adapter"
             ],
             "settings": {
+                // Disable key bindings Ctrl+P and Ctrl+Space used by fish-ai
+                // See https://code.visualstudio.com/docs/getstarted/keybindings
                 "terminal.integrated.commandsToSkipShell": [
-                    "-workbench.action.quickOpen"
+                    "-workbench.action.quickOpen",
+                    "-editor.action.triggerSuggest"
                 ],
                 "python.testing.pytestEnabled": true,
                 "python.testing.pytestArgs": [
