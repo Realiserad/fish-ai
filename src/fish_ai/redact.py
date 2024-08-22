@@ -13,6 +13,7 @@ def redact(messages):
 def redact_content(content):
     r = content
     r = redact_cli_parameter('api-key', r)
+    r = redact_cli_parameter('key', r)
     r = redact_cli_parameter('password', r)
     r = redact_cli_parameter('passphrase', r)
     r = redact_cli_parameter('secret', r)
