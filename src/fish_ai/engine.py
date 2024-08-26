@@ -19,6 +19,7 @@ from hugchat.login import Login
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 from fish_ai.redact import redact
+import itertools
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -66,6 +67,8 @@ def get_os():
 
 def get_manpage(command):
     try:
+        get_logger().debug('Retrieving manpage for command "{}"'
+                           .format(command))
         helppage = subprocess.run(
             ['fish', '-c', command + ' --help'],
             stdout=subprocess.PIPE,
@@ -75,24 +78,39 @@ def get_manpage(command):
         return 'No manpage available.'
     except Exception as e:
         get_logger().debug(
-            'Failed to get manpage for command "{}". Reason: {}'.format(
+            'Failed to retrieve manpage for command "{}". Reason: {}'.format(
                 command, str(e)))
         return 'No manpage available.'
 
 
-def get_commandline_history(commandline):
-    history_size = get_config('history_size') or '0'
-    commandline_history = subprocess.check_output(
-        [
-            'fish', '-c',
-            'history search --max {history_size} --prefix "{commandline}"'
-            .format(history_size=history_size,
-                    commandline=commandline.replace('"', "'")
-                    )
-        ]).decode('utf-8')
-    if commandline_history.strip() == '':
+def get_commandline_history(commandline, cursor_position):
+    history_size = int(get_config('history_size') or 0)
+    if history_size == 0:
+        get_logger().debug('Commandline history disabled.')
         return 'No commandline history available.'
-    return commandline_history
+
+    def yield_history():
+        command = commandline.split(' ')[0]
+        before_cursor = commandline[:cursor_position]
+        after_cursor = commandline[cursor_position:]
+
+        proc = subprocess.Popen(
+            ['fish', '-c', 'history search --prefix "{}"'.format(command)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL)
+        while True:
+            line = proc.stdout.readline()
+            if not line:
+                break
+            item = line.decode('utf-8').strip()
+            if item.startswith(before_cursor) and item.endswith(after_cursor):
+                yield item
+
+    history = list(itertools.islice(yield_history(), history_size))
+
+    if len(history) == 0:
+        return 'No commandline history available.'
+    return '\n'.join(history)
 
 
 def get_system_prompt():

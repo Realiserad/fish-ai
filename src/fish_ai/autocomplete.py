@@ -22,7 +22,7 @@ def get_instructions(commandline, cursor_position, completions_count):
 
             {commandline_history}''').format(
                 commandline_history=engine.get_commandline_history(
-                    commandline))
+                    commandline, cursor_position))
         },
         {
             'role': 'user',
@@ -75,20 +75,26 @@ def yield_completions(commandline, cursor_position, completions_count):
         cursor_position=cursor_position,
         completions_count=completions_count)
 
-    response = engine.get_response(messages=messages)
-    for completion in response.split('\n'):
-        engine.get_logger().debug('Created completion: ' + completion)
-        yield completion
+    try:
+        response = engine.get_response(messages=messages)
+        for completion in response.split('\n'):
+            engine.get_logger().debug('Created completion: ' + completion)
+            yield completion
+    except KeyboardInterrupt:
+        pass
+    except Exception as e:
+        engine.get_logger().exception(e)
 
 
 def autocomplete():
     commandline = engine.get_args()[0]
     cursor_position = int(engine.get_args()[1])
+    before_cursor = commandline[:cursor_position]
+    after_cursor = commandline[cursor_position:]
 
     try:
         engine.get_logger().debug('Autocompleting commandline: {}'.format(
-            commandline[:cursor_position] + '█' +
-            commandline[cursor_position:]))
+            before_cursor + '█' + after_cursor))
         completions_count = int(engine.get_config('completions') or '5')
         engine.get_logger().debug('Creating {} completions'
                                   .format(completions_count))
