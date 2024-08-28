@@ -19,4 +19,10 @@ jobs:
     - name: Run tests
       run: |
         coverage run --branch --include="src/fish_ai/*.py" -m pytest
+        coverage xml
         coverage report
+    - name: Report code coverage
+      uses: orgoro/coverage@v3.2
+      with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
