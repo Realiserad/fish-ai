@@ -4,6 +4,9 @@ function fish_ai_bug_report
     print_header Environment
     print_environment
 
+    print_header "Keyboard and key bindings"
+    print_keyboard
+
     print_header Dependencies
     print_dependencies
 
@@ -37,6 +40,16 @@ function print_environment
     else
         echo "❌ Running on an unsupported platform."
         set -g error_found true
+    end
+
+    echo ""
+end
+
+function print_keyboard
+    bind --key | grep --color=never _fish_ai
+    if type -q setxkbmap
+        set layout (setxkbmap -query | grep layout | awk '{ print $2 }' | tr -d ' ')
+        echo "Keyboard layout: $layout"
     end
 
     echo ""
