@@ -20,7 +20,7 @@ dependencies = [
   "simple-term-menu==1.6.4",
   "iterfzf==1.4.0.54.3",
   "hugchat==0.4.11",
-  "mistralai==0.4.2",
+  "mistralai==1.0.2",
   "binaryornot==0.4.4",
 ]
 
