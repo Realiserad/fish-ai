@@ -14,7 +14,8 @@
                 "github.vscode-github-actions",
                 "DavidAnson.vscode-markdownlint",
                 "tamasfe.even-better-toml",
-                "littlefoxteam.vscode-python-test-adapter"
+                "littlefoxteam.vscode-python-test-adapter",
+                "ryanluker.vscode-coverage-gutters"
             ],
             "settings": {
                 // Disable key bindings Ctrl+P and Ctrl+Space used by fish-ai

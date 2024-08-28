@@ -3,3 +3,5 @@ fish-ai.ini
 *.egg-info/
 build/
 __pycache__
+.coverage
+lcov.info

@@ -18,4 +18,5 @@ jobs:
         pip install -r .devcontainer/requirements-dev.txt
     - name: Run tests
       run: |
-        pytest
+        coverage run --branch --include="src/fish_ai/*.py" -m pytest
+        coverage report

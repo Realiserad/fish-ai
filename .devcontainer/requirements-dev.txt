@@ -1,9 +1,11 @@
 pre-commit
+coverage
+pytest
+pyfakefs
+
 openai
 google-generativeai
 simple-term-menu
-pytest
-pyfakefs
 iterfzf
 hugchat
 mistralai==0.4.2
