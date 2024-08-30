@@ -1,0 +1,19 @@
+name: Assign shirt size
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  assign-shirt-size:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions-ecosystem/action-size@v2.2.0
+      id: size
+    - uses: actions-ecosystem/action-remove-labels@v1.3.0
+      with:
+        github_token: ${{ secrets.github_token }}
+        labels: ${{ steps.size.outputs.stale_labels }}
+    - uses: actions-ecosystem/action-add-labels@v1.1.0
+      with:
+        github_token: ${{ secrets.github_token }}
+        labels: ${{ steps.size.outputs.new_label }}
