@@ -49,6 +49,7 @@ configuration = local-llama
 
 [local-llama]
 provider = self-hosted
+model = llama3.1
 server = http://localhost:11434/v1
 ```
 
