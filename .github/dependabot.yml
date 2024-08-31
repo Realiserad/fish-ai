@@ -14,7 +14,7 @@ updates:
   labels:
   - "deps/python"
 - package-ecosystem: "docker"
-  directory: "/tests/azure-openai"
+  directory: "/tests/*"
   schedule:
     interval: "monthly"
   labels:
