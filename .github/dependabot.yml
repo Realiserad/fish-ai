@@ -14,7 +14,19 @@ updates:
   labels:
   - "deps/python"
 - package-ecosystem: "docker"
-  directory: "/tests/*"
+  directory: "/tests/ubuntu-22"
+  schedule:
+    interval: "monthly"
+  labels:
+  - "deps/docker"
+- package-ecosystem: "docker"
+  directory: "/tests/fedora-40"
+  schedule:
+    interval: "monthly"
+  labels:
+  - "deps/docker"
+- package-ecosystem: "docker"
+  directory: "/tests/archlinux-base"
   schedule:
     interval: "monthly"
   labels:
