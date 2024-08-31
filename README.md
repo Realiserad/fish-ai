@@ -273,9 +273,9 @@ log = ~/.fish-ai/log.txt
 are packaged into containers and can be executed locally with e.g. `docker`.
 
 ```shell
-docker build -f tests/ubuntu-22/Dockerfile .
-docker build -f tests/fedora-40/Dockerfile .
-docker build -f tests/archlinux-base/Dockerfile .
+docker build -f tests/ubuntu/Dockerfile .
+docker build -f tests/fedora/Dockerfile .
+docker build -f tests/archlinux/Dockerfile .
 ```
 
 The Python modules containing most of the business logic can be tested using

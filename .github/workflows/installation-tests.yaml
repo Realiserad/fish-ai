@@ -10,9 +10,9 @@ jobs:
     strategy:
       matrix:
         os:
-        - archlinux-base
-        - ubuntu-22
-        - fedora-40
+        - archlinux
+        - ubuntu
+        - fedora
     if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
     steps:
     - uses: actions/checkout@v4
