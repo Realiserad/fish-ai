@@ -1,6 +1,6 @@
 FROM albx79/what-bump:1.2.0 as what-bump
 
-FROM mcr.microsoft.com/devcontainers/python:3.10-buster
+FROM mcr.microsoft.com/devcontainers/python:3.11-buster
 
 COPY requirements-dev.txt .
 
