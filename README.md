@@ -206,6 +206,9 @@ is `0` (do not send any commandline history).
 history_size = 5
 ```
 
+If you enable this option, consider the use of [`sponge`](https://github.com/meaningful-ooo/sponge)
+to automatically remove broken commands from your commandline history.
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
