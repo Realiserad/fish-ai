@@ -80,8 +80,6 @@ def yield_completions(commandline, cursor_position, completions_count):
         for completion in response.split('\n'):
             engine.get_logger().debug('Created completion: ' + completion)
             yield completion
-    except KeyboardInterrupt:
-        pass
     except Exception as e:
         engine.get_logger().exception(e)
 
@@ -111,8 +109,6 @@ def autocomplete():
             print(selected_completion, end='')
         else:
             print(commandline, end='')
-    except KeyboardInterrupt:
-        pass
     except Exception as e:
         engine.get_logger().exception(e)
         print(commandline, end='')

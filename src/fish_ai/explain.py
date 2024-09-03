@@ -64,8 +64,6 @@ def explain():
         engine.get_logger().debug('Explaining commandline: ' + commandline)
         response = engine.get_response(messages=get_messages(commandline))
         print('# ' + response.replace('\n', ' '), end='')
-    except KeyboardInterrupt:
-        pass
     except Exception as e:
         engine.get_logger().exception(e)
         # Leave the commandline untouched
