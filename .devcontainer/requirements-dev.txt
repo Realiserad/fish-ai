@@ -2,6 +2,7 @@ pre-commit
 coverage
 pytest
 pyfakefs
+mutatest
 
 openai
 google-generativeai
