@@ -16,8 +16,7 @@ import textwrap
 import sys
 from hugchat import hugchat
 from hugchat.login import Login
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from mistralai import Mistral
 from fish_ai.redact import redact
 import itertools
 
@@ -191,15 +190,6 @@ def get_messages_for_gemini(messages):
     return outputs
 
 
-def get_messages_for_mistral(messages):
-    output = []
-    for message in messages:
-        output.append(
-            ChatMessage(role=message.get('role'),
-                        content=message.get('content')))
-    return output
-
-
 def create_system_prompt(messages):
     return '\n\n'.join(
         list(
@@ -249,12 +239,12 @@ def get_response(messages):
             messages[-1].get('content')).wait_until_done().strip(' `')
         bot.delete_conversation(bot.get_conversation_info())
     elif get_config('provider') == 'mistral':
-        client = MistralClient(
+        client = Mistral(
             api_key=get_config('api_key')
         )
-        completions = client.chat(
+        completions = client.chat.complete(
             model=get_config('model') or 'mistral-large-latest',
-            messages=get_messages_for_mistral(messages),
+            messages=messages,
             max_tokens=1024,
             temperature=float(get_config('temperature') or '0.2'),
         )
