@@ -9,5 +9,5 @@ google-generativeai
 simple-term-menu
 iterfzf
 hugchat
-mistralai==0.4.2
+mistralai
 binaryornot
