@@ -4,6 +4,7 @@ pytest
 pyfakefs
 mutatest
 
+anthropic
 openai
 google-generativeai
 simple-term-menu
