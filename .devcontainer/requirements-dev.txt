@@ -11,3 +11,4 @@ iterfzf
 hugchat
 mistralai
 binaryornot
+azure-ai-inference

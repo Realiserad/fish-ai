@@ -19,6 +19,8 @@ from hugchat.login import Login
 from mistralai import Mistral
 from fish_ai.redact import redact
 import itertools
+from azure.ai.inference import ChatCompletionsClient
+from azure.core.credentials import AzureKeyCredential
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -247,6 +249,19 @@ def get_response(messages):
             messages=messages,
             max_tokens=1024,
             temperature=float(get_config('temperature') or '0.2'),
+        )
+        response = completions.choices[0].message.content.strip(' `')
+    elif get_config('provider') == 'github':
+        client = ChatCompletionsClient(
+            endpoint='https://models.inference.ai.azure.com',
+            credential=AzureKeyCredential(get_config('api_key')),
+        )
+
+        completions = client.complete(
+            messages=messages,
+            model=get_config('model') or 'Meta-Llama-3.1-70B-Instruct',
+            temperature=float(get_config('temperature') or '0.2'),
+            max_tokens=1024
         )
         response = completions.choices[0].message.content.strip(' `')
     else:

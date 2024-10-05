@@ -10,8 +10,8 @@ Python and git is installed.
 Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
 but with some additional functionality.
 
-It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, Mistral or a
-self-hosted LLM behind any OpenAI-compatible API.
+It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, Mistral,
+GitHub or a self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
@@ -117,6 +117,21 @@ configuration = mistral
 provider = mistral
 api_key = <your API key>
 ```
+
+If you use [GitHub Models](https://github.com/marketplace/models):
+
+```ini
+[fish-ai]
+configuration = github
+
+[github]
+provider = github
+api_key = <GitHub PAT>
+model = Meta-Llama-3.1-70B-Instruct
+```
+
+You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
+The PAT does not require any permissions.
 
 ### Install `fish-ai`
 

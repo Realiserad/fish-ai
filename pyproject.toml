@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "0.9.10"
+version = "0.10.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -22,6 +22,7 @@ dependencies = [
   "hugchat==0.4.11",
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
+  "azure-ai-inference==1.0.0b4",
 ]
 
 [project.urls]
