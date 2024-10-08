@@ -21,6 +21,7 @@ from fish_ai.redact import redact
 import itertools
 from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
+from anthropic import Anthropic
 
 config = ConfigParser()
 config.read(path.expanduser('~/.config/fish-ai.ini'))
@@ -264,6 +265,17 @@ def get_response(messages):
             max_tokens=1024
         )
         response = completions.choices[0].message.content.strip(' `')
+    elif get_config('provider') == 'anthropic':
+        client = Anthropic(
+            api_key=get_config('api_key')
+        )
+        completions = client.messages.create(
+            model=get_config('model') or 'claude-3-5-sonnet-20240620',
+            temperature=float(get_config('temperature') or '0.2'),
+            max_tokens=1024,
+            messages=messages
+        )
+        response = completions.content[0].text.strip(' `')
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4o',
