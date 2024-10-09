@@ -27,14 +27,18 @@ function _fish_ai_install --on-event fish_ai_install
     python3 -m venv ~/.fish-ai
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
+    python_version_check
     if ! test -f ~/.config/fish-ai.ini
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
 end
 
 function _fish_ai_update --on-event fish_ai_update
+    echo "🐍 Upgrading to $(python3 --version)..."
+    python3 -m venv --upgrade ~/.fish-ai
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
+    python_version_check
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -57,5 +61,15 @@ function get_installation_url
     else
         # Install from GitHub
         echo -n "fish-ai@git+https://github.com/$plugin"
+    end
+end
+
+function python_version_check
+    set python_version (python3 -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor)')
+    set supported_versions 3.9 3.10 3.11 3.12
+    if ! contains python_version supported_versions
+        echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
+        echo "The following versions are supported: $supported_versions"
+        echo "Consider running 'python$supported_versions[-1] -m venv --upgrade ~/.fish-ai'."
     end
 end
