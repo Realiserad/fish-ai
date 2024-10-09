@@ -1,4 +1,10 @@
 ##
+## Supported major.minor versions of Python.
+## Unit tests are run in CI against these versions.
+##
+set -g supported_versions 3.9 3.10 3.11 3.12
+
+##
 ## This section contains the keybindings for fish-ai. If you want to change the
 ## default keybindings, edit the key binding escape sequences below according to
 ## your needs. You can get the key binding escape sequence for a keyboard shortcut
@@ -24,17 +30,30 @@ end
 ##
 function _fish_ai_install --on-event fish_ai_install
     echo "🥡 Setting up a virtual environment..."
-    python3 -m venv ~/.fish-ai
+    # If the environment variable FISH_AI_PYTHON_VERSION is set, use it.
+    # This allows users with an unsupported version of Python to still
+    # use the plugin.
+    if test -n "$FISH_AI_PYTHON_VERSION"
+        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION."
+        set python_exe python$FISH_AI_PYTHON_VERSION
+    else
+        set python_exe python3
+    end
+    $python_exe -m venv ~/.fish-ai
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
+    python_version_check
     if ! test -f ~/.config/fish-ai.ini
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
 end
 
 function _fish_ai_update --on-event fish_ai_update
+    python3 -m venv --upgrade ~/.fish-ai
+    echo "🐍 Now using $(~/.fish-ai/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
+    python_version_check
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -57,5 +76,21 @@ function get_installation_url
     else
         # Install from GitHub
         echo -n "fish-ai@git+https://github.com/$plugin"
+    end
+end
+
+function python_version_check
+    set python_version (~/.fish-ai/bin/python3 -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
+    if ! contains $python_version $supported_versions
+        echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
+        echo "The following versions are supported: $supported_versions"
+        echo "Consider setting the environment variable 'FISH_AI_PYTHON_VERSION' to a supported version and reinstalling the plugin. For example:"
+        set_color --italics blue
+        echo ""
+        echo "  fisher remove realiserad/fish-ai"
+        echo "  set -g FISH_AI_PYTHON_VERSION $supported_versions[-1]"
+        echo "  fisher install realiserad/fish-ai"
+        echo ""
+        set_color normal
     end
 end

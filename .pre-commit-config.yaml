@@ -33,6 +33,13 @@ repos:
   rev: '7.1.1'
   hooks:
   - id: flake8
+- repo: local
+  hooks:
+  - id: supported-versions-check
+    name: Supported versions check
+    entry: ./ops/supported-versions-check.fish
+    language: script
+    pass_filenames: false
 - repo: https://github.com/compilerla/conventional-pre-commit
   rev: v3.4.0
   hooks:
@@ -52,3 +59,4 @@ ci:
   - fish_indent
   - fish_syntax
   - bump-version
+  - supported-versions-check
