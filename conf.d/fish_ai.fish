@@ -30,11 +30,8 @@ end
 ##
 function _fish_ai_install --on-event fish_ai_install
     echo "🥡 Setting up a virtual environment..."
-    # If the environment variable FISH_AI_PYTHON_VERSION is set, use it.
-    # This allows users with an unsupported version of Python to still
-    # use the plugin.
     if test -n "$FISH_AI_PYTHON_VERSION"
-        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION."
+        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
         set python_exe python$FISH_AI_PYTHON_VERSION
     else
         set python_exe python3
@@ -49,7 +46,13 @@ function _fish_ai_install --on-event fish_ai_install
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    python3 -m venv --upgrade ~/.fish-ai
+    if test -n "$FISH_AI_PYTHON_VERSION"
+        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
+        set python_exe python$FISH_AI_PYTHON_VERSION
+    else
+        set python_exe python3
+    end
+    $python_exe -m venv --upgrade ~/.fish-ai
     echo "🐍 Now using $(~/.fish-ai/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
