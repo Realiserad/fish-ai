@@ -19,6 +19,9 @@ function fish_ai_bug_report
     print_header "Functionality tests"
     perform_functionality_tests
 
+    print_header "Compatibility check"
+    perform_compatibility_check
+
     if test "$error_found" = true
         echo "❌ Problems were found (see output above for details)."
         return 1
@@ -111,4 +114,17 @@ function perform_functionality_tests
         string shorten --max 50)
     set duration (math (date +%s) - $start)
     echo "explain 'date' -> '$result' (in $duration seconds)"
+    echo ""
+end
+
+function perform_compatibility_check
+    source ~/.config/fish/conf.d/fish_ai.fish
+    set python_version (~/.fish-ai/bin/python3 -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
+    if ! contains $python_version $supported_versions
+        echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
+        echo "The following versions are supported: $supported_versions"
+        set -g error_found true
+    else
+        echo "👍 Python $python_version is supported."
+    end
 end
