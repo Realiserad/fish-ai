@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "0.10.2"
+version = "0.11.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -35,6 +35,7 @@ codify = "fish_ai.codify:codify"
 explain = "fish_ai.explain:explain"
 autocomplete = "fish_ai.autocomplete:autocomplete"
 switch_context = "fish_ai.switch_context:switch_context"
+lookup_setting = "fish_ai.config:lookup_setting"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

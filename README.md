@@ -226,6 +226,19 @@ history_size = 5
 If you enable this option, consider the use of [`sponge`](https://github.com/meaningful-ooo/sponge)
 to automatically remove broken commands from your commandline history.
 
+### Disable the status emoji
+
+By default, a status emoji is shown in the [right prompt](https://fishshell.com/docs/current/cmds/fish_right_prompt.html).
+If you already use your right prompt for something else, or just don't like
+emojis, you can disable them:
+
+```ini
+[fish-ai]
+status_emoji = False
+```
+
+Restart any open terminal windows for the change to take effect.
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the

@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
-function fish_right_prompt
-    echo "$status_emoji"
+if test (~/.fish-ai/bin/lookup_setting status_emoji) != False
+    eval "function fish_right_prompt; echo (string escape \$status_emoji); end"
 end
 
 function _fish_ai_autocomplete_or_fix --description "Autocomplete the current command or fix the previous command using AI."

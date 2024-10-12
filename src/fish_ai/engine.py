@@ -4,8 +4,6 @@ from openai import OpenAI
 from openai import AzureOpenAI
 import google.generativeai as genai
 from google.generativeai.types import GenerationConfig
-from configparser import ConfigParser
-from os import path
 from os.path import isfile
 import platform
 import logging
@@ -21,9 +19,8 @@ from fish_ai.redact import redact
 import itertools
 from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
-
-config = ConfigParser()
-config.read(path.expanduser('~/.config/fish-ai.ini'))
+from fish_ai.config import get_config
+from os import path
 
 
 def get_args():
@@ -125,20 +122,6 @@ def get_system_prompt():
         respond with a short message starting with "error: ".
         ''').format(os=get_os())
     }
-
-
-def get_config(key):
-    if not config.has_section('fish-ai'):
-        # There is no configuration file or the user made a mistake.
-        # Just return 'None' here to simplify testing.
-        return None
-
-    active_section = config.get(section='fish-ai', option='configuration')
-
-    if config.has_option(section=active_section, option=key):
-        return config.get(section=active_section, option=key)
-
-    return config.get(section='fish-ai', option=key, fallback=None)
 
 
 def get_openai_client():
