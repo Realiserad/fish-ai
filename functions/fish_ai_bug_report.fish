@@ -65,7 +65,7 @@ function print_dependencies
         return
     end
 
-    ~/.fish-ai/bin/python3 --version
+    echo "$(~/.fish-ai/bin/python3 --version) (the system default is $(python3 --version))"
     fish --version
     fisher --version
     git --version
