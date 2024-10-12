@@ -51,7 +51,8 @@ repos:
     name: Bump version
     entry: ./ops/bump-version.fish
     language: script
-    stages: [commit-msg]
+    stages: [post-commit]
+    always_run: true
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'
