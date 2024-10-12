@@ -14,8 +14,8 @@ bind \cP _fish_ai_codify_or_explain
 bind -k nul _fish_ai_autocomplete_or_fix
 
 ##
-## This section contains functionality for setting and clearing the status shown
-## in the right prompt.
+## This section contains functionality for clearing the status emoji
+## shown in the right prompt.
 ##
 bind \r 'clear_status; commandline -f execute'
 bind \cc 'clear_status; commandline -f repaint; commandline -f cancel-commandline'
