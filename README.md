@@ -242,11 +242,11 @@ Restart any open terminal windows for the change to take effect.
 ### Preview pipes
 
 To send the output of a pipe to the LLM when completing a command, use the
-`preview_pipes` option.
+`preview_pipe` option.
 
 ```ini
 [fish-ai]
-preview_pipes = True
+preview_pipe = True
 ```
 
 This will send the output of the command before the cursor when the command before
