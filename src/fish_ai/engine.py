@@ -21,6 +21,9 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
 from fish_ai.config import get_config
 from os import path
+from binaryornot.check import is_binary
+from os import access, R_OK
+from re import match
 
 
 def get_args():
@@ -72,13 +75,38 @@ def get_manpage(command):
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL)
         if helppage.returncode == 0:
-            return helppage.stdout.decode('utf-8')
+            output = helppage.stdout.decode('utf-8')
+            if len(output) > 2000:
+                return output[:2000] + ' [...]'
+            else:
+                return output
         return 'No manpage available.'
     except Exception as e:
         get_logger().debug(
             'Failed to retrieve manpage for command "{}". Reason: {}'.format(
                 command, str(e)))
         return 'No manpage available.'
+
+
+def get_file_info(words):
+    """
+    If the user is mentioning a file, return the filename and its file
+    contents.
+    """
+    for word in words.split():
+        filename = word.rstrip(',.!').strip('"\'')
+        if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
+            continue
+        if not isfile(filename):
+            continue
+        if not access(filename, R_OK):
+            continue
+        if is_binary(filename):
+            continue
+        with open(filename, 'r') as file:
+            get_logger().debug('Loading file: ' + filename)
+            return filename, file.read(3072)
+    return None, None
 
 
 def get_commandline_history(commandline, cursor_position):

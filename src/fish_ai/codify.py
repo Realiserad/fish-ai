@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from os.path import isfile
-from os import access, R_OK
-from re import match
 from fish_ai import engine
 import textwrap
-from binaryornot.check import is_binary
 
 
 def get_instructions(commandline):
@@ -46,36 +42,15 @@ def get_instructions(commandline):
             'content': commandline
         },
     ]
-    (filename, file_contents) = get_file_info(commandline)
+    (filename, file_contents) = engine.get_file_info(commandline)
     if filename:
-        instructions[-1]['content'] = instructions[-1]['content'] + \
-            textwrap.dedent('''\
+        instructions[-1]['content'] += textwrap.dedent('''\
+            The content of the file {filename} is'
 
-            The content of the file {} is'
-
-            {}''').format(filename, file_contents)
+            {file_contents}''').format(
+                filename=filename,
+                file_contents=file_contents)
     return instructions
-
-
-def get_file_info(commandline):
-    """
-    If the user is mentioning a file in the instructions, return the
-    filename and its file contents.
-    """
-    for word in commandline.split():
-        filename = word.rstrip(',.!').strip('"\'')
-        if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
-            continue
-        if not isfile(filename):
-            continue
-        if not access(filename, R_OK):
-            continue
-        if is_binary(filename):
-            continue
-        with open(filename, 'r') as file:
-            engine.get_logger().debug('Loading file: ' + filename)
-            return filename, file.read(3072)
-    return None, None
 
 
 def get_messages(commandline):

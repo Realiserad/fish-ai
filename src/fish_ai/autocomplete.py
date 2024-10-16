@@ -3,10 +3,14 @@
 from fish_ai import engine
 from iterfzf import iterfzf
 import textwrap
+from subprocess import getoutput
+from fish_ai.config import get_config
 
 
 def get_instructions(commandline, cursor_position, completions_count):
-    return [
+    before_cursor = commandline[:cursor_position]
+    after_cursor = commandline[cursor_position:]
+    instructions = [
         {
             'role': 'system',
             'content': textwrap.dedent('''\
@@ -55,10 +59,37 @@ def get_instructions(commandline, cursor_position, completions_count):
 
             {before_cursor}█{after_cursor}''').format(
                 n=completions_count,
-                before_cursor=commandline[:cursor_position],
-                after_cursor=commandline[cursor_position:])
+                before_cursor=before_cursor,
+                after_cursor=after_cursor)
         },
     ]
+
+    if (get_config('preview_pipe') == 'True' and
+            before_cursor.strip().endswith('|')):
+        command = before_cursor.strip()[:-1]
+        output = getoutput(command)
+        if len(output) > 2000:
+            short_output = output[:2000] + ' [...]'
+        else:
+            short_output = output
+        instructions[-1]['content'] += textwrap.dedent('''
+            The output from '{command}' is:
+
+            {output}''').format(
+                command=command,
+                output=short_output)
+        return instructions
+
+    (filename, file_contents) = engine.get_file_info(before_cursor)
+    if filename:
+        instructions[-1]['content'] += textwrap.dedent('''\
+            The content of the file {filename} is'
+
+            {file_contents}''').format(
+                filename=filename,
+                file_contents=file_contents)
+
+    return instructions
 
 
 def get_messages(commandline, cursor_position, completions_count):
