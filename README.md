@@ -239,6 +239,20 @@ status_emoji = False
 
 Restart any open terminal windows for the change to take effect.
 
+### Preview pipes
+
+To send the output of a pipe to the LLM when completing a command, use the
+`preview_pipes` option.
+
+```ini
+[fish-ai]
+preview_pipes = True
+```
+
+This will send the output of the command before the cursor when the command before
+the cursor ends with a pipe (`|`). This is disabled by default, as it may slow down
+the completion process and lead to commands being executed twice.
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
@@ -249,13 +263,13 @@ You can switch between different sections in the configuration using the
 When using the plugin, `fish-ai` submits the name of your OS and the
 commandline buffer to the LLM.
 
-When you codify a command, it also sends the contents of any files you
-mention (as long as the file is readable), and when you explain or
-autocomplete a command, the output from `<command> --help` is provided
-to the LLM for reference.
+When you codify or complete a command, it also sends the contents of any
+files you mention (as long as the file is readable), and when you explain
+or complete a command, the output from `<command> --help` is provided to
+the LLM for reference.
 
 `fish-ai` can also send an exerpt of your commandline history
-when autocompleting a command. This is disabled by default.
+when completing a command. This is disabled by default.
 
 Finally, to fix the previous command, the previous commandline buffer,
 along with any terminal output and the corresponding exit code is sent
