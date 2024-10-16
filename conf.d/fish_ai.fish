@@ -40,6 +40,7 @@ function _fish_ai_install --on-event fish_ai_install
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
     python_version_check
+    symlink_truststore
     if ! test -f ~/.config/fish-ai.ini
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
@@ -57,6 +58,7 @@ function _fish_ai_update --on-event fish_ai_update
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
     python_version_check
+    symlink_truststore
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -95,5 +97,15 @@ function python_version_check
         echo "  fisher install realiserad/fish-ai"
         echo ""
         set_color normal
+    end
+end
+
+function symlink_truststore --description "Use the bundle with CA certificates trusted by the OS."
+    if test -f /etc/ssl/certs/ca-certificates.crt
+        echo "🔑 Symlinking to certificates stored in /etc/ssl/certs/ca-certificates.crt."
+        ln -snf /etc/ssl/certs/ca-certificates.crt (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+    else if test -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+        echo "🔑 Symlinking to certificates stored in /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem."
+        ln -snf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
     end
 end
