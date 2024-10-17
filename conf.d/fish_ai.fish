@@ -107,5 +107,8 @@ function symlink_truststore --description "Use the bundle with CA certificates t
     else if test -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
         echo "🔑 Symlinking to certificates stored in /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem."
         ln -snf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+    else if test -f /etc/ssl/cert.pem
+        echo "🔑 Symlinking to certificates stored in /etc/ssl/cert.pem."
+        ln -snf /etc/ssl/cert.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
     end
 end
