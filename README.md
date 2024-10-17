@@ -292,6 +292,9 @@ The following information is redacted:
 
 ## 🔨 Development
 
+If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)
+first.
+
 This repository ships with a `devcontainer.json` which can be used with
 GitHub Codespaces or Visual Studio Code with
 [the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).

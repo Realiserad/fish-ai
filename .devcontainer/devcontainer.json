@@ -15,7 +15,9 @@
                 "DavidAnson.vscode-markdownlint",
                 "tamasfe.even-better-toml",
                 "littlefoxteam.vscode-python-test-adapter",
-                "ryanluker.vscode-coverage-gutters"
+                "ryanluker.vscode-coverage-gutters",
+                "bierner.markdown-mermaid",
+                "bpruitt-goddard.mermaid-markdown-syntax-highlighting"
             ],
             "settings": {
                 // Disable key bindings Ctrl+P and Ctrl+Space used by fish-ai
