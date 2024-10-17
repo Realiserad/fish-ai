@@ -12,7 +12,7 @@ Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom
 but with some additional functionality.
 
 It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, Mistral,
-GitHub or a self-hosted LLM behind any OpenAI-compatible API.
+GitHub, Anthropic or a self-hosted LLM behind any OpenAI-compatible API.
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
@@ -133,6 +133,14 @@ model = Meta-Llama-3.1-70B-Instruct
 
 You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
 The PAT does not require any permissions.
+
+If you use [Anthropic](https://www.anthropic.com):
+
+```ini
+[anthropic]
+provider = anthropic
+api_key = <your API key>
+```
 
 ### Install `fish-ai`
 
