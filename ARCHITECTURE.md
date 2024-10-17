@@ -27,7 +27,8 @@ of the business logic.
 ## How the plugin is installed
 
 The plugin is intended to be installed using the fisher package manager.
-As explained [here](https://github.com/jorgebucaran/fisher/blob/main/README.md#creating-a-plugin), when a user runs `fisher install`, fisher will copy
+As explained [here](https://github.com/jorgebucaran/fisher/blob/main/README.md#creating-a-plugin),
+when a user runs `fisher install`, fisher will copy
 the `functions` and `conf.d` directories to the user's home directory and
 invoke the `_fish_ai_install` hook in `conf.d/fish_ai.fish`.
 
