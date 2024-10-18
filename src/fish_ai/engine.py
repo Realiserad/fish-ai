@@ -25,32 +25,33 @@ from binaryornot.check import is_binary
 from os import access, R_OK
 from re import match
 
+logger = logging.getLogger()
 
-def get_args():
-    return list.copy(sys.argv[1:])
+if path.exists('/dev/log'):
+    # Syslog on Linux
+    handler = SysLogHandler(address='/dev/log')
+    logger.addHandler(handler)
+elif path.exists('/var/run/syslog'):
+    # Syslog on macOS
+    handler = SysLogHandler(address='/var/run/syslog')
+    logger.addHandler(handler)
+
+if get_config('log'):
+    handler = RotatingFileHandler(path.expanduser(get_config('log')),
+                                  backupCount=0,
+                                  maxBytes=1024*1024)
+    logger.addHandler(handler)
+
+if get_config('debug') == 'True':
+    logger.setLevel(logging.DEBUG)
 
 
 def get_logger():
-    logger = logging.getLogger()
-
-    if path.exists('/dev/log'):
-        # Syslog on Linux
-        handler = SysLogHandler(address='/dev/log')
-        logger.addHandler(handler)
-    elif path.exists('/var/run/syslog'):
-        # Syslog on macOS
-        handler = SysLogHandler(address='/var/run/syslog')
-        logger.addHandler(handler)
-
-    if get_config('log'):
-        handler = RotatingFileHandler(path.expanduser(get_config('log')),
-                                      backupCount=0,
-                                      maxBytes=1024*1024)
-        logger.addHandler(handler)
-
-    if get_config('debug') == 'True':
-        logger.setLevel(logging.DEBUG)
     return logger
+
+
+def get_args():
+    return list.copy(sys.argv[1:])
 
 
 def get_os():
