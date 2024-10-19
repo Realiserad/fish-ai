@@ -116,6 +116,8 @@ def yield_completions(commandline, cursor_position, completions_count):
 
 
 def autocomplete():
+    engine.get_logger().info('----- BEGIN SESSION -----')
+
     commandline = engine.get_args()[0]
     cursor_position = int(engine.get_args()[1])
     before_cursor = commandline[:cursor_position]
@@ -143,3 +145,5 @@ def autocomplete():
     except Exception as e:
         engine.get_logger().exception(e)
         print(commandline, end='')
+
+    engine.get_logger().info('----- END SESSION -----')

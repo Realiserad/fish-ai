@@ -22,6 +22,9 @@ function fish_ai_bug_report
     print_header "Compatibility check"
     perform_compatibility_check
 
+    print_header "Logs from the last session"
+    print_logs
+
     if test "$error_found" = true
         echo "❌ Problems were found (see output above for details)."
         return 1
@@ -126,5 +129,32 @@ function perform_compatibility_check
         set -g error_found true
     else
         echo "👍 Python $python_version is supported."
+    end
+    echo ""
+end
+
+function print_logs
+    set log_file (python3 -c "import os; print(os.path.expanduser('$(~/.fish-ai/bin/lookup_setting log)'))")
+    if ! test -f "$log_file"
+        echo "😴 No log file available."
+        return
+    end
+    print_last_section "$log_file"
+    if test (~/.fish-ai/bin/lookup_setting debug) != True
+        echo ""
+        echo "🙏 Consider enabling debug mode to get more log output."
+    end
+end
+
+function print_last_section --argument-names log_file
+    set -l len (wc -l $log_file | awk '{ print $1 }')
+    for i in (seq $len -1 1)
+        set -l line (sed -n "$i p" "$log_file")
+        if test "$line" = "----- BEGIN SESSION -----"
+            for j in (seq $i $len)
+                echo (sed -n "$j p" "$log_file")
+            end
+            return
+        end
     end
 end

@@ -58,6 +58,8 @@ def get_messages(commandline):
 
 
 def codify():
+    engine.get_logger().info('----- BEGIN SESSION -----')
+
     commandline = engine.get_args()[0]
     if commandline.startswith('# '):
         commandline = commandline[2:]
@@ -70,3 +72,5 @@ def codify():
         engine.get_logger().exception(e)
         # Leave the commandline untouched
         print('# ' + commandline, end='')
+
+    engine.get_logger().info('----- END SESSION -----')

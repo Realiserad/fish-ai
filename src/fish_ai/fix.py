@@ -81,6 +81,8 @@ def get_error_message(previous_command):
 
 
 def fix():
+    engine.get_logger().info('----- BEGIN SESSION -----')
+
     previous_command = engine.get_args()[0]
     error_message = get_error_message(previous_command)
 
@@ -92,3 +94,5 @@ def fix():
         print(response, end='')
     except Exception as e:
         engine.get_logger().exception(e)
+
+    engine.get_logger().info('----- END SESSION -----')

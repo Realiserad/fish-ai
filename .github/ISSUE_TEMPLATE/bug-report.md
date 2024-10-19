@@ -36,10 +36,3 @@ Follow these steps to reproduce the bug.
 ### 🕊 Expected behavior
 
 A clear and concise description of what you expected to happen.
-
-### 🖥 Log output (optional)
-
-```shell
-> journalctl -f
-<paste relevant log lines here>
-```
