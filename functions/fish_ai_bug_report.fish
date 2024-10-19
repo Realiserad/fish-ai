@@ -53,11 +53,9 @@ end
 
 function print_keyboard
     bind --key | grep --color=never _fish_ai
-    if type -q setxkbmap
-        set layout (setxkbmap -query | grep layout | awk '{ print $2 }' | tr -d ' ')
-        echo "Keyboard layout: $layout"
+    if test -f /etc/default/keyboard
+        awk -F= '/^XKBMODEL|^XKBLAYOUT/ {print $1 ": " $2}' /etc/default/keyboard
     end
-
     echo ""
 end
 
