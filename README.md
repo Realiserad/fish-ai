@@ -250,7 +250,7 @@ preview_pipe = True
 ```
 
 This will send the output of the longest consecutive pipe after the last
-unterminated parathesis before the cursor. For example, if you autocomplete
+unterminated parenthesis before the cursor. For example, if you autocomplete
 `az vm list | jq`, the output from `az vm list` will be sent to the LLM.
 
 This behaviour is disabled by default, as it may slow down the completion
