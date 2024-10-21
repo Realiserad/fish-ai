@@ -41,7 +41,7 @@ repos:
     language: script
     pass_filenames: false
 - repo: https://github.com/compilerla/conventional-pre-commit
-  rev: v3.4.0
+  rev: v3.6.0
   hooks:
   - id: conventional-pre-commit
     stages: [commit-msg]
