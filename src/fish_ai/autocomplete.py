@@ -64,10 +64,10 @@ def get_instructions(commandline, cursor_position, completions_count):
         },
     ]
 
-    if (get_config('preview_pipe') == 'True' and
-            before_cursor.strip().endswith('|')):
-        command = before_cursor.strip()[:-1]
-        output = getoutput(command)
+    pipe = get_pipe(before_cursor)
+    if (get_config('preview_pipe') == 'True' and pipe != ''):
+        engine.get_logger().debug('Detected pipe: ' + pipe)
+        output = getoutput(pipe)
         if len(output) > 2000:
             short_output = output[:2000] + ' [...]'
         else:
@@ -76,11 +76,11 @@ def get_instructions(commandline, cursor_position, completions_count):
             The output from '{command}' is:
 
             {output}''').format(
-                command=command,
+                command=pipe,
                 output=short_output)
         return instructions
 
-    (filename, file_contents) = engine.get_file_info(before_cursor)
+    (filename, file_contents) = engine.get_file_info(commandline)
     if filename:
         instructions[-1]['content'] += textwrap.dedent('''\
             The content of the file {filename} is'
@@ -90,6 +90,32 @@ def get_instructions(commandline, cursor_position, completions_count):
                 file_contents=file_contents)
 
     return instructions
+
+
+def get_pipe(buffer):
+    opening_parens_pos = [-1]
+    last_pipe_pos = -1
+    processing_string = False
+    for i, char in enumerate(buffer):
+        escape_chars = 0
+        j = i - 1
+        while buffer[j] == '\\' and j >= 0:
+            escape_chars += 1
+            j -= 1
+        escape = escape_chars % 2 == 1
+        if not escape and (char == '"' or char == "'"):
+            processing_string = not processing_string
+        if not processing_string:
+            if char == '(':
+                opening_parens_pos.append(i)
+            elif char == ')' and len(opening_parens_pos) > 1:
+                opening_parens_pos.pop()
+            elif char == '|':
+                last_pipe_pos = i
+    if last_pipe_pos > -1:
+        return buffer[opening_parens_pos[-1] + 1:last_pipe_pos].strip(' ')
+    else:
+        return ''
 
 
 def get_messages(commandline, cursor_position, completions_count):
