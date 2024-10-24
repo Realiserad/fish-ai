@@ -10,9 +10,8 @@ def get_instructions(command, error_message):
         {
             'role': 'system',
             'content': textwrap.dedent('''\
-            Provide a fix for the user's error message.
-
-            Output only the fish shell command that fixes the problem.''')
+            Provide a fixed shell command given an error message from stdout.
+            ''')
         },
         {
             'role': 'user',
@@ -54,7 +53,10 @@ def get_instructions(command, error_message):
 
             Error message:
 
-            {}''').format(command, error_message)
+            {}
+
+            Output only the shell command that fixes the problem.
+            Do not explain your solution.''').format(command, error_message)
         }
     ]
 
