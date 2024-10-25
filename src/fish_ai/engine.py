@@ -24,6 +24,7 @@ from os import path
 from binaryornot.check import is_binary
 from os import access, R_OK
 from re import match
+from anthropic import Anthropic
 
 logger = logging.getLogger()
 
@@ -204,6 +205,17 @@ def get_messages_for_gemini(messages):
     return outputs
 
 
+def get_messages_for_anthropic(messages):
+    user_messages = []
+    system_messages = []
+    for message in messages:
+        if message.get('role') == 'system':
+            system_messages.append(message.get('content'))
+        else:
+            user_messages.append(message)
+    return system_messages, user_messages
+
+
 def create_system_prompt(messages):
     return '\n\n'.join(
         list(
@@ -276,6 +288,19 @@ def get_response(messages):
             max_tokens=1024
         )
         response = completions.choices[0].message.content.strip(' `')
+    elif get_config('provider') == 'anthropic':
+        client = Anthropic(
+            api_key=get_config('api_key')
+        )
+        system_messages, user_messages = get_messages_for_anthropic(messages)
+        completions = client.messages.create(
+            model=get_config('model') or 'claude-3-5-sonnet-20241022',
+            temperature=float(get_config('temperature') or '0.2'),
+            max_tokens=1024,
+            system='\n'.join(system_messages),
+            messages=user_messages
+        )
+        response = completions.content[0].text.strip(' `')
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4o',
