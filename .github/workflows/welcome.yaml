@@ -6,7 +6,7 @@ jobs:
   welcome:
     runs-on: ubuntu-latest
     steps:
-    - uses: wow-actions/welcome@v1.3.0
+    - uses: wow-actions/welcome@v1.3.1
       with:
         FIRST_PR_COMMENT: |
           Hello @{{ author }}. Thank you for contributing to this project! 💛 I'll review your changes when time permits.
