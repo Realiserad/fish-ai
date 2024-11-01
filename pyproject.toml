@@ -22,7 +22,7 @@ dependencies = [
   "hugchat==0.4.11",
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
-  "azure-ai-inference==1.0.0b4",
+  "azure-ai-inference==1.0.0b5",
   "anthropic==0.34.2",
 ]
 
