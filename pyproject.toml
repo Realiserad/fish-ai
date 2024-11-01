@@ -23,7 +23,7 @@ dependencies = [
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
   "azure-ai-inference==1.0.0b5",
-  "anthropic==0.37.1",
+  "anthropic==0.38.0",
 ]
 
 [project.urls]
