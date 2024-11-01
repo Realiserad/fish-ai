@@ -30,7 +30,8 @@ jobs:
         coverage xml
         coverage report
     - name: Report code coverage
+      if: github.event.pull_request.user.login != 'dependabot[bot]'
       uses: orgoro/coverage@v3.2
       with:
-          coverageFile: coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+        coverageFile: coverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
