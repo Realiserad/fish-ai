@@ -4,36 +4,36 @@ updates:
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/ci"
 - package-ecosystem: "pip"
   directory: "/"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/python"
 - package-ecosystem: "docker"
   directory: ".devcontainer"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/docker"
 - package-ecosystem: "docker"
   directory: "tests/ubuntu"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/docker"
 - package-ecosystem: "docker"
   directory: "tests/fedora"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/docker"
 - package-ecosystem: "docker"
   directory: "tests/archlinux"
   schedule:
-    interval: "monthly"
+    interval: "daily"
   labels:
   - "deps/docker"
