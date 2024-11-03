@@ -25,3 +25,17 @@ jobs:
           file: tests/${{ matrix.os }}/Dockerfile
           push: false
           build-args: SOURCE=${{ github.repository }}@${{ github.sha }}
+
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Installation test results
+    needs: [installation-tests]
+    steps:
+    - run: |
+        result="${{ needs.installation-tests.result }}"
+        if [[ $result == "success" || $result == "skipped" ]]; then
+          exit 0
+        else
+          exit 1
+        fi

@@ -35,3 +35,17 @@ jobs:
       with:
         coverageFile: coverage.xml
         token: ${{ secrets.GITHUB_TOKEN }}
+
+  results:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: Python test results
+    needs: [python-tests]
+    steps:
+    - run: |
+        result="${{ needs.python-tests.result }}"
+        if [[ $result == "success" || $result == "skipped" ]]; then
+          exit 0
+        else
+          exit 1
+        fi
