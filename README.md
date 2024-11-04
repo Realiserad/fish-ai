@@ -126,10 +126,10 @@ If you use [GitHub Models](https://github.com/marketplace/models):
 configuration = github
 
 [github]
-provider = github
-api_key = <GitHub PAT>
-model = Meta-Llama-3.1-70B-Instruct
-```
+provider = self-hosted
+server = https://models.inference.ai.azure.com
+api_key = <paste GitHub PAT here>
+model = gpt-4o-mini
 
 You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
 The PAT does not require any permissions.
