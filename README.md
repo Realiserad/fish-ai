@@ -130,6 +130,7 @@ provider = self-hosted
 server = https://models.inference.ai.azure.com
 api_key = <paste GitHub PAT here>
 model = gpt-4o-mini
+```
 
 You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
 The PAT does not require any permissions.
