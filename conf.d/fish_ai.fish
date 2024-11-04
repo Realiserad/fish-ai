@@ -41,6 +41,7 @@ function _fish_ai_install --on-event fish_ai_install
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
     python_version_check
     symlink_truststore
+    autoconfig_gh_models
     if ! test -f ~/.config/fish-ai.ini
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
@@ -111,4 +112,29 @@ function symlink_truststore --description "Use the bundle with CA certificates t
         echo "🔑 Symlinking to certificates stored in /etc/ssl/cert.pem."
         ln -snf /etc/ssl/cert.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
     end
+end
+
+function autoconfig_gh_models --description "Deploy configuration for GitHub Models."
+    if test -f ~/.config/fish-ai.ini
+        return
+    end
+    if ! type -q gh
+        return
+    end
+    if test -z (gh auth token)
+        return
+    end
+    if test -z (gh ext ls | grep "gh models")
+        return
+    end
+    echo "[fish-ai]" >>~/.config/fish-ai.ini
+    echo "configuration = github" >>~/.config/fish-ai.ini
+    echo "" >>~/.config/fish-ai.ini
+    echo "[github]" >>~/.config/fish-ai.ini
+    echo "provider = self-hosted" >>~/.config/fish-ai.ini
+    echo "server = https://models.inference.ai.azure.com" >>~/.config/fish-ai.ini
+    echo "api_key = $(gh auth token)" >>~/.config/fish-ai.ini
+    echo "model = gpt-4o-mini" >>~/.config/fish-ai.ini
+
+    echo "😺 Access to GitHub Models has been automatically configured for you!"
 end
