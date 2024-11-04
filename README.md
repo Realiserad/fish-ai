@@ -22,6 +22,14 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ## 👨‍🔧 How to install
 
+### Install `fish-ai`
+
+Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
+
+```shell
+fisher install realiserad/fish-ai
+```
+
 ### Create a configuration
 
 Create a configuration file `~/.config/fish-ai.ini`.
@@ -141,14 +149,6 @@ If you use [Anthropic](https://www.anthropic.com):
 [anthropic]
 provider = anthropic
 api_key = <your API key>
-```
-
-### Install `fish-ai`
-
-Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
-
-```shell
-fisher install realiserad/fish-ai
 ```
 
 ## 🙉 How to use
