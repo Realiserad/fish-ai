@@ -22,7 +22,7 @@ dependencies = [
   "hugchat==0.4.11",
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
-  "anthropic==0.38.0",
+  "anthropic==0.39.0",
 ]
 
 [project.urls]
