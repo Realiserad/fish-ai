@@ -121,3 +121,8 @@ def test_redact_content():
 def test_nothing_to_redact():
     input_str = 'Nothing to redact here...'
     assert redact_content(input_str) == input_str
+
+
+def test_do_not_redact():
+    input_str = 'import-key --keyring /etc/apk/keys/foo.gpg'
+    assert redact_content(input_str) == input_str

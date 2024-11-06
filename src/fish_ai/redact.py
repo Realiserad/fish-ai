@@ -24,7 +24,7 @@ def redact_content(content):
 
 
 def redact_cli_parameter(param, content):
-    pattern = r'--{param}([= ]?)(["\']?)\S+\2'.format(
+    pattern = r'--{param}([= ])(["\']?)\S+\2'.format(
         param=param)
     replace_with = r'--{param}\1\2<REDACTED>\2'.format(
         param=param)
