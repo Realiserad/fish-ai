@@ -22,7 +22,7 @@ jobs:
         go install
         cd -
         sudo apt install jq jo
-        HOURS=$(git-estimate -json | jq '.overall.hours | round')
+        HOURS=$(git-estimate -json | jq '[.developers[] | select(.author | contains("[bot]") | not) | .hours] | add | round')
         jo -p \
           "schemaVersion=1" \
           "label=⏳ Time spent" \
