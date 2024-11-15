@@ -59,13 +59,24 @@ def get_instructions(commandline, cursor_position, completions_count):
 
             {before_cursor}█{after_cursor}
 
-            Any autocompleted command MUST begin with "{before_cursor}"
-            and end with "{after_cursor}".''').format(
+            ''').format(
                 n=completions_count,
                 before_cursor=before_cursor,
                 after_cursor=after_cursor)
         },
     ]
+
+    if after_cursor.strip() == '':
+        instructions[-1]['content'] += textwrap.dedent('''\
+            The autocompleted command must begin with "{before_cursor}".
+            ''').format(before_cursor=before_cursor)
+    else:
+        instructions[-1]['content'] += textwrap.dedent('''\
+            The autocompleted command must begin with "{before_cursor}" and end
+            with "{after_cursor}".
+            ''').format(
+                before_cursor=before_cursor,
+                after_cursor=after_cursor)
 
     pipe = get_pipe(before_cursor)
     if (get_config('preview_pipe') == 'True' and pipe != ''):
