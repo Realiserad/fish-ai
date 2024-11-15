@@ -57,7 +57,10 @@ def get_instructions(commandline, cursor_position, completions_count):
             'content': textwrap.dedent('''\
             Provide {n} autocompleted commands for the commandline:
 
-            {before_cursor}█{after_cursor}''').format(
+            {before_cursor}█{after_cursor}
+
+            Any autocompleted command MUST begin with "{before_cursor}"
+            and end with "{after_cursor}".''').format(
                 n=completions_count,
                 before_cursor=before_cursor,
                 after_cursor=after_cursor)
@@ -72,22 +75,26 @@ def get_instructions(commandline, cursor_position, completions_count):
             short_output = output[:2000] + ' [...]'
         else:
             short_output = output
-        instructions[-1]['content'] += textwrap.dedent('''
+        instructions[-1]['content'] = textwrap.dedent('''\
             The output from '{command}' is:
 
-            {output}''').format(
+            {output}
+
+            ''').format(
                 command=pipe,
-                output=short_output)
+                output=short_output) + instructions[-1]['content']
         return instructions
 
     (filename, file_contents) = engine.get_file_info(commandline)
     if filename:
-        instructions[-1]['content'] += textwrap.dedent('''\
+        instructions[-1]['content'] = textwrap.dedent('''\
             The content of the file {filename} is'
 
-            {file_contents}''').format(
+            {file_contents}
+
+            ''').format(
                 filename=filename,
-                file_contents=file_contents)
+                file_contents=file_contents) + instructions[-1]['content']
 
     return instructions
 
