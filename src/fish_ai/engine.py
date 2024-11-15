@@ -245,7 +245,7 @@ def get_response(messages):
         response = (chat.send_message(generation_config=generation_config,
                                       content=messages[-1].get('content'),
                                       stream=False)
-                    .text.strip(' `'))
+                    .text)
     elif get_config('provider') == 'huggingface':
         email = get_config('email')
         password = get_config('password')
@@ -260,7 +260,7 @@ def get_response(messages):
             'meta-llama/Meta-Llama-3.1-70B-Instruct')
 
         response = bot.chat(
-            messages[-1].get('content')).wait_until_done().strip(' `')
+            messages[-1].get('content')).wait_until_done()
         bot.delete_conversation(bot.get_conversation_info())
     elif get_config('provider') == 'mistral':
         client = Mistral(
@@ -272,7 +272,7 @@ def get_response(messages):
             max_tokens=1024,
             temperature=float(get_config('temperature') or '0.2'),
         )
-        response = completions.choices[0].message.content.strip(' `')
+        response = completions.choices[0].message.content
     elif get_config('provider') == 'anthropic':
         client = Anthropic(
             api_key=get_config('api_key')
@@ -285,7 +285,7 @@ def get_response(messages):
             system='\n'.join(system_messages),
             messages=user_messages
         )
-        response = completions.content[0].text.strip(' `')
+        response = completions.content[0].text
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4o',
@@ -295,7 +295,9 @@ def get_response(messages):
             temperature=float(get_config('temperature') or '0.2'),
             n=1,
         )
-        response = completions.choices[0].message.content.strip(' `')
+        response = completions.choices[0].message.content
+
+    response = '\n'.join(line.strip(' `') for line in response.split('\n'))
 
     end_time = time_ns()
     get_logger().debug('Response received from backend: ' + response)
