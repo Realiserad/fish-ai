@@ -264,7 +264,8 @@ def get_response(messages):
         bot.delete_conversation(bot.get_conversation_info())
     elif get_config('provider') == 'mistral':
         client = Mistral(
-            api_key=get_config('api_key')
+            api_key=get_config('api_key'),
+            server_url=get_config('server') or 'https://api.mistral.ai'
         )
         completions = client.chat.complete(
             model=get_config('model') or 'mistral-large-latest',
