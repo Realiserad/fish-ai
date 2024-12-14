@@ -14,17 +14,6 @@ bind \cP _fish_ai_codify_or_explain
 bind -k nul _fish_ai_autocomplete_or_fix
 
 ##
-## This section contains functionality for clearing the status emoji
-## shown in the right prompt.
-##
-bind \r 'clear_status; commandline -f execute'
-bind \cc 'clear_status; commandline -f repaint; commandline -f cancel-commandline'
-
-function clear_status
-    set -e status_emoji
-end
-
-##
 ## This section contains the plugin lifecycle hooks invoked by the fisher package
 ## manager.
 ##
