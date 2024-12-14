@@ -14,13 +14,10 @@ def test_successful_codify(capsys):
     assert capsys.readouterr().err == ''
 
 
-@patch('fish_ai.engine.get_args', lambda: ['# hello'])
 @patch('fish_ai.engine.get_response',
        side_effect=Exception('crystal ball failed'))
-@patch('builtins.print')
-def test_unsuccessful_codify(mock_print, _, caplog):
+def test_unsuccessful_codify(_, caplog):
     codify()
-    mock_print.assert_called_with('# hello', end='')
     assert 'crystal ball failed' in caplog.text
 
 

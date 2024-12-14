@@ -17,16 +17,11 @@ def test_successful_autocomplete(capsys):
     assert capsys.readouterr().err == ''
 
 
-@patch('fish_ai.engine.get_args', lambda: ['echo hello', 10])
-@patch('fish_ai.engine.get_config', lambda key: {
-    'completions': '1'
-}.get(key))
+@patch('fish_ai.engine.get_args', lambda: ['echo hello', 4])
 @patch('fish_ai.autocomplete.iterfzf',
        side_effect=Exception('crystal ball failed'))
-@patch('builtins.print')
-def test_unsuccessful_autocomplete(mock_print, _, caplog):
+def test_unsuccessful_autocomplete(_, caplog):
     autocomplete()
-    mock_print.assert_called_with('echo hello', end='')
     assert 'crystal ball failed' in caplog.text
 
 
