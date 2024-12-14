@@ -146,8 +146,7 @@ def get_system_prompt():
         You are a shell scripting assistant working inside a fish shell.
         The operating system is {os}. Your output must to be shell runnable.
         You may consult Stack Overflow and the official Fish shell
-        documentation for answers. If you are unable to fulfill the request,
-        respond with a short message starting with "error: ".
+        documentation for answers.
         ''').format(os=get_os())
     }
 
