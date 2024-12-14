@@ -96,5 +96,8 @@ def fix():
         print(response, end='')
     except Exception as e:
         engine.get_logger().exception(e)
-
-    engine.get_logger().info('----- END SESSION -----')
+        print('# An error occurred when running fish-ai. More info: ' +
+              str(e.args), end='')
+        exit(1)
+    finally:
+        engine.get_logger().info('----- END SESSION -----')

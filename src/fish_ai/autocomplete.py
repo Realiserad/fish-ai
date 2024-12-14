@@ -188,6 +188,8 @@ def autocomplete():
             print(commandline, end='')
     except Exception as e:
         engine.get_logger().exception(e)
-        print(commandline, end='')
-
-    engine.get_logger().info('----- END SESSION -----')
+        print('# An error occurred when running fish-ai. More info: ' +
+              str(e.args), end='')
+        exit(1)
+    finally:
+        engine.get_logger().info('----- END SESSION -----')
