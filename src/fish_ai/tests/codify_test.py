@@ -14,6 +14,7 @@ def test_successful_codify(capsys):
     assert capsys.readouterr().err == ''
 
 
+@patch('fish_ai.engine.get_args', lambda: ['# hello'])
 @patch('fish_ai.engine.get_response',
        side_effect=Exception('crystal ball failed'))
 def test_unsuccessful_codify(_, caplog):
