@@ -28,13 +28,13 @@ function _fish_ai_install --on-event fish_ai_install
     $python_exe -m venv ~/.fish-ai
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
-        exit 1
+        return 1
     end
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
-        exit 2
+        return 2
     end
     python_version_check
     symlink_truststore
@@ -54,14 +54,14 @@ function _fish_ai_update --on-event fish_ai_update
     $python_exe -m venv --upgrade ~/.fish-ai
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
-        exit 1
+        return 1
     end
     echo "🐍 Now using $(~/.fish-ai/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
-        exit 2
+        return 2
     end
     python_version_check
     symlink_truststore
