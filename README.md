@@ -3,16 +3,36 @@
 
 # About
 
-`fish-ai` adds AI functionality to [Fish](https://fishshell.com). It
-has been tested with macOS and Linux, but should run on any system where
+`fish-ai` adds AI functionality to [Fish](https://fishshell.com).
+It's awesome! I built it to make my life easier, and I hope it will make
+yours easier too. Here is the complete sales pitch:
+
+- It can turn a comment into a shell command and vice versa, which means
+less time spent
+reading manpages, googling and copy-pasting from Stack Overflow. Great
+when working with `git`, `kubectl`, `curl` and other tools with loads
+of parameters and switches.
+- Did you make a typo? It can also fix a broken command (similarly to
+[`thefuck`](https://github.com/nvbn/thefuck)).
+- Not sure what to type next or just lazy? Let the LLM autocomplete
+your commands with a built in fuzzy finder.
+- Everything is done using two keyboard shortcuts, no mouse needed!
+- It can be hooked up to the LLM of your choice (even a self-hosted one!).
+- Everything is open source, hopefully somewhat easy to read and
+around 3000 lines of code, which means that you can audit the code
+yourself in an afternoon.
+- Install and update with ease using [`fisher`](https://github.com/jorgebucaran/fisher).
+- Tested on both macOS and Linux, but should run on any system where
 [a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
 and git is installed.
+- Does not interfere with [`fzf.fish`](https://github.com/PatrickF1/fzf.fish),
+[`tide`](https://github.com/IlanCosman/tide) or any of the other plugins
+you're already using!
+- Does not wrap your shell, install telemetry or force you to switch
+to a proprietary terminal emulator.
 
-Originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish),
-but with some additional functionality.
-
-It can be hooked up to OpenAI, Azure OpenAI, Google, Hugging Face, Mistral,
-Anthropic, GitHub or a self-hosted LLM behind any OpenAI-compatible API.
+This plugin was originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish).
+Without Tom, this repository would not exist!
 
 If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
