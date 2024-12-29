@@ -23,6 +23,7 @@ from binaryornot.check import is_binary
 from os import access, R_OK
 from re import match
 from anthropic import Anthropic
+import cohere
 
 logger = logging.getLogger()
 
@@ -286,6 +287,16 @@ def get_response(messages):
             messages=user_messages
         )
         response = completions.content[0].text
+    elif get_config('provider') == 'cohere':
+        api_key = get_config('api_key')
+        client = cohere.ClientV2(api_key)
+        completions = client.chat(
+            model=get_config('model') or 'command-r-plus-08-2024',
+            messages=messages,
+            max_tokens=1024,
+            temperature=float(get_config('temperature') or '0.2'),
+        )
+        response = completions.message.content[0].text
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4o',

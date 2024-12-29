@@ -12,3 +12,4 @@ hugchat
 mistralai
 binaryornot
 anthropic
+cohere
