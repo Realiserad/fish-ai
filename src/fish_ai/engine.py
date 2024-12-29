@@ -314,6 +314,4 @@ def get_response(messages):
     get_logger().debug('Response received from backend: ' + response)
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')
-    if response.startswith('error:'):
-        raise Exception(response)
     return response
