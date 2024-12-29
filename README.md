@@ -171,6 +171,14 @@ provider = anthropic
 api_key = <your API key>
 ```
 
+If you use [Cohere](https://cohere.com):
+
+```ini
+[cohere]
+provider = cohere
+api_key = <your API key>
+```
+
 ## 🙉 How to use
 
 ### Transform comments into commands and vice versa
