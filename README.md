@@ -109,17 +109,6 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
-If you use [Gemini](https://ai.google.dev):
-
-```ini
-[fish-ai]
-configuration = gemini
-
-[gemini]
-provider = google
-api_key = <your API key>
-```
-
 If you use [Hugging Face](https://huggingface.co):
 
 ```ini
