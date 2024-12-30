@@ -2,7 +2,7 @@
 ## Supported major.minor versions of Python.
 ## Unit tests are run in CI against these versions.
 ##
-set -g supported_versions 3.9 3.10 3.11 3.12
+set -g supported_versions 3.9 3.10 3.11 3.12 3.13
 
 ##
 ## This section contains the keybindings for fish-ai. If you want to change the
