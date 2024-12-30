@@ -2,8 +2,6 @@
 
 from openai import OpenAI
 from openai import AzureOpenAI
-import google.generativeai as genai
-from google.generativeai.types import GenerationConfig
 from os.path import isfile
 import platform
 import logging
@@ -175,34 +173,6 @@ def get_openai_client():
                         .format(get_config('provider')))
 
 
-def get_messages_for_gemini(messages):
-    """
-    Create message history which can be used with Gemini.
-    Google uses a different chat history format than OpenAI.
-    The message content should be put in a parts array and
-    system messages are not supported.
-    """
-    outputs = []
-    system_messages = []
-    for message in messages:
-        if message.get('role') == 'system':
-            system_messages.append(message.get('content'))
-    for i in range(len(messages) - 1):
-        message = messages[i]
-        if message.get('role') == 'user':
-            outputs.append({
-                'role': 'user',
-                'parts': system_messages + [message.get('content')] if i == 0
-                else [message.get('content')]
-            })
-        elif message.get('role') == 'assistant':
-            outputs.append({
-                'role': 'model',
-                'parts': [message.get('content')]
-            })
-    return outputs
-
-
 def get_messages_for_anthropic(messages):
     user_messages = []
     system_messages = []
@@ -234,19 +204,7 @@ def get_response(messages):
 
     start_time = time_ns()
 
-    if get_config('provider') == 'google':
-        genai.configure(api_key=get_config('api_key'))
-        model = genai.GenerativeModel(
-            get_config('model') or 'gemini-1.5-flash')
-        chat = model.start_chat(history=get_messages_for_gemini(messages))
-        generation_config = GenerationConfig(
-            candidate_count=1,
-            temperature=float(get_config('temperature') or '0.2'))
-        response = (chat.send_message(generation_config=generation_config,
-                                      content=messages[-1].get('content'),
-                                      stream=False)
-                    .text)
-    elif get_config('provider') == 'huggingface':
+    if get_config('provider') == 'huggingface':
         email = get_config('email')
         password = get_config('password')
         cookies = Login(email, password).login(
