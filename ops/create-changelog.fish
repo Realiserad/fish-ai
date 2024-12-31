@@ -16,13 +16,13 @@ for commit in $commits
     set long_hash (git log --format=%H -n 1 $commit)
     set commit_link "https://github.com/realiserad/fish-ai/commit/$long_hash"
     set message "$commit_description (in commit [`#$short_hash`]($commit_link))"
-    if test "$commit_type" = fix || test "$commit_type" = "fix!"
+    if string match --regex --quiet 'fix(\([a-z]+\))!?' "$commit_type"
         set -a fixes (echo -n $message)
     end
-    if test "$commit_type" = feat || test "$commit_type" = "feat!"
+    if string match --regex --quiet 'feat(\([a-z]+\))!?' "$commit_type"
         set -a feats (echo -n $message)
     end
-    if test "$commit_type" = perf || test "$commit_type" = "perf!"
+    if string match --regex --quiet 'perf(\([a-z]+\))!?' "$commit_type"
         set -a perfs (echo -n $message)
     end
     if test "$commit_type" = "chore(deps)"
