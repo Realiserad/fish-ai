@@ -74,11 +74,7 @@ if test -n "$breaking_changes"
     for commit_hash in $breaking_changes
         set breaking_change (git log -n 1 "$commit_hash" --format="%b" | \
             # Strip the BREAKING CHANGE: prefix
-            awk '/^BREAKING CHANGE:/{print substr($0, 18)}' | \
-            # Capitalize the first letter in the sentence
-            sed 's/^\(.\)/\u\1/' | \
-            # Make sure the sentence ends with a dot
-            awk '{if (substr($0, length($0))!= ".") $0 = $0 "."; print toupper(substr($0,1,1)) tolower(substr($0,2))}')
+            awk '/^BREAKING CHANGE:/{print substr($0, 18)}')
         echo ""
         set short_commit_hash (git rev-parse --short "$commit_hash")
         set commit_link "https://github.com/realiserad/fish-ai/commit/$commit_hash"
