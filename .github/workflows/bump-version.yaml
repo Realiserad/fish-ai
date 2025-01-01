@@ -1,0 +1,19 @@
+name: Bump version
+on:
+  pull_request:
+  pull_request_target:
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: fish-shop/install-fish-shell@v1
+    - name: Bump version
+      run: fish ops/bump-version.fish || true
+    - uses: actions4git/add-commit-push@v1
+      with:
+        commit-message: "chore: bump version"
