@@ -54,7 +54,7 @@ fisher install realiserad/fish-ai
 
 Create a configuration file `~/.config/fish-ai.ini`.
 
-If you use a self-hosted LLM:
+If you use a self-hosted LLM (behind an OpenAI-compatible API):
 
 ```ini
 [fish-ai]
