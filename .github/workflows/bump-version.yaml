@@ -12,6 +12,11 @@ jobs:
         fetch-depth: 0
         ref: ${{ github.head_ref }}
     - uses: fish-shop/install-fish-shell@v1
+    - name: Install what-bump
+      uses: baptiste0928/cargo-install@v3
+      with:
+        crate: what-bump
+        version: "1.3.0"
     - name: Bump version
       run: fish ops/bump-version.fish || true
     - uses: stefanzweifel/git-auto-commit-action@v5
