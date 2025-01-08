@@ -191,12 +191,7 @@ def create_system_prompt(messages):
                 list(
                     filter(
                         lambda message: message.get('role') == 'system',
-                        messages
-                    )
-            )
-            )
-        )
-    )
+                        messages)))))
 
 
 def get_response(messages):
