@@ -3,6 +3,8 @@
 function _fish_ai_codify_or_explain --description "Transform a command into a comment and vice versa using AI."
     set input (commandline --current-buffer)
 
+    show_progess_indicator
+
     if test -z "$input"
         return
     end

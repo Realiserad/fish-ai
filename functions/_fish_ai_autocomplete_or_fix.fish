@@ -4,6 +4,9 @@ function _fish_ai_autocomplete_or_fix --description "Autocomplete the current co
     set previous_status $status
 
     set input (commandline --current-buffer)
+
+    show_progess_indicator
+
     if test -z "$input" && test $previous_status -ne 0
         # Fix the previous command.
         set previous_command (history | head -1)

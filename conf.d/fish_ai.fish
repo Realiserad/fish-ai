@@ -143,3 +143,9 @@ function autoconfig_gh_models --description "Deploy configuration for GitHub Mod
 
     echo "😺 Access to GitHub Models has been automatically configured for you!"
 end
+
+function show_progess_indicator --description "Show a progress indicator."
+    # Move the cursor to the end of the line and insert progress indicator
+    tput hpa (math $COLUMNS - (string length -v (fish_right_prompt)[-1]) - 2)
+    echo -n '⏳'
+end
