@@ -22,7 +22,7 @@ dependencies = [
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
   "anthropic==0.43.1",
-  "cohere==5.13.8",
+  "cohere==5.13.11",
 ]
 
 [project.urls]
