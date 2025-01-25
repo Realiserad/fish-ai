@@ -5,8 +5,9 @@ or return
 
 set current_tag (git tag --sort=-creatordate | sed -n 1p)
 set previous_tag (git tag --sort=-creatordate | sed -n 2p)
-set commits (git log $current_tag...$previous_tag --format='%H')
-set breaking_changes (git log --grep='BREAKING CHANGE:' $current_tag...$previous_tag --format='%H')
+# $A..$B selects all commits in B not in A
+set commits (git log $previous_tag..$current_tag --format='%H')
+set breaking_changes (git log --grep='BREAKING CHANGE:' $previous_tag..$current_tag --format='%H')
 
 for commit in $commits
     set message_header (git log --format=%s -n 1 $commit)
@@ -16,13 +17,13 @@ for commit in $commits
     set long_hash (git log --format=%H -n 1 $commit)
     set commit_link "https://github.com/realiserad/fish-ai/commit/$long_hash"
     set message "$commit_description (in commit [`#$short_hash`]($commit_link))"
-    if string match --regex --quiet 'fix(\([a-z]+\))!?' "$commit_type"
+    if string match --regex --quiet 'fix(\([a-z]+\))?!?' "$commit_type"
         set -a fixes (echo -n $message)
     end
-    if string match --regex --quiet 'feat(\([a-z]+\))!?' "$commit_type"
+    if string match --regex --quiet 'feat(\([a-z]+\))?!?' "$commit_type"
         set -a feats (echo -n $message)
     end
-    if string match --regex --quiet 'perf(\([a-z]+\))!?' "$commit_type"
+    if string match --regex --quiet 'perf(\([a-z]+\))?!?' "$commit_type"
         set -a perfs (echo -n $message)
     end
     if test "$commit_type" = "chore(deps)"
