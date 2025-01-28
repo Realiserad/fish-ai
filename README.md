@@ -168,6 +168,15 @@ provider = cohere
 api_key = <your API key>
 ```
 
+If you use [DeepSeek](https://www.deepseek.com):
+
+```ini
+[deepseek]
+provider = deepseek
+api_key = <your API key>
+model = deepseek-chat
+```
+
 ## 🙉 How to use
 
 ### Transform comments into commands and vice versa

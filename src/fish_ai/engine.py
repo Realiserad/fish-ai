@@ -168,6 +168,12 @@ def get_openai_client():
             api_key=get_config('api_key'),
             organization=get_config('organization'),
         )
+    elif (get_config('provider') == 'deepseek'):
+        # DeepSeek is compatiable with OpenAI Python SDK
+        return OpenAI(
+            api_key=get_config('api_key'),
+            base_url='https://api.deepseek.com'
+        )
     else:
         raise Exception('Unknown provider "{}".'
                         .format(get_config('provider')))
