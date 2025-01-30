@@ -183,8 +183,8 @@ model = deepseek-chat
 
 Type a comment (anything starting with `#`), and press **Ctrl + P** to turn it
 into shell command! Note that if your comment is very brief or vague, the LLM
-may decide to improve the comment instead of providing a shell command. You 
-then need to press **Ctrl + P** again. 
+may decide to improve the comment instead of providing a shell command. You
+then need to press **Ctrl + P** again.
 
 You can also run it in reverse. Type a command and press **Ctrl + P** to turn it
 into a comment explaining what the command does.
