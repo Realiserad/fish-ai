@@ -19,7 +19,7 @@ your commands with a built in fuzzy finder.
 - Everything is done using two keyboard shortcuts, no mouse needed!
 - It can be hooked up to the LLM of your choice (even a self-hosted one!).
 - Everything is open source, hopefully somewhat easy to read and
-around 3000 lines of code, which means that you can audit the code
+around 2000 lines of code, which means that you can audit the code
 yourself in an afternoon.
 - Install and update with ease using [`fisher`](https://github.com/jorgebucaran/fisher).
 - Tested on both macOS and Linux, but should run on any system where
