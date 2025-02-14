@@ -229,7 +229,6 @@ def get_response(messages):
         completions = client.chat.complete(
             model=get_config('model') or 'mistral-large-latest',
             messages=messages,
-            max_tokens=1024,
             temperature=float(get_config('temperature') or '0.2'),
         )
         response = completions.choices[0].message.content
@@ -241,7 +240,6 @@ def get_response(messages):
         completions = client.messages.create(
             model=get_config('model') or 'claude-3-5-sonnet-20241022',
             temperature=float(get_config('temperature') or '0.2'),
-            max_tokens=1024,
             system='\n'.join(system_messages),
             messages=user_messages
         )
@@ -252,14 +250,12 @@ def get_response(messages):
         completions = client.chat(
             model=get_config('model') or 'command-r-plus-08-2024',
             messages=messages,
-            max_tokens=1024,
             temperature=float(get_config('temperature') or '0.2'),
         )
         response = completions.message.content[0].text
     else:
         completions = get_openai_client().chat.completions.create(
             model=get_config('model') or 'gpt-4o',
-            max_tokens=1024,
             messages=messages,
             stream=False,
             temperature=float(get_config('temperature') or '0.2'),
