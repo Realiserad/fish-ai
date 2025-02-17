@@ -30,7 +30,7 @@ repos:
   - id: name-tests-test
   - id: trailing-whitespace
 - repo: https://github.com/pycqa/flake8
-  rev: '7.1.1'
+  rev: '7.1.2'
   hooks:
   - id: flake8
 - repo: local
