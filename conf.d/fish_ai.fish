@@ -10,8 +10,13 @@ set -g supported_versions 3.9 3.10 3.11 3.12 3.13
 ## your needs. You can get the key binding escape sequence for a keyboard shortcut
 ## using the command `fish_key_reader`.
 ##
-bind \cP _fish_ai_codify_or_explain
-bind -k nul _fish_ai_autocomplete_or_fix
+if test $fish_key_bindings = fish_vi_key_bindings
+    bind -M insert \cp _fish_ai_codify_or_explain
+    bind -M insert -k nul _fish_ai_autocomplete_or_fix
+else
+    bind \cP _fish_ai_codify_or_explain
+    bind -k nul _fish_ai_autocomplete_or_fix
+end
 
 ##
 ## This section contains the plugin lifecycle hooks invoked by the fisher package

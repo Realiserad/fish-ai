@@ -4,8 +4,8 @@ function fish_ai_bug_report
     print_header Environment
     print_environment
 
-    print_header "Keyboard and key bindings"
-    print_keyboard
+    print_header "Key bindings"
+    print_key_bindings
 
     print_header Dependencies
     print_dependencies
@@ -51,11 +51,10 @@ function print_environment
     echo ""
 end
 
-function print_keyboard
+function print_key_bindings
     bind --key | grep --color=never _fish_ai
-    if test -f /etc/default/keyboard
-        awk -F= '/^XKBMODEL|^XKBLAYOUT/ {print $1 ": " $2}' /etc/default/keyboard
-    end
+    echo ""
+    echo "Key bindings in use: $fish_key_bindings"
     echo ""
 end
 
