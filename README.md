@@ -196,6 +196,9 @@ completions in [`fzf`](https://github.com/junegunn/fzf) (it is bundled
 with the plugin, no need to install it separately). Completions load in the
 background and show up as they become available.
 
+To refine the results, type some instructions and press **Ctrl + P**
+inside `fzf`.
+
 ### Suggest fixes
 
 If a command fails, you can immediately press **Ctrl + Space** at the command prompt
@@ -244,6 +247,15 @@ Here is an example of how you can increase the number of completions to `10`:
 ```ini
 [fish-ai]
 completions = 10
+```
+
+To change the number of refined completions suggested by the LLM when pressing
+**Ctrl + P** in `fzf`, set the `refined_completions` option. The default value
+is `3`.
+
+```ini
+[fish-ai]
+refined_completions = 5
 ```
 
 ### Personalise completions using commandline history

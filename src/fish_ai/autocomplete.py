@@ -5,9 +5,13 @@ from iterfzf import iterfzf
 import textwrap
 from subprocess import getoutput
 from fish_ai.config import get_config
+from base64 import b64encode, b64decode
 
 
-def get_instructions(commandline, cursor_position, completions_count):
+def get_instructions(commandline,
+                     cursor_position,
+                     completions_count,
+                     additional_instructions):
     before_cursor = commandline[:cursor_position]
     after_cursor = commandline[cursor_position:]
     instructions = [
@@ -65,6 +69,12 @@ def get_instructions(commandline, cursor_position, completions_count):
                 after_cursor=after_cursor)
         },
     ]
+
+    if additional_instructions is not None:
+        instructions[-1]['content'] += textwrap.dedent('''\
+            The following additional instructions were provided by the user:\
+            {additional_instructions}
+            ''').format(additional_instructions=additional_instructions)
 
     if after_cursor.strip() == '':
         instructions[-1]['content'] += textwrap.dedent('''\
@@ -136,19 +146,27 @@ def get_pipe(buffer):
         return ''
 
 
-def get_messages(commandline, cursor_position, completions_count):
+def get_messages(commandline,
+                 cursor_position,
+                 completions_count,
+                 additional_instructions):
     return [engine.get_system_prompt()] + get_instructions(
         commandline=commandline,
         cursor_position=cursor_position,
-        completions_count=completions_count)
+        completions_count=completions_count,
+        additional_instructions=additional_instructions)
 
 
-def yield_completions(commandline, cursor_position, completions_count):
+def yield_completions(commandline,
+                      cursor_position,
+                      completions_count,
+                      additional_instructions=None):
     yield commandline
     messages = get_messages(
         commandline=commandline,
         cursor_position=cursor_position,
-        completions_count=completions_count)
+        completions_count=completions_count,
+        additional_instructions=additional_instructions)
 
     try:
         response = engine.get_response(messages=messages)
@@ -157,6 +175,19 @@ def yield_completions(commandline, cursor_position, completions_count):
             yield completion
     except Exception as e:
         engine.get_logger().exception(e)
+
+
+def get_reload_command(commandline, cursor_position):
+    return ('reload(~/.fish-ai/bin/refine {commandline} '
+            '{cursor_position} {completions_count} '
+            '{instructions})+clear-query').format(
+                # b64 encode commandline buffer to deal with single quotes
+                commandline=b64encode(commandline.encode()).decode(),
+                cursor_position=cursor_position,
+                completions_count=engine.get_config(
+                    'refined_completions') or '3',
+                instructions='{q}'
+            )
 
 
 def autocomplete():
@@ -181,7 +212,14 @@ def autocomplete():
             completions_generator,
             prompt='🤖 ',
             cycle=True,
-            __extra__=['--height=20%', '--layout=reverse', '--margin=1,1'])
+            bind={
+                'ctrl-p': get_reload_command(commandline, cursor_position),
+            },
+            __extra__=[
+                  '--height=20%',
+                  '--layout=reverse',
+                  '--margin=1,1'
+                ])
         if selected_completion:
             print(selected_completion, end='')
         else:
@@ -192,3 +230,28 @@ def autocomplete():
               str(e.args), end='')
     finally:
         engine.get_logger().info('----- END SESSION -----')
+
+
+def refine_completions():
+    commandline = b64decode(engine.get_args()[0]).decode()
+    cursor_position = int(engine.get_args()[1])
+    refined_completions_count = int(engine.get_args()[2])
+    instructions = engine.get_args()[3]
+
+    before_cursor = commandline[:cursor_position]
+    after_cursor = commandline[cursor_position:]
+
+    engine.get_logger().debug(('Refining {completions_count} completions '
+                               'for "{before_cursor}█{after_cursor}" using '
+                               'instructions "{instructions}".').format(
+                                completions_count=refined_completions_count,
+                                before_cursor=before_cursor,
+                                after_cursor=after_cursor,
+                                instructions=instructions
+    ))
+
+    for completion in yield_completions(commandline,
+                                        cursor_position,
+                                        refined_completions_count,
+                                        instructions):
+        print(completion)
