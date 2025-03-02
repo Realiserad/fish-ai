@@ -307,7 +307,7 @@ files you mention (as long as the file is readable), and when you explain
 or complete a command, the output from `<command> --help` is provided to
 the LLM for reference.
 
-`fish-ai` can also send an exerpt of your commandline history
+`fish-ai` can also send an excerpt of your commandline history
 when completing a command. This is disabled by default.
 
 Finally, to fix the previous command, the previous commandline buffer,
