@@ -22,9 +22,7 @@ your commands with a built in fuzzy finder.
 around 2000 lines of code, which means that you can audit the code
 yourself in an afternoon.
 - Install and update with ease using [`fisher`](https://github.com/jorgebucaran/fisher).
-- Tested on both macOS and Linux, but should run on any system where
-[a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
-and git is installed.
+- Tested on both macOS and the most common Linux distributions.
 - Does not interfere with [`fzf.fish`](https://github.com/PatrickF1/fzf.fish),
 [`tide`](https://github.com/IlanCosman/tide) or any of the other plugins
 you're already using!
@@ -44,7 +42,8 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ### Install `fish-ai`
 
-Install the plugin. You can install it using [`fisher`](https://github.com/jorgebucaran/fisher).
+Make sure `git` and [a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
+is installed. Then install using [`fisher`](https://github.com/jorgebucaran/fisher).
 
 ```shell
 fisher install realiserad/fish-ai
