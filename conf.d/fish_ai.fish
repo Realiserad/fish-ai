@@ -24,12 +24,7 @@ end
 ##
 function _fish_ai_install --on-event fish_ai_install
     echo "🥡 Setting up a virtual environment..."
-    if test -n "$FISH_AI_PYTHON_VERSION"
-        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
-        set python_exe python$FISH_AI_PYTHON_VERSION
-    else
-        set python_exe python3
-    end
+    set_python_exe
     $python_exe -m venv ~/.fish-ai
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
@@ -50,12 +45,7 @@ function _fish_ai_install --on-event fish_ai_install
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    if test -n "$FISH_AI_PYTHON_VERSION"
-        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
-        set python_exe python$FISH_AI_PYTHON_VERSION
-    else
-        set python_exe python3
-    end
+    set_python_exe
     $python_exe -m venv --upgrade ~/.fish-ai
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
@@ -76,6 +66,15 @@ function _fish_ai_uninstall --on-event fish_ai_uninstall
     if test -d ~/.fish-ai
         echo "💣 Nuking the virtual environment..."
         rm -r ~/.fish-ai
+    end
+end
+
+function set_python_exe
+    if test -n "$FISH_AI_PYTHON_VERSION"
+        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
+        set python_exe python$FISH_AI_PYTHON_VERSION
+    else
+        set python_exe python3
     end
 end
 
