@@ -32,9 +32,9 @@ when a user runs `fisher install`, fisher will copy
 the `functions` and `conf.d` directories to the user's home directory and
 invoke the `_fish_ai_install` hook in `conf.d/fish_ai.fish`.
 
-The install hook will then create a virtual environment using `venv` and run
-`pip` to install the `fish_ai` module directly from the git repository here
-on GitHub.
+The install hook will then create a virtual environment using `uv`or `venv`
+and run `pip` to install the `fish_ai` module directly from the git repository
+here on GitHub.
 
 The virtual environment is created in the `~/.fish-ai` directory. It will
 contain the `fish_ai` module along with its dependencies.
@@ -47,7 +47,7 @@ their configuration disappearing.
 
 The Python module is located in the `src/fish_ai` directory. It contains
 the backend code for constructing the prompt, reading configuration values
-and making API calls. It also bundles `fzf`for showing autocompletions.
+and making API calls. It also bundles `fzf` for showing autocompletions.
 
 Here are the most important files and directories:
 
