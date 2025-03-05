@@ -238,10 +238,11 @@ def get_response(messages):
         )
         system_messages, user_messages = get_messages_for_anthropic(messages)
         completions = client.messages.create(
-            model=get_config('model') or 'claude-3-5-sonnet-20241022',
+            model=get_config('model') or 'claude-3-7-sonnet-latest',
             temperature=float(get_config('temperature') or '0.2'),
             system='\n'.join(system_messages),
-            messages=user_messages
+            messages=user_messages,
+            max_tokens=4096
         )
         response = completions.content[0].text
     elif get_config('provider') == 'cohere':
