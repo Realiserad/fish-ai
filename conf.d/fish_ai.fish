@@ -23,13 +23,19 @@ end
 ## manager.
 ##
 function _fish_ai_install --on-event fish_ai_install
-    echo "🥡 Setting up a virtual environment..."
-    set_python_exe
-    $python_exe -m venv ~/.fish-ai
+    set_python_version
+    if type -q uv
+        echo "🥡 Setting up a virtual environment using uv..."
+        uv venv --seed --python $python_version ~/.fish-ai
+    else
+        echo "🥡 Setting up a virtual environment using venv..."
+        python$python_version -m venv ~/.fish-ai
+    end
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 1
     end
+
     echo "🍬 Installing dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq "$(get_installation_url)"
     if test $status -ne 0
@@ -45,12 +51,17 @@ function _fish_ai_install --on-event fish_ai_install
 end
 
 function _fish_ai_update --on-event fish_ai_update
-    set_python_exe
-    $python_exe -m venv --upgrade ~/.fish-ai
+    set_python_version
+    if type -q uv
+        uv venv --seed --python $python_version ~/.fish-ai
+    else
+        python$python_version -m venv --upgrade ~/.fish-ai
+    end
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 1
     end
+
     echo "🐍 Now using $(~/.fish-ai/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
     ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
@@ -69,12 +80,12 @@ function _fish_ai_uninstall --on-event fish_ai_uninstall
     end
 end
 
-function set_python_exe
+function set_python_version
     if test -n "$FISH_AI_PYTHON_VERSION"
         echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
-        set python_exe python$FISH_AI_PYTHON_VERSION
+        set -g python_version $FISH_AI_PYTHON_VERSION
     else
-        set python_exe python3
+        set -g python_version 3
     end
 end
 
