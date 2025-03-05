@@ -42,8 +42,8 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ### Install `fish-ai`
 
-Make sure `git` and [a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
-is installed. Then install using [`fisher`](https://github.com/jorgebucaran/fisher).
+Make sure `git` and either [`uv`](https://github.com/astral-sh/uv) or [a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
+along with `pip` and is `venv` is installed. Then grab the plugin using [`fisher`](https://github.com/jorgebucaran/fisher):
 
 ```shell
 fisher install realiserad/fish-ai
