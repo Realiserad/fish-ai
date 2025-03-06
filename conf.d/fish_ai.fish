@@ -84,7 +84,11 @@ function set_python_version
     if test -n "$FISH_AI_PYTHON_VERSION"
         echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
         set -g python_version $FISH_AI_PYTHON_VERSION
+    else if type -q uv
+        # Use the last supported version of Python
+        set -g python_version $supported_versions[-1]
     else
+        # Use the Python version provided by the system
         set -g python_version 3
     end
 end
