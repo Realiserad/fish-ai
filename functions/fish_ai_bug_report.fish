@@ -42,7 +42,7 @@ function print_environment
     if test -f /etc/os-release
         echo "Running on $(cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"')"
     else if type -q sw_vers
-        echo "Running on Mac OS X $(sw_vers --productVersion)"
+        echo "Running on macOS $(sw_vers --productVersion)"
     else
         echo "❌ Running on an unsupported platform."
         set -g error_found true
@@ -65,7 +65,13 @@ function print_dependencies
         return
     end
 
-    echo "$(~/.fish-ai/bin/python3 --version) (the system default is $(python3 --version))"
+    if type -q uv
+        echo "😎 This system has uv installed."
+    end
+    echo "Python version used by fish-ai: $(~/.fish-ai/bin/python3 --version)"
+    if type -q python3
+        echo "Python version used by the system: $(python3 --version)"
+    end
     fish --version
     fisher --version
     git --version
@@ -98,6 +104,7 @@ end
 function perform_functionality_tests
     if ! test -f ~/.config/fish-ai.ini
         echo "😴 No configuration available. Skipping."
+        echo ""
         return
     end
 
@@ -131,7 +138,7 @@ function perform_compatibility_check
 end
 
 function print_logs
-    set log_file (python3 -c "import os; print(os.path.expanduser('$(~/.fish-ai/bin/lookup_setting log)'))")
+    set log_file (~/.fish-ai/bin/python3 -c "import os; print(os.path.expanduser('$(~/.fish-ai/bin/lookup_setting log)'))")
     if ! test -f "$log_file"
         echo "😴 No log file available."
         return

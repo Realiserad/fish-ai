@@ -29,9 +29,10 @@ FROM ubuntu:24.04 AS install-with-uv
 ARG SOURCE=.
 
 RUN apt update && \
-    apt install -y curl git
+    apt install -y curl git software-properties-common
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    . $HOME/.local/bin/env
 
 RUN apt-add-repository ppa:fish-shell/release-3 && \
     apt update && \
