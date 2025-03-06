@@ -23,7 +23,8 @@ ARG SOURCE=.
 
 RUN dnf -y install fish git
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    . $HOME/.local/bin/env
 
 WORKDIR /workspace
 
