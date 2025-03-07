@@ -200,6 +200,12 @@ def create_system_prompt(messages):
                         messages)))))
 
 
+def get_temperature():
+    if get_config('temperature') == 'None':
+        return None
+    return float(get_config('temperature') or '0.2')
+
+
 def get_response(messages):
     messages = redact(messages)
 
@@ -229,7 +235,7 @@ def get_response(messages):
         completions = client.chat.complete(
             model=get_config('model') or 'mistral-large-latest',
             messages=messages,
-            temperature=float(get_config('temperature') or '0.2'),
+            temperature=get_temperature(),
         )
         response = completions.choices[0].message.content
     elif get_config('provider') == 'anthropic':
@@ -239,7 +245,7 @@ def get_response(messages):
         system_messages, user_messages = get_messages_for_anthropic(messages)
         completions = client.messages.create(
             model=get_config('model') or 'claude-3-7-sonnet-latest',
-            temperature=float(get_config('temperature') or '0.2'),
+            temperature=get_temperature(),
             system='\n'.join(system_messages),
             messages=user_messages,
             max_tokens=4096
@@ -251,7 +257,7 @@ def get_response(messages):
         completions = client.chat(
             model=get_config('model') or 'command-r-plus-08-2024',
             messages=messages,
-            temperature=float(get_config('temperature') or '0.2'),
+            temperature=get_temperature(),
         )
         response = completions.message.content[0].text
     else:
@@ -259,7 +265,7 @@ def get_response(messages):
             model=get_config('model') or 'gpt-4o',
             messages=messages,
             stream=False,
-            temperature=float(get_config('temperature') or '0.2'),
+            temperature=get_temperature(),
             n=1,
         )
         response = completions.choices[0].message.content
