@@ -226,42 +226,54 @@ def get_response(messages):
             api_key=get_config('api_key'),
             server_url=get_config('server') or 'https://api.mistral.ai'
         )
-        completions = client.chat.complete(
-            model=get_config('model') or 'mistral-large-latest',
-            messages=messages,
-            temperature=float(get_config('temperature') or '0.2'),
-        )
+        params = {
+            'model': get_config('model') or 'mistral-large-latest',
+            'messages': messages,
+        }
+        temp = get_config('temperature')
+        if temp != 'None':
+            params['temperature'] = float(temp or '0.2')
+        completions = client.chat.complete(**params)
         response = completions.choices[0].message.content
     elif get_config('provider') == 'anthropic':
         client = Anthropic(
             api_key=get_config('api_key')
         )
         system_messages, user_messages = get_messages_for_anthropic(messages)
-        completions = client.messages.create(
-            model=get_config('model') or 'claude-3-7-sonnet-latest',
-            temperature=float(get_config('temperature') or '0.2'),
-            system='\n'.join(system_messages),
-            messages=user_messages,
-            max_tokens=4096
-        )
+        params = {
+            'model': get_config('model') or 'claude-3-7-sonnet-latest',
+            'system': '\n'.join(system_messages),
+            'messages': user_messages,
+            'max_tokens': 4096
+        }
+        temp = get_config('temperature')
+        if temp != 'None':
+            params['temperature'] = float(temp or '0.2')
+        completions = client.messages.create(**params)
         response = completions.content[0].text
     elif get_config('provider') == 'cohere':
         api_key = get_config('api_key')
         client = cohere.ClientV2(api_key)
-        completions = client.chat(
-            model=get_config('model') or 'command-r-plus-08-2024',
-            messages=messages,
-            temperature=float(get_config('temperature') or '0.2'),
-        )
+        params = {
+            'model': get_config('model') or 'command-r-plus-08-2024',
+            'messages': messages,
+        }
+        temp = get_config('temperature')
+        if temp != 'None':
+            params['temperature'] = float(temp or '0.2')
+        completions = client.chat(**params)
         response = completions.message.content[0].text
     else:
-        completions = get_openai_client().chat.completions.create(
-            model=get_config('model') or 'gpt-4o',
-            messages=messages,
-            stream=False,
-            temperature=float(get_config('temperature') or '0.2'),
-            n=1,
-        )
+        params = {
+            'model': get_config('model') or 'gpt-4o',
+            'messages': messages,
+            'stream': False,
+            'n': 1,
+        }
+        temp = get_config('temperature')
+        if temp != 'None':
+            params['temperature'] = float(temp or '0.2')
+        completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
     response = '\n'.join(line.strip(' `') for line in response.split('\n'))
