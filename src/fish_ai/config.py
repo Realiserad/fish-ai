@@ -20,6 +20,9 @@ def get_config(key):
     active_section = config.get(section='fish-ai', option='configuration')
 
     if config.has_option(section=active_section, option=key):
-        return config.get(section=active_section, option=key)
+        return path.expandvars(config.get(section=active_section, option=key))
 
-    return config.get(section='fish-ai', option=key, fallback=None)
+    if config.has_option(section='fish-ai', option=key):
+        return path.expandvars(config.get(section='fish-ai', option=key))
+
+    return None
