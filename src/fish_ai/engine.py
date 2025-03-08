@@ -1,41 +1,35 @@
 # -*- coding: utf-8 -*-
 
-from openai import OpenAI
-from openai import AzureOpenAI
-from os.path import isfile
-import platform
 import logging
 from logging.handlers import SysLogHandler, RotatingFileHandler
+from os.path import isfile, exists, expanduser
+from platform import system, mac_ver
 from time import time_ns
-import subprocess
 import textwrap
-import sys
-from hugchat import hugchat
-from hugchat.login import Login
-from mistralai import Mistral
-from fish_ai.redact import redact
-import itertools
-from fish_ai.config import get_config
-from os import path
-from binaryornot.check import is_binary
 from os import access, R_OK
 from re import match
-from anthropic import Anthropic
-import cohere
+from binaryornot.check import is_binary
+from subprocess import run, PIPE, DEVNULL, Popen
+from itertools import islice
+from sys import argv
+
+from fish_ai.redact import redact
+from fish_ai.config import get_config
+
 
 logger = logging.getLogger()
 
-if path.exists('/dev/log'):
+if exists('/dev/log'):
     # Syslog on Linux
     handler = SysLogHandler(address='/dev/log')
     logger.addHandler(handler)
-elif path.exists('/var/run/syslog'):
+elif exists('/var/run/syslog'):
     # Syslog on macOS
     handler = SysLogHandler(address='/var/run/syslog')
     logger.addHandler(handler)
 
 if get_config('log'):
-    handler = RotatingFileHandler(path.expanduser(get_config('log')),
+    handler = RotatingFileHandler(expanduser(get_config('log')),
                                   backupCount=0,
                                   maxBytes=1024*1024)
     logger.addHandler(handler)
@@ -49,19 +43,19 @@ def get_logger():
 
 
 def get_args():
-    return list.copy(sys.argv[1:])
+    return list.copy(argv[1:])
 
 
 def get_os():
-    if platform.system() == 'Linux':
+    if system() == 'Linux':
         if isfile('/etc/os-release'):
             with open('/etc/os-release') as f:
                 for line in f:
                     if line.startswith('PRETTY_NAME='):
                         return line.split('=')[1].strip('"')
         return 'Linux'
-    if platform.system() == 'Darwin':
-        return 'macOS ' + platform.mac_ver()[0]
+    if system() == 'Darwin':
+        return 'macOS ' + mac_ver()[0]
     return 'Unknown'
 
 
@@ -69,10 +63,10 @@ def get_manpage(command):
     try:
         get_logger().debug('Retrieving manpage for command "{}"'
                            .format(command))
-        helppage = subprocess.run(
+        helppage = run(
             ['fish', '-c', command + ' --help'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL)
+            stdout=PIPE,
+            stderr=DEVNULL)
         if helppage.returncode == 0:
             output = helppage.stdout.decode('utf-8')
             if len(output) > 2000:
@@ -119,10 +113,10 @@ def get_commandline_history(commandline, cursor_position):
         before_cursor = commandline[:cursor_position]
         after_cursor = commandline[cursor_position:]
 
-        proc = subprocess.Popen(
+        proc = Popen(
             ['fish', '-c', 'history search --prefix "{}"'.format(command)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL)
+            stdout=PIPE,
+            stderr=DEVNULL)
         while True:
             line = proc.stdout.readline()
             if not line:
@@ -131,7 +125,7 @@ def get_commandline_history(commandline, cursor_position):
             if item.startswith(before_cursor) and item.endswith(after_cursor):
                 yield item
 
-    history = list(itertools.islice(yield_history(), history_size))
+    history = list(islice(yield_history(), history_size))
 
     if len(history) == 0:
         return 'No commandline history available.'
@@ -152,6 +146,7 @@ def get_system_prompt():
 
 def get_openai_client():
     if (get_config('provider') == 'azure'):
+        from openai import AzureOpenAI
         return AzureOpenAI(
             azure_endpoint=get_config('server'),
             api_version='2023-07-01-preview',
@@ -159,17 +154,20 @@ def get_openai_client():
             azure_deployment=get_config('azure_deployment'),
         )
     elif (get_config('provider') == 'self-hosted'):
+        from openai import OpenAI
         return OpenAI(
             base_url=get_config('server'),
             api_key=get_config('api_key') or 'dummy',
         )
     elif (get_config('provider') == 'openai'):
+        from openai import OpenAI
         return OpenAI(
             api_key=get_config('api_key'),
             organization=get_config('organization'),
         )
     elif (get_config('provider') == 'deepseek'):
         # DeepSeek is compatible with OpenAI Python SDK
+        from openai import OpenAI
         return OpenAI(
             api_key=get_config('api_key'),
             base_url='https://api.deepseek.com'
@@ -206,10 +204,13 @@ def get_response(messages):
     start_time = time_ns()
 
     if get_config('provider') == 'huggingface':
+        from hugchat import hugchat
+        from hugchat.login import Login
+
         email = get_config('email')
         password = get_config('password')
         cookies = Login(email, password).login(
-            cookie_dir_path=path.expanduser('~/.fish-ai/cookies/'),
+            cookie_dir_path=expanduser('~/.fish-ai/cookies/'),
             save_cookies=True)
 
         bot = hugchat.ChatBot(
@@ -222,6 +223,8 @@ def get_response(messages):
             messages[-1].get('content')).wait_until_done()
         bot.delete_conversation(bot.get_conversation_info())
     elif get_config('provider') == 'mistral':
+        from mistralai import Mistral
+
         client = Mistral(
             api_key=get_config('api_key'),
             server_url=get_config('server') or 'https://api.mistral.ai'
@@ -236,6 +239,8 @@ def get_response(messages):
         completions = client.chat.complete(**params)
         response = completions.choices[0].message.content
     elif get_config('provider') == 'anthropic':
+        from anthropic import Anthropic
+
         client = Anthropic(
             api_key=get_config('api_key')
         )
@@ -252,8 +257,10 @@ def get_response(messages):
         completions = client.messages.create(**params)
         response = completions.content[0].text
     elif get_config('provider') == 'cohere':
+        from cohere import ClientV2
+
         api_key = get_config('api_key')
-        client = cohere.ClientV2(api_key)
+        client = ClientV2(api_key)
         params = {
             'model': get_config('model') or 'command-r-plus-08-2024',
             'messages': messages,
