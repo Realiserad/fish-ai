@@ -53,6 +53,12 @@ repos:
     language: script
     stages: [post-commit]
     always_run: true
+  - id: git-nowhere
+    name: Remove git timestamps
+    entry: ./ops/git-nowhere.fish
+    language: script
+    stages: [post-commit]
+    always_run: true
 ci:
   autofix_commit_msg: 'style: modified by hook'
   autoupdate_commit_msg: 'ci: pre-commit autoupdate'
@@ -60,4 +66,5 @@ ci:
   - fish_indent
   - fish_syntax
   - bump-version
+  - git-nowhere
   - supported-versions-check
