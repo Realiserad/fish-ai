@@ -55,7 +55,7 @@ if test "$perfs" != ""
     echo ""
     echo "## ⚡ Performance improvements"
     echo ""
-    for perfs in $perfs
+    for perf in $perfs
         echo "- $perf"
     end
 end
