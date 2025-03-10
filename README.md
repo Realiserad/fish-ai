@@ -238,6 +238,10 @@ temperature = 0.5
 
 This option is not supported when using the `huggingface` provider.
 
+Some reasoning models, such as OpenAI's o3, does not support the
+temperature parameter, and you need to explicitly disable it by
+setting `temperature = None`.
+
 ### Number of completions
 
 To change the number of completions suggested by the LLM when pressing
