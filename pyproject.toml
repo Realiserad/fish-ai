@@ -17,7 +17,7 @@ classifiers = [
 dependencies = [
   "openai==1.66.2",
   "simple-term-menu==1.6.6",
-  "iterfzf==1.5.0.60.2",
+  "iterfzf==1.6.0.60.3",
   "hugchat==0.4.18",
   "mistralai==1.0.2",
   "binaryornot==0.4.4",
