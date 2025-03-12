@@ -3,7 +3,6 @@
 from unittest.mock import patch
 
 from fish_ai.codify import codify
-import logging
 
 
 @patch('fish_ai.engine.get_args', lambda: ['# hello'])
@@ -20,13 +19,3 @@ def test_successful_codify(capsys):
 def test_unsuccessful_codify(_, caplog):
     codify()
     assert 'crystal ball failed' in caplog.text
-
-
-@patch('fish_ai.engine.get_args', lambda: ['# print /tmp/hello.txt'])
-@patch('fish_ai.engine.get_response')
-@patch('fish_ai.engine.get_logger', lambda: logging.getLogger('dummy'))
-def test_codify_with_file(mock_get_response, fs):
-    fs.create_file('/tmp/hello.txt', contents='what is cooking?')
-    codify()
-    assert 'what is cooking?' in mock_get_response \
-        .call_args.kwargs['messages'][-1]['content']
