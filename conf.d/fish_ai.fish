@@ -6,17 +6,40 @@ set -g supported_versions 3.9 3.10 3.11 3.12 3.13
 
 ##
 ## This section contains the keybindings for fish-ai. If you want to change the
-## default keybindings, edit the key binding escape sequences below according to
-## your needs. You can get the key binding escape sequence for a keyboard shortcut
-## using the command `fish_key_reader`.
+## default keybindings, use the environment variables:
 ##
-if test $fish_key_bindings = fish_vi_key_bindings
-    bind -M insert \cp _fish_ai_codify_or_explain
-    bind -M insert -k nul _fish_ai_autocomplete_or_fix
+##   - FISH_AI_KEYMAP_1 (defaults to Ctrl + P)
+##   - FISH_AI_KEYMAP_2 (defaults to Ctrl + Space)
+##
+## These should be set to the key binding escape sequence for a keyboard shortcut
+## you want to use + any flags. You can get the key binding escape sequence using
+## the command `fish_key_reader`.
+##
+if test -n "$FISH_AI_KEYMAP_1"
+    echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_1' instead of Ctrl+P."
+    set -g keymap_1 "$FISH_AI_KEYMAP_1"
 else
-    bind \cP _fish_ai_codify_or_explain
-    bind -k nul _fish_ai_autocomplete_or_fix
+    set -g keymap_1 \cp
 end
+if test -n "$FISH_AI_KEYMAP_2"
+    echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_2' instead of Ctrl+Space."
+    set -g keymap_2 "$FISH_AI_KEYMAP_2"
+else
+    if type -q sw_vers
+        # macOS
+        set -g keymap_2 ctrl-space
+    else
+        # Linux
+        set -g keymap_2 -k nul
+    end
+end
+if test $fish_key_bindings = fish_vi_key_bindings
+    set -g bind_command bind -M insert
+else
+    set -g bind_command bind
+end
+$bind_command $keymap_1 _fish_ai_codify_or_explain
+$bind_command $keymap_2 _fish_ai_autocomplete_or_fix
 
 ##
 ## This section contains the plugin lifecycle hooks invoked by the fisher package
