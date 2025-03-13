@@ -12,3 +12,4 @@ mistralai
 binaryornot
 anthropic
 cohere
+keyring
