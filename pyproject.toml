@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "1.4.2"
+version = "1.5.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -23,6 +23,7 @@ dependencies = [
   "binaryornot==0.4.4",
   "anthropic==0.49.0",
   "cohere==5.14.0",
+  "keyring==25.6.0",
 ]
 
 [project.urls]
@@ -35,6 +36,7 @@ codify = "fish_ai.codify:codify"
 explain = "fish_ai.explain:explain"
 autocomplete = "fish_ai.autocomplete:autocomplete"
 switch_context = "fish_ai.switch_context:switch_context"
+put_api_key = "fish_ai.put_api_key:put_api_key"
 lookup_setting = "fish_ai.config:lookup_setting"
 refine = "fish_ai.autocomplete:refine_completions"
 
