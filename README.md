@@ -178,6 +178,12 @@ api_key = <your API key>
 model = deepseek-chat
 ```
 
+### Put the API key on your keyring
+
+Instead of putting the API key in the configuration file, you can let
+`fish-ai` load it from your keyring. To save a new API key or transfer
+an existing API key to your keyring, run `fish_ai put_api_key`.
+
 ## 🙉 How to use
 
 ### Transform comments into commands and vice versa
