@@ -208,7 +208,7 @@ def get_response(messages):
         from hugchat.login import Login
 
         email = get_config('email')
-        password = get_config('password')
+        password = get_config('api_key') or get_config('password')
         cookies = Login(email, password).login(
             cookie_dir_path=expanduser('~/.fish-ai/cookies/'),
             save_cookies=True)

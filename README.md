@@ -119,7 +119,7 @@ configuration = huggingface
 [huggingface]
 provider = huggingface
 email = <your email>
-password = <your password>
+api_key = <your password>
 model = meta-llama/Llama-3.3-70B-Instruct
 ```
 
