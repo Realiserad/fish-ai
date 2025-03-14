@@ -94,6 +94,7 @@ function _fish_ai_update --on-event fish_ai_update
     end
     python_version_check
     symlink_truststore
+    warn_plaintext_api_keys
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -158,6 +159,20 @@ function symlink_truststore --description "Use the bundle with CA certificates t
     else if test -f /etc/ssl/cert.pem
         echo "🔑 Symlinking to certificates stored in /etc/ssl/cert.pem."
         ln -snf /etc/ssl/cert.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+    end
+end
+
+function warn_plaintext_api_keys --description "Warn about plaintext API keys."
+    if grep -q "^api_key" ~/.config/fish-ai.ini
+        echo -n "🚨 One or more plaintext API keys are stored in "
+        set_color --bold red
+        echo -n "~/.config/fish-ai.ini"
+        set_color normal
+        echo -n ". Consider moving them to your keyring using "
+        set_color --italics blue
+        echo -n fish_ai_put_api_key
+        set_color normal
+        echo "."
     end
 end
 
