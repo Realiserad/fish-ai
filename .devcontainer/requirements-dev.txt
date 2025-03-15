@@ -13,3 +13,4 @@ binaryornot
 anthropic
 cohere
 keyring
+groq
