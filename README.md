@@ -178,6 +178,14 @@ api_key = <your API key>
 model = deepseek-chat
 ```
 
+If you use [Groq](https://groq.com):
+
+```ini
+[groq]
+provider = groq
+api_key = <your API key>
+```
+
 ### Put the API key on your keyring
 
 Instead of putting the API key in the configuration file, you can let
