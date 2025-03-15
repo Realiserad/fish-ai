@@ -172,6 +172,11 @@ def get_openai_client():
             api_key=get_config('api_key'),
             base_url='https://api.deepseek.com'
         )
+    elif (get_config('provider') == 'groq'):
+        from groq import Groq
+        return Groq(
+            api_key=get_config('api_key'),
+        )
     else:
         raise Exception('Unknown provider "{}".'
                         .format(get_config('provider')))
@@ -270,6 +275,24 @@ def get_response(messages):
             params['temperature'] = float(temp or '0.2')
         completions = client.chat(**params)
         response = completions.message.content[0].text
+    elif get_config('provider') == 'groq':
+        model = get_config('model') or 'qwen-qwq-32b'
+        params = {
+            'model': model,
+            'messages': messages,
+            'stream': False,
+            'max_completion_tokens': 4096,
+            'top_p': 0.95,
+            'n': 1,
+        }
+        temp = get_config('temperature')
+        if temp != 'None':
+            params['temperature'] = float(temp or '0.6')
+        # This removes the thinking tokens for the qwen-qwq-32b model:
+        if model == 'qwen-qwq-32b':
+            params['reasoning_format'] = 'parsed'
+        completions = get_openai_client().chat.completions.create(**params)
+        response = completions.choices[0].message.content
     else:
         params = {
             'model': get_config('model') or 'gpt-4o',
