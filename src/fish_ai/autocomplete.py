@@ -194,7 +194,17 @@ def autocomplete():
     engine.get_logger().info('----- BEGIN SESSION -----')
 
     commandline = engine.get_args()[0]
-    cursor_position = int(engine.get_args()[1])
+    if commandline.startswith('#'):
+        engine.get_logger().debug(
+            'Codifying commandline before completion using instructions: ' +
+            commandline[1:].strip())
+        from fish_ai.codify import get_messages
+        commandline = engine.get_response(
+            messages=get_messages(commandline[1:].strip()))
+        cursor_position = len(commandline)
+    else:
+        cursor_position = int(engine.get_args()[1])
+
     before_cursor = commandline[:cursor_position]
     after_cursor = commandline[cursor_position:]
 

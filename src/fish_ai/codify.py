@@ -61,8 +61,8 @@ def codify():
     engine.get_logger().info('----- BEGIN SESSION -----')
 
     commandline = engine.get_args()[0]
-    if commandline.startswith('# '):
-        commandline = commandline[2:]
+    if commandline.startswith('#'):
+        commandline = commandline[1:].strip()
 
     try:
         engine.get_logger().debug('Codifying commandline: ' + commandline)
