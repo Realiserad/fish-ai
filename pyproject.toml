@@ -15,7 +15,7 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  "openai==1.67.0",
+  "openai==1.68.0",
   "simple-term-menu==1.6.6",
   "iterfzf==1.6.0.60.3",
   "hugchat==0.4.18",
