@@ -206,10 +206,9 @@ into a comment explaining what the command does.
 
 ### Autocomplete commands
 
-Begin typing your command and press **Ctrl + Space** to display a list of
-completions in [`fzf`](https://github.com/junegunn/fzf) (it is bundled
-with the plugin, no need to install it separately). Completions load in the
-background and show up as they become available.
+Begin typing your command or comment and press **Ctrl + Space** to display a list
+of completions in [`fzf`](https://github.com/junegunn/fzf) (it is bundled
+with the plugin, no need to install it separately).
 
 To refine the results, type some instructions and press **Ctrl + P**
 inside `fzf`.
