@@ -17,7 +17,7 @@ jobs:
           useGitIgnore: true
           modifiedFilesOnly: true
     - name: Run Linkspector
-      uses: umbrelladocs/action-linkspector@v1.3.2
+      uses: umbrelladocs/action-linkspector@v1.3.3
       with:
         github_token: ${{ secrets.github_token }}
         reporter: github-pr-review
