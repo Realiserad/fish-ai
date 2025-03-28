@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-import base64
 
 
 def redact(messages):
@@ -19,7 +18,6 @@ def redact_content(content):
     r = redact_cli_parameter('secret', r)
     r = redact_pem_encoded_private_key(r)
     r = redact_pem_encoded_private_key_block(r)
-    r = redact_base64_data(r)
     return r
 
 
@@ -60,17 +58,3 @@ def redact_pem_encoded_private_key_block(content):
         replace_with,
         content,
         flags=re.DOTALL)
-
-
-def redact_base64_data(content):
-    pattern = r'["\']([A-Za-z0-9+\\/=]+={0,2})["\']'
-
-    def redact_match(match):
-        encoded_string = match.group(1)
-        try:
-            base64.b64decode(encoded_string)
-            return r'"<REDACTED>"'
-        except base64.binascii.Error:
-            return match.group(0)
-
-    return re.sub(pattern, redact_match, content)

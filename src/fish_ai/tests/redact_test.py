@@ -56,16 +56,6 @@ def test_redact_multiple_cli_parameters():
     assert redact_content(input_str) == expected_output
 
 
-def test_redact_base64_data():
-    input_str = 'echo "cGFzc3dvcmQxMjM=" | login'
-    expected_output = 'echo "<REDACTED>" | login'
-    assert redact_content(input_str) == expected_output
-
-    input_str = "echo 'cGFzc3dvcmQxMjM=' | login"
-    expected_output = 'echo "<REDACTED>" | login'
-    assert redact_content(input_str) == expected_output
-
-
 def test_redact_pem_encoded_private_key():
     input_str = textwrap.dedent("""\
         -----BEGIN RSA PRIVATE KEY-----
