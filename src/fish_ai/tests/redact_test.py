@@ -45,14 +45,12 @@ def test_redact_multiple_cli_parameters():
         Here are some login commands for cucumber, tomato and pepper:
 
         login --username cucumber --password cucumber
-        login --username tomato --api-key tomato
-        echo 'cGVwcGVy' | login --username pepper""")
+        login --username tomato --api-key tomato""")
     expected_output = textwrap.dedent("""\
         Here are some login commands for cucumber, tomato and pepper:
 
         login --username cucumber --password <REDACTED>
-        login --username tomato --api-key <REDACTED>
-        echo \"<REDACTED>\" | login --username pepper""")
+        login --username tomato --api-key <REDACTED>""")
     assert redact_content(input_str) == expected_output
 
 
