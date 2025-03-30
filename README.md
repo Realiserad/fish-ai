@@ -344,7 +344,6 @@ the `<REDACTED>` placeholder.
 The following information is redacted:
 
 - Passwords and API keys supplied on the commandline.
-- Base64 encoded data in single or double quotes.
 - PEM-encoded private keys.
 
 ## 🔨 Development
