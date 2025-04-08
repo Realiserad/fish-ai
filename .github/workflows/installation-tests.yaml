@@ -5,7 +5,33 @@ on:
     branches:
     - main
 jobs:
-  installation-tests:
+  macos-installation-tests:
+    runs-on: macos-latest
+    if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: astral-sh/setup-uv@v5
+      with:
+        version: latest
+    - uses: fish-shop/install-fish-shell@v1
+    - name: Install Fisher plugin manager
+      uses: fish-shop/install-plugin-manager@v2
+      with:
+        plugin-manager: fisher
+    - name: Install on macOS
+      shell: fish {0}
+      run: |
+        echo '::group:: 🏗 Show installation log'
+        fisher install .
+        echo '::endgroup::'
+
+        echo '::group:: 🐞 Show bug report'
+        fish_ai_bug_report
+        echo '::endgroup::'
+
+  linux-installation-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -30,12 +56,17 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: Installation test results
-    needs: [installation-tests]
+    needs:
+    - macos-installation-tests
+    - linux-installation-tests
     steps:
     - run: |
-        result="${{ needs.installation-tests.result }}"
-        if [[ $result == "success" || $result == "skipped" ]]; then
-          exit 0
-        else
-          exit 1
+        linux_result="${{ needs.linux-installation-tests.result }}"
+        macos_result="${{ needs.macos-installation-tests.result }}"
+        if [[ $linux_result == "success" || $linux_result == "skipped" ]]; then
+          if [[ $macos_result == "success" || $macos_result == "skipped" ]]; then
+            exit 0
+          fi
         fi
+
+        exit 1

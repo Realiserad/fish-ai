@@ -31,7 +31,7 @@ else
         set -g keymap_2 -k nul
     end
 end
-if test $fish_key_bindings = fish_vi_key_bindings
+if test "$fish_key_bindings" = fish_vi_key_bindings
     set -g bind_command bind -M insert
 else
     set -g bind_command bind
