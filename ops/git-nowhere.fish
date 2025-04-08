@@ -21,4 +21,4 @@ echo "Setting AuthorDate: $utc_author_date"
 echo "Setting CommitDate: $utc_commit_date"
 
 set -x GIT_COMMITTER_DATE $utc_commit_date
-git commit --amend --no-edit --date="$utc_author_date" 2>/dev/null
+git commit --amend --no-edit --no-verify --date="$utc_author_date" 2>/dev/null
