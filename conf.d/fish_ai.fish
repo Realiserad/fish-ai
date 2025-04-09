@@ -183,10 +183,10 @@ function autoconfig_gh_models --description "Deploy configuration for GitHub Mod
     if ! type -q gh
         return
     end
-    if test -z (gh auth token)
+    if test -z (gh auth token 2>/dev/null)
         return
     end
-    if test -z (gh ext ls | grep "gh models")
+    if test -z (gh ext ls | grep "gh models" 2>/dev/null)
         return
     end
     echo "[fish-ai]" >>~/.config/fish-ai.ini
