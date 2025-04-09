@@ -5,8 +5,8 @@ on:
     branches:
     - main
 jobs:
-  macos-installation-tests:
-    runs-on: macos-latest
+  macos-15-installation-test:
+    runs-on: macos-15
     if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
     steps:
     - uses: actions/checkout@v4
@@ -57,12 +57,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Installation test results
     needs:
-    - macos-installation-tests
+    - macos-15-installation-test
     - linux-installation-tests
     steps:
     - run: |
         linux_result="${{ needs.linux-installation-tests.result }}"
-        macos_result="${{ needs.macos-installation-tests.result }}"
+        macos_result="${{ needs.macos-15-installation-test.result }}"
         if [[ $linux_result == "success" || $linux_result == "skipped" ]]; then
           if [[ $macos_result == "success" || $macos_result == "skipped" ]]; then
             exit 0
