@@ -41,8 +41,10 @@ end
 function print_environment
     if test -f /etc/os-release
         echo "Running on $(cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"')"
+        echo "Machine hardware: $(uname -m)"
     else if type -q sw_vers
         echo "Running on macOS $(sw_vers --productVersion)"
+        echo "Machine hardware: $(uname -m)"
     else
         echo "❌ Running on an unsupported platform."
         set -g error_found true
