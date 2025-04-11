@@ -1,0 +1,28 @@
+name: Render popularity badge
+on:
+  schedule:
+  - cron: "0 0 * * *"
+  workflow_dispatch:
+jobs:
+  render-popularity-badge:
+    runs-on: ubuntu-latest
+    steps:
+    - run: sudo apt install -y jq jo
+    - name: Create JSON payload for badge
+      run: |
+        VISITORS=$(curl --silent \
+          --user "${{ github.actor }}:${{ secrets.TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json"
+          https://api.github.com/repos/realiserad/fish-ai/traffic/views | jq .uniques)
+        jo -p \
+          "schemaVersion=1" \
+          "label=😍 Popularity" \
+          "message=$VISITORS recent visits" \
+          "color=red" \
+          "style=for-the-badge" > popularity.json
+    - name: Store JSON in gist
+      uses: realiserad/actions-deploy-gist@main
+      with:
+        token: ${{ secrets.TOKEN }}
+        gist_id: ${{ vars.GIST_ID }}
+        file_path: popularity.json
