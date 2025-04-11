@@ -54,9 +54,30 @@ fisher install realiserad/fish-ai
 
 ### Create a configuration
 
-Create a configuration file `~/.config/fish-ai.ini`.
+Create a configuration file `~/.config/fish-ai.ini` where you specify which LLM
+`fish-ai` should talk to. If you're not sure, use GitHub Models.
 
-If you use a self-hosted LLM (behind an OpenAI-compatible API):
+#### GitHub Models
+
+To use [GitHub Models](https://github.com/marketplace/models):
+
+```ini
+[fish-ai]
+configuration = github
+
+[github]
+provider = self-hosted
+server = https://models.inference.ai.azure.com
+api_key = <paste GitHub PAT here>
+model = gpt-4o-mini
+```
+
+You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
+The PAT does not require any permissions.
+
+#### Self-hosted
+
+To use a self-hosted LLM (behind an OpenAI-compatible API):
 
 ```ini
 [fish-ai]
@@ -85,7 +106,9 @@ model = llama3.3
 server = http://localhost:11434/v1
 ```
 
-If you use [OpenAI](https://platform.openai.com):
+#### OpenAI
+
+To use [OpenAI](https://platform.openai.com):
 
 ```ini
 [fish-ai]
@@ -98,7 +121,9 @@ api_key = <your API key>
 organization = <your organization>
 ```
 
-If you use [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service):
+#### Azure OpenAI
+
+To use [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service):
 
 ```ini
 [fish-ai]
@@ -111,7 +136,9 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
-If you use [Hugging Face](https://huggingface.co):
+#### Hugging Face
+
+To use [Hugging Face](https://huggingface.co):
 
 ```ini
 [fish-ai]
@@ -127,7 +154,9 @@ model = meta-llama/Llama-3.3-70B-Instruct
 Available models are listed [here](https://huggingface.co/chat/models).
 Note that 2FA must be disabled on the account.
 
-If you use [Mistral](https://mistral.ai):
+#### Mistral
+
+To use [Mistral](https://mistral.ai):
 
 ```ini
 [fish-ai]
@@ -138,23 +167,9 @@ provider = mistral
 api_key = <your API key>
 ```
 
-If you use [GitHub Models](https://github.com/marketplace/models):
+#### Anthropic
 
-```ini
-[fish-ai]
-configuration = github
-
-[github]
-provider = self-hosted
-server = https://models.inference.ai.azure.com
-api_key = <paste GitHub PAT here>
-model = gpt-4o-mini
-```
-
-You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
-The PAT does not require any permissions.
-
-If you use [Anthropic](https://www.anthropic.com):
+To use [Anthropic](https://www.anthropic.com):
 
 ```ini
 [anthropic]
@@ -162,7 +177,9 @@ provider = anthropic
 api_key = <your API key>
 ```
 
-If you use [Cohere](https://cohere.com):
+#### Cohere
+
+To use [Cohere](https://cohere.com):
 
 ```ini
 [cohere]
@@ -170,7 +187,9 @@ provider = cohere
 api_key = <your API key>
 ```
 
-If you use [DeepSeek](https://www.deepseek.com):
+#### DeepSeek
+
+To use [DeepSeek](https://www.deepseek.com):
 
 ```ini
 [deepseek]
@@ -179,7 +198,9 @@ api_key = <your API key>
 model = deepseek-chat
 ```
 
-If you use [Groq](https://groq.com):
+#### Groq
+
+To use [Groq](https://groq.com):
 
 ```ini
 [groq]
