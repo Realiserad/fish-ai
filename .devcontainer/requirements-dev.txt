@@ -14,3 +14,4 @@ anthropic
 cohere
 keyring
 groq
+google-genai
