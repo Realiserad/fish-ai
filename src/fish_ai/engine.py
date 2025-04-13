@@ -16,7 +16,6 @@ from sys import argv
 from fish_ai.redact import redact
 from fish_ai.config import get_config
 
-
 logger = logging.getLogger()
 
 if exists('/dev/log'):
@@ -193,6 +192,38 @@ def get_messages_for_anthropic(messages):
     return system_messages, user_messages
 
 
+def get_messages_for_gemini(messages):
+    """
+    Create message history which can be used with Gemini.
+    Google uses a different chat history format than OpenAI.
+    The message content should be put in a parts array and
+    system messages are not supported.
+    """
+    outputs = []
+    system_messages = []
+    other_messages = []
+    for message in messages:
+        if message.get('role') == 'system':
+            system_messages.append({'text': message.get('content')})
+        else:
+            other_messages.append(message)
+
+    for i in range(len(other_messages)):
+        message = other_messages[i]
+        if message.get('role') == 'user':
+            outputs.append({
+                'role': 'user',
+                'parts': system_messages + [{'text': message.get('content')}]
+                if i == 0 else [{'text': message.get('content')}]
+            })
+        elif message.get('role') == 'assistant':
+            outputs.append({
+                'role': 'model',
+                'parts': [{'text': message.get('content')}]
+            })
+    return outputs
+
+
 def create_system_prompt(messages):
     return '\n\n'.join(
         list(
@@ -293,6 +324,17 @@ def get_response(messages):
             params['reasoning_format'] = 'parsed'
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
+    elif get_config('provider') == 'google':
+        from google import genai
+        client = genai.Client(api_key=get_config('api_key'))
+        response = client.models.generate_content(
+            model=get_config('model') or 'gemini-2.0-flash',
+            contents=get_messages_for_gemini(messages),
+            config={
+                'candidate_count': 1,
+                'temperature': float(get_config('temperature') or '0.2'),
+            },
+        ).text
     else:
         params = {
             'model': get_config('model') or 'gpt-4o',

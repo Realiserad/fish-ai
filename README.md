@@ -225,6 +225,16 @@ provider = groq
 api_key = <your API key>
 ```
 
+#### Google
+
+To use [Gemini](https://ai.google.com) from Google:
+
+```ini
+[google]
+provider = google
+api_key = <your API key>
+```
+
 ### Put the API key on your keyring
 
 Instead of putting the API key in the configuration file, you can let
