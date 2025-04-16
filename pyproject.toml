@@ -22,7 +22,7 @@ dependencies = [
   "binaryornot==0.4.4",
   "anthropic==0.49.0",
   "hugchat==0.4.19",
-  "cohere==5.14.2",
+  "cohere==5.15.0",
   "keyring==25.6.0",
   "groq==0.22.0"
 ]
