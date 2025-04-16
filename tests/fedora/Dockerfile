@@ -1,4 +1,4 @@
-FROM fedora:41 AS install-with-pip
+FROM fedora:42 AS install-with-pip
 
 ARG SOURCE=.
 
@@ -17,7 +17,7 @@ RUN fisher install $SOURCE
 
 RUN fish_ai_bug_report
 
-FROM fedora:41 AS install-with-uv
+FROM fedora:42 AS install-with-uv
 
 ARG SOURCE=.
 
