@@ -212,7 +212,7 @@ api_key = <your API key>
 
 Instead of putting the API key in the configuration file, you can let
 `fish-ai` load it from your keyring. To save a new API key or transfer
-an existing API key to your keyring, run `fish_ai put_api_key`.
+an existing API key to your keyring, run `fish_ai_put_api_key`.
 
 ## 🙉 How to use
 
