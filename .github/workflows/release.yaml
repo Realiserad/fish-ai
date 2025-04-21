@@ -14,6 +14,6 @@ jobs:
     - uses: fish-shop/install-fish-shell@v1.0.38
     - name: Create changelog
       run: ops/create-changelog.fish > CHANGELOG.md
-    - uses: softprops/action-gh-release@v2.2.1
+    - uses: softprops/action-gh-release@v2.2.2
       with:
         body_path: CHANGELOG.md
