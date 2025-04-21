@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: fish-shop/install-fish-shell@v1.0.38
+    - uses: fish-shop/install-fish-shell@v2
     - name: Create changelog
       run: ops/create-changelog.fish > CHANGELOG.md
     - uses: softprops/action-gh-release@v2.2.2

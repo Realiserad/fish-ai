@@ -15,7 +15,7 @@ jobs:
     - uses: astral-sh/setup-uv@v5
       with:
         version: latest
-    - uses: fish-shop/install-fish-shell@v1
+    - uses: fish-shop/install-fish-shell@v2
     - name: Install Fisher plugin manager
       uses: fish-shop/install-plugin-manager@v2
       with:
