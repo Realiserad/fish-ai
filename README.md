@@ -106,6 +106,23 @@ model = llama3.3
 server = http://localhost:11434/v1
 ```
 
+#### OpenRouter
+
+To use [OpenRouter](https://openrouter.ai):
+
+```ini
+[fish-ai]
+configuration = openrouter
+
+[openrouter]
+provider = self-hosted
+server = https://openrouter.ai/api/v1
+model = google/gemini-2.0-flash-lite-001
+api_key = <your API key>
+```
+
+Available models are listed [here](https://openrouter.ai/models).
+
 #### OpenAI
 
 To use [OpenAI](https://platform.openai.com):
