@@ -18,7 +18,7 @@ dependencies = [
   "openai==1.76.0",
   "simple-term-menu==1.6.6",
   "iterfzf==1.6.0.60.3",
-  "mistralai==1.0.2",
+  "mistralai==1.7.0",
   "binaryornot==0.4.4",
   "anthropic==0.50.0",
   "hugchat==0.4.19",
