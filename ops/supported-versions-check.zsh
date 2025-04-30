@@ -1,23 +1,24 @@
-#!/usr/bin/env fish
+#!/usr/bin/env zsh
 
 # Make sure the Python versions tested in the "Python tests" workflow
 # correspond to the compatibility check being performed during the
 # installation.
 
-if ! type -q yq
+if ! command -v yq &> /dev/null
+then
     echo "❌ 'yq' is not installed."
     echo "See https://github.com/mikefarah/yq/#install for installation instructions."
     exit 1
-end
+fi
 
-set tested_versions (yq '.jobs.python-tests.strategy.matrix.python-version[]' \
+tested_versions=$(yq '.jobs.python-tests.strategy.matrix.python-version[]' \
     .github/workflows/python-tests.yaml)
 
-source conf.d/fish_ai.fish
+source conf.d/fish_ai.zsh
 
-if test "$tested_versions" != "$supported_versions"
+if [ "$tested_versions" != "$supported_versions" ]; then
     echo "Supported versions: '$supported_versions'"
     echo "Tested versions: '$tested_versions'"
-    echo "Update the 'supported_versions' variable in the 'conf.d/fish_ai.fish' file."
+    echo "Update the 'supported_versions' variable in the 'conf.d/fish_ai.zsh' file."
     exit 1
-end
+fi

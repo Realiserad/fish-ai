@@ -11,9 +11,10 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: fish-shop/install-fish-shell@v2
+    - name: Install Zsh
+      run: sudo apt-get install -y zsh
     - name: Create changelog
-      run: ops/create-changelog.fish > CHANGELOG.md
+      run: ops/create-changelog.zsh > CHANGELOG.md
     - uses: softprops/action-gh-release@v2.2.2
       with:
         body_path: CHANGELOG.md

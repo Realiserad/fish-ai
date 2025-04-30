@@ -7,8 +7,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "lunaryorn.fish-ide",
-                "skyapps.fish-vscode",
+                "zsh-users.zsh",
                 "ms-python.flake8",
                 "ms-python.python",
                 "github.vscode-github-actions",
@@ -35,7 +34,7 @@
     },
     "features": {
         "docker-in-docker": {},
-        "ghcr.io/meaningful-ooo/devcontainer-features/fish:1.2.2": {}
+        "ghcr.io/meaningful-ooo/devcontainer-features/zsh:1.2.2": {}
     },
     "mounts": [
         "source=${localEnv:HOME}/.config/fish-ai.ini,target=/home/vscode/.config/fish-ai.ini,type=bind,consistency=cached"

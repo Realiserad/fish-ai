@@ -4,7 +4,7 @@
 
 # About
 
-`fish-ai` adds AI functionality to [Fish](https://fishshell.com).
+`fish-ai` adds AI functionality to [Zsh](https://www.zsh.org).
 It's awesome! I built it to make my life easier, and I hope it will make
 yours easier too. Here is the complete sales pitch:
 
@@ -22,10 +22,10 @@ your commands with a built in fuzzy finder.
 - Everything is open source, hopefully somewhat easy to read and
 around 2000 lines of code, which means that you can audit the code
 yourself in an afternoon.
-- Install and update with ease using [`fisher`](https://github.com/jorgebucaran/fisher).
+- Install and update with ease using [`zinit`](https://github.com/zdharma-continuum/zinit).
 - Tested on both macOS and the most common Linux distributions.
-- Does not interfere with [`fzf.fish`](https://github.com/PatrickF1/fzf.fish),
-[`tide`](https://github.com/IlanCosman/tide) or any of the other plugins
+- Does not interfere with [`fzf`](https://github.com/junegunn/fzf),
+[`powerlevel10k`](https://github.com/romkatv/powerlevel10k) or any of the other plugins
 you're already using!
 - Does not wrap your shell, install telemetry or force you to switch
 to a proprietary terminal emulator.
@@ -46,10 +46,10 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 Make sure `git` and either [`uv`](https://github.com/astral-sh/uv), or
 [a supported version of Python](https://github.com/Realiserad/fish-ai/blob/main/.github/workflows/python-tests.yaml)
 along with `pip` and `venv` is installed. Then grab the plugin using
-[`fisher`](https://github.com/jorgebucaran/fisher):
+[`zinit`](https://github.com/zdharma-continuum/zinit):
 
 ```shell
-fisher install realiserad/fish-ai
+zinit light realiserad/fish-ai
 ```
 
 ### Create a configuration
@@ -404,10 +404,10 @@ This repository ships with a `devcontainer.json` which can be used with
 GitHub Codespaces or Visual Studio Code with
 [the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
-To install `fish-ai` from a local copy, use `fisher`:
+To install `fish-ai` from a local copy, use `zinit`:
 
 ```shell
-fisher install .
+zinit light .
 ```
 
 ### Enable debug logging
