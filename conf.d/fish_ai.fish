@@ -163,6 +163,9 @@ function symlink_truststore --description "Use the bundle with CA certificates t
 end
 
 function warn_plaintext_api_keys --description "Warn about plaintext API keys."
+    if ! test -f ~/.config/fish-ai.ini
+        return
+    end
     if grep -q "^api_key" ~/.config/fish-ai.ini
         echo -n "🚨 One or more plaintext API keys are stored in "
         set_color --bold red
