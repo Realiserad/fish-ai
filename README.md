@@ -425,16 +425,10 @@ log = ~/.fish-ai/log.txt
 ### Run the tests
 
 [The installation tests](https://github.com/Realiserad/fish-ai/actions/workflows/installation-tests.yaml)
-are packaged into containers and can be executed locally with e.g. `docker`.
+(currently running on macOS, Fedora, Ubuntu and Arch Linux) are executed by the GitHub runner when you push
+to the  repository. Pull requests are blocked until all installation tests pass.
 
-```shell
-docker build -f tests/ubuntu/Dockerfile .
-docker build -f tests/fedora/Dockerfile .
-docker build -f tests/archlinux/Dockerfile .
-```
-
-The Python modules containing most of the business logic can be tested using
-`pytest`.
+The Python modules containing most of the business logic can be tested using `pytest`.
 
 ### Create a release
 
