@@ -3,9 +3,14 @@
 from os import path
 import sys
 from configparser import ConfigParser
+import os
 
-config = ConfigParser()
-config.read(path.expanduser('~/.config/fish-ai.ini'))
+
+def get_config_path():
+    if 'XDG_CONFIG_HOME' in os.environ:
+        return path.expandvars('$XDG_CONFIG_HOME/fish-ai.ini')
+    else:
+        return path.expanduser('~/.config/fish-ai.ini')
 
 
 def lookup_setting():
@@ -32,3 +37,7 @@ def get_config(key):
         return keyring.get_password('fish-ai', active_section)
 
     return None
+
+
+config = ConfigParser()
+config.read(get_config_path())
