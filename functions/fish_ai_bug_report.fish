@@ -1,6 +1,9 @@
 #!/usr/bin/env fish
 
 function fish_ai_bug_report
+    # TODO: Is this needed? If yes, make sure it works when XDG envs are set.
+    #source ~/.config/fish/conf.d/fish_ai.fish
+
     print_header Environment
     print_environment
 
@@ -61,8 +64,10 @@ function print_key_bindings
 end
 
 function print_dependencies
-    if ! test -d ~/.fish-ai
-        echo "❌ The virtual environment '$(echo ~/.fish-ai)' does not exist."
+    set install_dir "$(get_install_dir)"
+
+    if ! test -d "$install_dir"
+        echo "❌ The virtual environment '$install_dir' does not exist."
         set -g error_found true
         return
     end
@@ -70,7 +75,7 @@ function print_dependencies
     if type -q uv
         echo "😎 This system has uv installed."
     end
-    echo "Python version used by fish-ai: $(~/.fish-ai/bin/python3 --version)"
+    echo "Python version used by fish-ai: $($install_dir/bin/python3 --version)"
     if type -q python3
         echo "Python version used by the system: $(python3 --version)"
     end
@@ -79,8 +84,8 @@ function print_dependencies
     git --version
     echo ""
 
-    ~/.fish-ai/bin/pip list
-    if ! test (~/.fish-ai/bin/pip list | grep fish_ai)
+    "$install_dir/bin/pip" list
+    if ! test ("$install_dir/bin/pip" list | grep fish_ai)
         echo "❌ The Python package 'fish_ai' could not be found."
         set -g error_found true
     end
@@ -94,17 +99,19 @@ function print_fish_plugins
 end
 
 function print_configuration
-    if ! test -f ~/.config/fish-ai.ini
-        echo "😕 The configuration file '$(echo ~/.config/fish-ai.ini)' does not exist."
+    set config_path $(get_config_path)
+
+    if ! test -f "$config_path"
+        echo "😕 The configuration file '$config_path' does not exist."
     else
-        sed /api_key/d ~/.config/fish-ai.ini | sed /password/d
+        sed /api_key/d "$config_path" | sed /password/d
     end
 
     echo ""
 end
 
 function perform_functionality_tests
-    if ! test -f ~/.config/fish-ai.ini
+    if ! test -f "$(get_config_path)"
         echo "😴 No configuration available. Skipping."
         echo ""
         return
@@ -127,8 +134,8 @@ function perform_functionality_tests
 end
 
 function perform_compatibility_check
-    source ~/.config/fish/conf.d/fish_ai.fish
-    set python_version (~/.fish-ai/bin/python3 -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
+    set install_dir "$(get_install_dir)"
+    set python_version ("$install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
     if ! contains $python_version $supported_versions
         echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
         echo "The following versions are supported: $supported_versions"
@@ -140,13 +147,15 @@ function perform_compatibility_check
 end
 
 function print_logs
-    set log_file (~/.fish-ai/bin/python3 -c "import os; print(os.path.expanduser('$(~/.fish-ai/bin/lookup_setting log)'))")
+    set install_dir "$(get_install_dir)"
+
+    set log_file ("$install_dir/bin/python3" -c "import os; print(os.path.expanduser('$($install_dir/bin/lookup_setting log)'))")
     if ! test -f "$log_file"
         echo "😴 No log file available."
         return
     end
     print_last_section "$log_file"
-    if test (~/.fish-ai/bin/lookup_setting debug) != True
+    if test ("$install_dir/bin/lookup_setting debug") != True
         echo ""
         echo "🙏 Consider enabling debug mode to get more log output."
     end

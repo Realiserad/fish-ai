@@ -4,6 +4,25 @@
 ##
 set -g supported_versions 3.9 3.10 3.11 3.12 3.13
 
+function get_install_dir
+    if test -z "$XDG_DATA_HOME"
+        echo "$HOME/.local/share/fish-ai"
+    else
+        echo "$XDG_DATA_HOME/fish-ai"
+    end
+end
+
+function get_config_path
+    if test -z "$XDG_DATA_HOME"
+        echo "$HOME/.config/fish-ai.ini"
+    else
+        echo "$XDG_CONFIG_HOME/fish-ai.ini"
+    end
+end
+
+set -g install_dir (get_install_dir)
+set -g config_path (get_config_path)
+
 ##
 ## This section contains the keybindings for fish-ai. If you want to change the
 ## default keybindings, use the environment variables:
@@ -47,10 +66,10 @@ function _fish_ai_install --on-event fish_ai_install
     set_python_version
     if type -q uv
         echo "🥡 Setting up a virtual environment using uv..."
-        uv venv --seed --python $python_version ~/.fish-ai
+        uv venv --seed --python $python_version "$install_dir"
     else
         echo "🥡 Setting up a virtual environment using venv..."
-        python$python_version -m venv ~/.fish-ai
+        python$python_version -m venv "$install_dir"
     end
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
@@ -58,7 +77,7 @@ function _fish_ai_install --on-event fish_ai_install
     end
 
     echo "🍬 Installing dependencies. This may take a few seconds..."
-    ~/.fish-ai/bin/pip -qq install "$(get_installation_url)"
+    "$install_dir/bin/pip" -qq install "$(get_installation_url)"
     if test $status -ne 0
         echo "💔 Installation from '$(get_installation_url)' failed. Check previous terminal output for details."
         return 2
@@ -67,26 +86,36 @@ function _fish_ai_install --on-event fish_ai_install
     notify_custom_keybindings
     symlink_truststore
     autoconfig_gh_models
-    if ! test -f ~/.config/fish-ai.ini
+    if ! test -f "$(get_config_path)"
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
 end
 
 function _fish_ai_update --on-event fish_ai_update
+    # Upgrade to fish-ai 1.9.0
+    if test -d "$HOME/.fish-ai"
+        echo "👷 Moving installation directory to '$install_dir'."
+        mv "$HOME/.fish-ai" "$install_dir"
+    end
+    if test -f "$HOME/.config/fish-ai.ini"
+        echo "👷 Moving configuration file to '$config_path'."
+        mv -u "$HOME/.config/fish-ai.ini" "$config_path"
+    end
+
     set_python_version
     if type -q uv
-        uv venv --seed --python $python_version ~/.fish-ai
+        uv venv --seed --python $python_version "$install_dir"
     else
-        python$python_version -m venv --upgrade ~/.fish-ai
+        python$python_version -m venv --upgrade "$install_dir"
     end
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 1
     end
 
-    echo "🐍 Now using $(~/.fish-ai/bin/python3 --version)."
+    echo "🐍 Now using $($install_dir/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
-    ~/.fish-ai/bin/pip install -qq --upgrade "$(get_installation_url)"
+    $install_dir/bin/pip install -qq --upgrade "$(get_installation_url)"
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 2
@@ -98,9 +127,9 @@ function _fish_ai_update --on-event fish_ai_update
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
-    if test -d ~/.fish-ai
+    if test -d "$install_dir"
         echo "💣 Nuking the virtual environment..."
-        rm -r ~/.fish-ai
+        rm -r "$install_dir"
     end
 end
 
@@ -134,7 +163,7 @@ function get_installation_url
 end
 
 function python_version_check
-    set python_version (~/.fish-ai/bin/python3 -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
+    set python_version ("$install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
     if ! contains $python_version $supported_versions
         echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
         echo "The following versions are supported: $supported_versions"
@@ -152,24 +181,24 @@ end
 function symlink_truststore --description "Use the bundle with CA certificates trusted by the OS."
     if test -f /etc/ssl/certs/ca-certificates.crt
         echo "🔑 Symlinking to certificates stored in /etc/ssl/certs/ca-certificates.crt."
-        ln -snf /etc/ssl/certs/ca-certificates.crt (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+        ln -snf /etc/ssl/certs/ca-certificates.crt ("$install_dir/bin/python3" -c 'import certifi; print(certifi.where())')
     else if test -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
         echo "🔑 Symlinking to certificates stored in /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem."
-        ln -snf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+        ln -snf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ("$install_dir/bin/python3" -c 'import certifi; print(certifi.where())')
     else if test -f /etc/ssl/cert.pem
         echo "🔑 Symlinking to certificates stored in /etc/ssl/cert.pem."
-        ln -snf /etc/ssl/cert.pem (~/.fish-ai/bin/python3 -c 'import certifi; print(certifi.where())')
+        ln -snf /etc/ssl/cert.pem ("$install_dir/bin/python3" -c 'import certifi; print(certifi.where())')
     end
 end
 
 function warn_plaintext_api_keys --description "Warn about plaintext API keys."
-    if ! test -f ~/.config/fish-ai.ini
+    if ! test -f "$config_path"
         return
     end
-    if grep -q "^api_key" ~/.config/fish-ai.ini
+    if grep -q "^api_key" "$config_path"
         echo -n "🚨 One or more plaintext API keys are stored in "
         set_color --bold red
-        echo -n "~/.config/fish-ai.ini"
+        echo -n "$config_path"
         set_color normal
         echo -n ". Consider moving them to your keyring using "
         set_color --italics blue
@@ -180,7 +209,7 @@ function warn_plaintext_api_keys --description "Warn about plaintext API keys."
 end
 
 function autoconfig_gh_models --description "Deploy configuration for GitHub Models."
-    if test -f ~/.config/fish-ai.ini
+    if test -f "$config_path"
         return
     end
     if ! type -q gh
@@ -192,14 +221,14 @@ function autoconfig_gh_models --description "Deploy configuration for GitHub Mod
     if test -z (gh ext ls | grep "gh models" 2>/dev/null)
         return
     end
-    echo "[fish-ai]" >>~/.config/fish-ai.ini
-    echo "configuration = github" >>~/.config/fish-ai.ini
-    echo "" >>~/.config/fish-ai.ini
-    echo "[github]" >>~/.config/fish-ai.ini
-    echo "provider = self-hosted" >>~/.config/fish-ai.ini
-    echo "server = https://models.inference.ai.azure.com" >>~/.config/fish-ai.ini
-    echo "api_key = $(gh auth token)" >>~/.config/fish-ai.ini
-    echo "model = gpt-4o-mini" >>~/.config/fish-ai.ini
+    echo "[fish-ai]" >>"$config_path"
+    echo "configuration = github" >>"$config_path"
+    echo "" >>"$config_path"
+    echo "[github]" >>"$config_path"
+    echo "provider = self-hosted" >>"$config_path"
+    echo "server = https://models.inference.ai.azure.com" >>"$config_path"
+    echo "api_key = $(gh auth token)" >>"$config_path"
+    echo "model = gpt-4o-mini" >>"$config_path"
 
     echo "😺 Access to GitHub Models has been automatically configured for you!"
 end

@@ -54,8 +54,10 @@ fisher install realiserad/fish-ai
 
 ### Create a configuration
 
-Create a configuration file `~/.config/fish-ai.ini` where you specify which LLM
-`fish-ai` should talk to. If you're not sure, use GitHub Models.
+Create a configuration file `$XDG_CONFIG_HOME/fish-ai.ini` (use
+`~/.config/fish-ai.ini` if `$XDG_CONFIG_HOME` is not set) where
+you specify which LLM `fish-ai` should talk to. If you're not sure,
+use GitHub Models.
 
 #### GitHub Models
 
@@ -419,7 +421,7 @@ logging to file using `log = <path to file>`, for example:
 ```ini
 [fish-ai]
 debug = True
-log = ~/.fish-ai/log.txt
+log = /tmp/fish-ai.log
 ```
 
 ### Run the tests

@@ -2,11 +2,11 @@
 
 import logging
 from logging.handlers import SysLogHandler, RotatingFileHandler
-from os.path import isfile, exists, expanduser
+from os.path import isfile, exists, expanduser, expandvars
 from platform import system, mac_ver
 from time import time_ns
 import textwrap
-from os import access, R_OK
+from os import access, R_OK, environ
 from re import match
 from binaryornot.check import is_binary
 from subprocess import run, PIPE, DEVNULL, Popen
@@ -245,8 +245,10 @@ def get_response(messages):
 
         email = get_config('email')
         password = get_config('api_key') or get_config('password')
+        # TODO: Use XDG_CACHE_DIR
         cookies = Login(email, password).login(
-            cookie_dir_path=expanduser('~/.fish-ai/cookies/'),
+            cookie_dir_path='{install_dir}/cookies'.format(
+                install_dir=get_install_dir()),
             save_cookies=True)
 
         bot = hugchat.ChatBot(
@@ -355,3 +357,10 @@ def get_response(messages):
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')
     return response
+
+
+def get_install_dir():
+    if 'XDG_DATA_HOME' in environ:
+        return expandvars('$XDG_DATA_HOME/fish-ai')
+    else:
+        return expanduser('~/.local/share/fish-ai')
