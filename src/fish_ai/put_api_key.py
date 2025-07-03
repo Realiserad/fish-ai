@@ -2,9 +2,9 @@
 
 from simple_term_menu import TerminalMenu
 from configparser import ConfigParser
-from os import path
 import sys
 import keyring
+from fish_ai import config
 
 
 def select_section(config, sections):
@@ -25,18 +25,20 @@ def select_section(config, sections):
 
 
 def put_api_key():
-    config = ConfigParser()
-    config.read(path.expanduser('~/.config/fish-ai.ini'))
-    sections = config.sections()
+    configuration_file = ConfigParser()
+    configuration_file.read(config.get_config_path())
+    sections = configuration_file.sections()
     sections.remove('fish-ai')
-    selected_section = select_section(config, sections)
+    selected_section = select_section(configuration_file, sections)
 
-    if config.has_option(section=selected_section, option='api_key'):
+    if configuration_file.has_option(section=selected_section,
+                                     option='api_key'):
         # Move API key from the configuration to the keyring
-        api_key = config.get(section=selected_section, option='api_key')
+        api_key = configuration_file.get(section=selected_section,
+                                         option='api_key')
         keyring.set_password('fish-ai', selected_section, api_key)
-        config.remove_option(selected_section, 'api_key')
-        config.write(open(path.expanduser('~/.config/fish-ai.ini'), 'w'))
+        configuration_file.remove_option(selected_section, 'api_key')
+        configuration_file.write(open(config.get_config_path(), 'w'))
     else:
         # Ask for the API key and put it on the keyring
         p = (f'Provide an API key for \033[92m{selected_section}\033[0m.\n'

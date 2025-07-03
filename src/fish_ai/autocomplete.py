@@ -178,9 +178,10 @@ def yield_completions(commandline,
 
 
 def get_reload_command(commandline, cursor_position):
-    return ('reload(~/.fish-ai/bin/refine {commandline} '
+    return ('reload({install_dir}/bin/refine {commandline} '
             '{cursor_position} {completions_count} '
             '{instructions})+clear-query').format(
+                install_dir=engine.get_install_dir(),
                 # b64 encode commandline buffer to deal with single quotes
                 commandline=b64encode(commandline.encode()).decode(),
                 cursor_position=cursor_position,
