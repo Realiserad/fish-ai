@@ -7,10 +7,10 @@ import os
 
 
 def get_config_path():
-    if "XDG_CONFIG_HOME" in os.environ:
-        return path.expandvars("$XDG_CONFIG_HOME/fish-ai.ini")
+    if 'XDG_CONFIG_HOME' in os.environ:
+        return path.expandvars('$XDG_CONFIG_HOME/fish-ai.ini')
     else:
-        return path.expanduser("~/.config/fish-ai.ini")
+        return path.expanduser('~/.config/fish-ai.ini')
 
 
 def lookup_setting():

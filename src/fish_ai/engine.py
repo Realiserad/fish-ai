@@ -247,7 +247,7 @@ def get_response(messages):
         password = get_config('api_key') or get_config('password')
         # TODO: Use XDG_CACHE_DIR
         cookies = Login(email, password).login(
-            cookie_dir_path="{install_dir}/cookies".format(
+            cookie_dir_path='{install_dir}/cookies'.format(
                 install_dir=get_install_dir()),
             save_cookies=True)
 
@@ -360,7 +360,7 @@ def get_response(messages):
 
 
 def get_install_dir():
-    if "XDG_DATA_HOME" in environ:
-        return expandvars("$XDG_DATA_HOME/fish-ai")
+    if 'XDG_DATA_HOME' in environ:
+        return expandvars('$XDG_DATA_HOME/fish-ai')
     else:
-        return expanduser("~/.local/share/fish-ai")
+        return expanduser('~/.local/share/fish-ai')
