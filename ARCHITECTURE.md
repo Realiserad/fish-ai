@@ -36,10 +36,10 @@ The install hook will then create a virtual environment using `uv`or `venv`
 and run `pip` to install the `fish_ai` module directly from the git repository
 here on GitHub.
 
-The virtual environment is created in the `~/.fish-ai` directory. It will
-contain the `fish_ai` module along with its dependencies.
+The virtual environment is created in the `$XDG_DATA_HOME/fish-ai` directory. It
+contains the `fish_ai` module along with its dependencies.
 
-The configuration file `~/.config/fish-ai.ini` is the only file that lives
+The configuration file `$XDG_CONFIG_HOME/fish-ai.ini` is the only file that lives
 outside this virtual environment, so the user can remove the plugin without
 their configuration disappearing.
 
