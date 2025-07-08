@@ -309,7 +309,9 @@ def get_response(messages):
         completions = client.chat(**params)
         response = completions.message.content[0].text
     elif get_config('provider') == 'groq':
-        model = get_config('model') or 'qwen-qwq-32b'
+        default_groq_model = 'qwen/qwen3-32b'
+        groq_qwen_reasoning_models = ['qwen/qwen3-32b', 'qwen-qwq-32b']
+        model = get_config('model') or default_groq_model
         params = {
             'model': model,
             'messages': messages,
@@ -322,7 +324,7 @@ def get_response(messages):
         if temp != 'None':
             params['temperature'] = float(temp or '0.6')
         # This removes the thinking tokens for the qwen-qwq-32b model:
-        if model == 'qwen-qwq-32b':
+        if model in groq_qwen_reasoning_models:
             params['reasoning_format'] = 'parsed'
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
