@@ -155,24 +155,6 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
-#### Hugging Face
-
-To use [Hugging Face](https://huggingface.co):
-
-```ini
-[fish-ai]
-configuration = huggingface
-
-[huggingface]
-provider = huggingface
-email = <your email>
-api_key = <your password>
-model = meta-llama/Llama-3.3-70B-Instruct
-```
-
-Available models are listed [here](https://huggingface.co/chat/models).
-Note that 2FA must be disabled on the account.
-
 #### Mistral
 
 To use [Mistral](https://mistral.ai):
@@ -299,8 +281,6 @@ Here is an example of how to increase the temperature to `0.5`.
 [fish-ai]
 temperature = 0.5
 ```
-
-This option is not supported when using the `huggingface` provider.
 
 Some reasoning models, such as OpenAI's o3, does not support the
 temperature parameter, and you need to explicitly disable it by

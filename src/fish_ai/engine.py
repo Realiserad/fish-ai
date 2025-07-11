@@ -239,28 +239,7 @@ def get_response(messages):
 
     start_time = time_ns()
 
-    if get_config('provider') == 'huggingface':
-        from hugchat import hugchat
-        from hugchat.login import Login
-
-        email = get_config('email')
-        password = get_config('api_key') or get_config('password')
-        # TODO: Use XDG_CACHE_DIR
-        cookies = Login(email, password).login(
-            cookie_dir_path='{install_dir}/cookies'.format(
-                install_dir=get_install_dir()),
-            save_cookies=True)
-
-        bot = hugchat.ChatBot(
-            cookies=cookies.get_dict(),
-            system_prompt=create_system_prompt(messages),
-            default_llm=get_config('model') or
-            'meta-llama/Llama-3.3-70B-Instruct')
-
-        response = bot.chat(
-            messages[-1].get('content')).wait_until_done()
-        bot.delete_conversation(bot.get_conversation_info())
-    elif get_config('provider') == 'mistral':
+    if get_config('provider') == 'mistral':
         from mistralai import Mistral
 
         client = Mistral(
