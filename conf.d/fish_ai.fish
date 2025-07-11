@@ -85,6 +85,11 @@ function _fish_ai_update --on-event fish_ai_update
         echo "👷 Moving configuration file to '$config_path'."
         mv -u "$HOME/.config/fish-ai.ini" "$config_path"
     end
+    # Upgrade to fish-ai 2.0.0
+    set provider ("$install_dir/bin/lookup_setting" provider)
+    if test "$provider" = huggingface
+        echo "🌇 The provider for Hugging Face has been removed. Switch to a different provider."
+    end
 
     _fish_ai_set_python_version
     if type -q uv

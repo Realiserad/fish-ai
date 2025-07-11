@@ -7,7 +7,6 @@ mutatest
 openai
 simple-term-menu
 iterfzf
-hugchat
 mistralai
 binaryornot
 anthropic
