@@ -40,7 +40,6 @@ switch_context = "fish_ai.switch_context:switch_context"
 put_api_key = "fish_ai.put_api_key:put_api_key"
 lookup_setting = "fish_ai.config:lookup_setting"
 refine = "fish_ai.autocomplete:refine_completions"
-get_progress_indicator = "fish_ai.get_progress_indicator:get_progress_indicator"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
