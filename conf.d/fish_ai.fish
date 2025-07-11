@@ -4,24 +4,8 @@
 ##
 set -g supported_versions 3.9 3.10 3.11 3.12 3.13
 
-function get_install_dir
-    if test -z "$XDG_DATA_HOME"
-        echo "$HOME/.local/share/fish-ai"
-    else
-        echo "$XDG_DATA_HOME/fish-ai"
-    end
-end
-
-function get_config_path
-    if test -z "$XDG_DATA_HOME"
-        echo "$HOME/.config/fish-ai.ini"
-    else
-        echo "$XDG_CONFIG_HOME/fish-ai.ini"
-    end
-end
-
-set -g install_dir (get_install_dir)
-set -g config_path (get_config_path)
+set -g install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-ai"; or echo "$XDG_DATA_HOME/fish-ai")
+set -g config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
 ##
 ## This section contains the keybindings for fish-ai. If you want to change the
@@ -86,7 +70,7 @@ function _fish_ai_install --on-event fish_ai_install
     notify_custom_keybindings
     symlink_truststore
     autoconfig_gh_models
-    if ! test -f "$(get_config_path)"
+    if ! test -f "$config_path"
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
 end

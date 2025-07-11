@@ -1,9 +1,9 @@
 #!/usr/bin/env fish
 
-function fish_ai_bug_report
-    # TODO: Is this needed? If yes, make sure it works when XDG envs are set.
-    #source ~/.config/fish/conf.d/fish_ai.fish
+set -g install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-ai"; or echo "$XDG_DATA_HOME/fish-ai")
+set -g config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
+function fish_ai_bug_report
     print_header Environment
     print_environment
 
@@ -64,8 +64,6 @@ function print_key_bindings
 end
 
 function print_dependencies
-    set install_dir "$(get_install_dir)"
-
     if ! test -d "$install_dir"
         echo "❌ The virtual environment '$install_dir' does not exist."
         set -g error_found true
@@ -99,8 +97,6 @@ function print_fish_plugins
 end
 
 function print_configuration
-    set config_path $(get_config_path)
-
     if ! test -f "$config_path"
         echo "😕 The configuration file '$config_path' does not exist."
     else
@@ -111,7 +107,7 @@ function print_configuration
 end
 
 function perform_functionality_tests
-    if ! test -f "$(get_config_path)"
+    if ! test -f "$config_path"
         echo "😴 No configuration available. Skipping."
         echo ""
         return
@@ -134,7 +130,6 @@ function perform_functionality_tests
 end
 
 function perform_compatibility_check
-    set install_dir "$(get_install_dir)"
     set python_version ("$install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
     if ! contains $python_version $supported_versions
         echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
