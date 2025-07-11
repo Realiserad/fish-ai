@@ -47,7 +47,7 @@ $bind_command $keymap_2 _fish_ai_autocomplete_or_fix
 ## manager.
 ##
 function _fish_ai_install --on-event fish_ai_install
-    set_python_version
+    _fish_ai_set_python_version
     if type -q uv
         echo "🥡 Setting up a virtual environment using uv..."
         uv venv --seed --python $python_version "$install_dir"
@@ -61,15 +61,15 @@ function _fish_ai_install --on-event fish_ai_install
     end
 
     echo "🍬 Installing dependencies. This may take a few seconds..."
-    "$install_dir/bin/pip" -qq install "$(get_installation_url)"
+    "$install_dir/bin/pip" -qq install "$(_fish_ai_get_installation_url)"
     if test $status -ne 0
-        echo "💔 Installation from '$(get_installation_url)' failed. Check previous terminal output for details."
+        echo "💔 Installation from '$(_fish_ai_get_installation_url)' failed. Check previous terminal output for details."
         return 2
     end
-    python_version_check
-    notify_custom_keybindings
-    symlink_truststore
-    autoconfig_gh_models
+    _fish_ai_python_version_check
+    _fish_ai_notify_custom_keybindings
+    _fish_ai_symlink_truststore
+    _fish_ai_autoconfig_gh_models
     if ! test -f "$config_path"
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
@@ -86,7 +86,7 @@ function _fish_ai_update --on-event fish_ai_update
         mv -u "$HOME/.config/fish-ai.ini" "$config_path"
     end
 
-    set_python_version
+    _fish_ai_set_python_version
     if type -q uv
         uv venv --seed --python $python_version "$install_dir"
     else
@@ -99,15 +99,15 @@ function _fish_ai_update --on-event fish_ai_update
 
     echo "🐍 Now using $($install_dir/bin/python3 --version)."
     echo "🍬 Upgrading dependencies. This may take a few seconds..."
-    $install_dir/bin/pip install -qq --upgrade "$(get_installation_url)"
+    $install_dir/bin/pip install -qq --upgrade "$(_fish_ai_get_installation_url)"
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 2
     end
-    python_version_check
-    notify_custom_keybindings
-    symlink_truststore
-    warn_plaintext_api_keys
+    _fish_ai_python_version_check
+    _fish_ai_notify_custom_keybindings
+    _fish_ai_symlink_truststore
+    _fish_ai_warn_plaintext_api_keys
 end
 
 function _fish_ai_uninstall --on-event fish_ai_uninstall
@@ -117,7 +117,7 @@ function _fish_ai_uninstall --on-event fish_ai_uninstall
     end
 end
 
-function set_python_version
+function _fish_ai_set_python_version
     if test -n "$FISH_AI_PYTHON_VERSION"
         echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
         set -g python_version $FISH_AI_PYTHON_VERSION
@@ -130,7 +130,7 @@ function set_python_version
     end
 end
 
-function get_installation_url
+function _fish_ai_get_installation_url
     set plugin (fisher list "fish-ai")
     if test "$plugin" = ""
         # fish-ai may be installed from an unknown source, assume
@@ -146,7 +146,7 @@ function get_installation_url
     end
 end
 
-function python_version_check
+function _fish_ai_python_version_check
     set python_version ("$install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
     if ! contains $python_version $supported_versions
         echo "🔔 This plugin has not been tested with Python $python_version and may not function correctly."
@@ -162,7 +162,7 @@ function python_version_check
     end
 end
 
-function symlink_truststore --description "Use the bundle with CA certificates trusted by the OS."
+function _fish_ai_symlink_truststore --description "Use the bundle with CA certificates trusted by the OS."
     if test -f /etc/ssl/certs/ca-certificates.crt
         echo "🔑 Symlinking to certificates stored in /etc/ssl/certs/ca-certificates.crt."
         ln -snf /etc/ssl/certs/ca-certificates.crt ("$install_dir/bin/python3" -c 'import certifi; print(certifi.where())')
@@ -175,7 +175,7 @@ function symlink_truststore --description "Use the bundle with CA certificates t
     end
 end
 
-function warn_plaintext_api_keys --description "Warn about plaintext API keys."
+function _fish_ai_warn_plaintext_api_keys --description "Warn about plaintext API keys."
     if ! test -f "$config_path"
         return
     end
@@ -192,7 +192,7 @@ function warn_plaintext_api_keys --description "Warn about plaintext API keys."
     end
 end
 
-function autoconfig_gh_models --description "Deploy configuration for GitHub Models."
+function _fish_ai_autoconfig_gh_models --description "Deploy configuration for GitHub Models."
     if test -f "$config_path"
         return
     end
@@ -217,7 +217,7 @@ function autoconfig_gh_models --description "Deploy configuration for GitHub Mod
     echo "😺 Access to GitHub Models has been automatically configured for you!"
 end
 
-function show_progess_indicator --description "Show a progress indicator."
+function _fish_ai_show_progress_indicator --description "Show a progress indicator."
     if type -q fish_right_prompt
         set rplen (string length -v (fish_right_prompt)[-1])
     else
@@ -228,7 +228,7 @@ function show_progess_indicator --description "Show a progress indicator."
     echo -n '⏳'
 end
 
-function notify_custom_keybindings --description "Print a message when custom keybindings are used."
+function _fish_ai_notify_custom_keybindings --description "Print a message when custom keybindings are used."
     if test -n "$FISH_AI_KEYMAP_1"
         echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_1' instead of Ctrl+P."
     end
