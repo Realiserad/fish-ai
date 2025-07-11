@@ -223,9 +223,12 @@ function _fish_ai_show_progress_indicator --description "Show a progress indicat
     else
         set rplen 0
     end
+    # Get the progress indicator from the configuration, use hourglass emoji if not set
+    set progress_indicator ("$install_dir/bin/lookup_setting" progress_indicator '⏳')
+    set pilen (string length "$progress_indicator")
     # Move the cursor to the end of the line and insert progress indicator
-    tput hpa (math $COLUMNS - $rplen - 2)
-    echo -n '⏳'
+    tput hpa (math $COLUMNS - $rplen - 1 - $pilen)
+    echo -n "$progress_indicator"
 end
 
 function _fish_ai_notify_custom_keybindings --description "Print a message when custom keybindings are used."

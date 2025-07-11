@@ -361,6 +361,19 @@ unterminated parenthesis before the cursor. For example, if you autocomplete
 This behaviour is disabled by default, as it may slow down the completion
 process and lead to commands being executed twice.
 
+### Configure the progress indicator
+
+You can change the progress indicator (the default is ⏳) shown when the
+plugin is waiting for a response from the LLM.
+
+To change the default, set the `progress_indicator` option to zero or
+more characters.
+
+```ini
+[fish-ai]
+progress_indicator = wait...
+```
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
