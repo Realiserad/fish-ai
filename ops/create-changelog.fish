@@ -27,7 +27,14 @@ for commit in $commits
         set -a perfs (echo -n $message)
     end
     if test "$commit_type" = "chore(deps)"
-        set -a deps (echo -n $message)
+        # bump <dependency> from <version> to <new_version>
+        set dependency (string split ' ' "$commit_description" | sed -n 2p)
+        set new_version (string split ' ' "$commit_description" | sed -n 6p)
+        # if a dependency has been bumped more than once, only add the latest bump (first commit in $commits) to the changelog
+        if not contains "$dependency" $bumped_deps
+            set -a bumped_deps (echo -n "$dependency")
+            set -a deps (echo -n "bump $dependency to version $new_version (in commit [`#$short_hash`]($commit_link))")
+        end
     end
 end
 
