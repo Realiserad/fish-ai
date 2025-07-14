@@ -83,7 +83,7 @@ function _fish_ai_update --on-event fish_ai_update
     end
     if test -f "$HOME/.config/fish-ai.ini"
         echo "👷 Moving configuration file to '$config_path'."
-        mv -u "$HOME/.config/fish-ai.ini" "$config_path"
+        mv "$HOME/.config/fish-ai.ini" "$config_path"
     end
     # Upgrade to fish-ai 2.0.0
     set provider ("$install_dir/bin/lookup_setting" provider)
