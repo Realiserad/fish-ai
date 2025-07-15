@@ -37,7 +37,7 @@ def get_config(key):
     if config.has_option(section='fish-ai', option=key):
         return path.expandvars(config.get(section='fish-ai', option=key))
 
-    if key == 'api_key' or key == 'password':
+    if key == 'api_key':
         # If not specified in the configuration, try to load from keyring
         import keyring
         return keyring.get_password('fish-ai', active_section)

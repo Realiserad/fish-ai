@@ -100,6 +100,8 @@ function print_configuration
     if ! test -f "$config_path"
         echo "😕 The configuration file '$config_path' does not exist."
     else
+        # Remove api_key and password from the configuration
+        # password is no longer used but may be present in old configurations
         sed /api_key/d "$config_path" | sed /password/d
     end
 
