@@ -144,8 +144,6 @@ function perform_compatibility_check
 end
 
 function print_logs
-    set install_dir "$(get_install_dir)"
-
     set log_file ("$install_dir/bin/python3" -c "import os; print(os.path.expanduser('$($install_dir/bin/lookup_setting log)'))")
     if ! test -f "$log_file"
         echo "😴 No log file available."
