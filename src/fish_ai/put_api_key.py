@@ -4,7 +4,7 @@ from simple_term_menu import TerminalMenu
 from configparser import ConfigParser
 import sys
 import keyring
-from fish_ai import config
+from fish_ai.config import get_config_path
 
 
 def select_section(config, sections):
@@ -26,7 +26,7 @@ def select_section(config, sections):
 
 def put_api_key():
     configuration_file = ConfigParser()
-    configuration_file.read(config.get_config_path())
+    configuration_file.read(get_config_path())
     sections = configuration_file.sections()
     sections.remove('fish-ai')
     selected_section = select_section(configuration_file, sections)
@@ -38,7 +38,7 @@ def put_api_key():
                                          option='api_key')
         keyring.set_password('fish-ai', selected_section, api_key)
         configuration_file.remove_option(selected_section, 'api_key')
-        configuration_file.write(open(config.get_config_path(), 'w'))
+        configuration_file.write(open(get_config_path(), 'w'))
     else:
         # Ask for the API key and put it on the keyring
         p = (f'Provide an API key for \033[92m{selected_section}\033[0m.\n'

@@ -2,13 +2,12 @@
 
 from simple_term_menu import TerminalMenu
 from configparser import ConfigParser
-from os import path
-from fish_ai import engine
+from fish_ai.config import get_config_path
 
 
 def switch_context():
     config = ConfigParser()
-    config.read(path.expanduser(engine.get_install_dir()))
+    config.read(get_config_path())
     sections = config.sections()
     sections.remove('fish-ai')
     options = [
@@ -23,5 +22,5 @@ def switch_context():
         return
     active_section = options[index].split(' ')[0]
     config.set(section='fish-ai', option='configuration', value=active_section)
-    config.write(open(path.expanduser(engine.get_install_dir()), 'w'))
+    config.write(open(get_config_path(), 'w'))
     print("💪 Now using '{}'.".format(active_section))
