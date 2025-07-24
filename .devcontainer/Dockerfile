@@ -1,5 +1,5 @@
 FROM albx79/what-bump:1.2.0 as what-bump
-FROM mikefarah/yq:4.46.1 as yq
+FROM mikefarah/yq:4.47.1 as yq
 
 FROM mcr.microsoft.com/devcontainers/python:3.11-buster
 
