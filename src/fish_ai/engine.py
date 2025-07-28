@@ -12,6 +12,7 @@ from binaryornot.check import is_binary
 from subprocess import run, PIPE, DEVNULL, Popen
 from itertools import islice
 from sys import argv
+import re
 
 from fish_ai.redact import redact
 from fish_ai.config import get_config
@@ -337,7 +338,26 @@ def get_response(messages):
     get_logger().debug('Response received from backend: ' + response)
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')
-    return response
+    return remove_thinking_tokens(response)
+
+
+def remove_thinking_tokens(response):
+    """
+    Removes thinking tokens which may be present in the beginning of the
+    response.
+
+    Example with thinking tokens:
+
+      <think>bar</think>foo -> foo
+
+    :param response: The response from the backend.
+    :return: The output without any thinking tokens.
+    """
+    match = re.search(r'<think>(.*?)</think>(.*)', response, re.DOTALL)
+    if match:
+        return match.group(2).strip()
+    else:
+        return response.strip()
 
 
 def get_install_dir():
