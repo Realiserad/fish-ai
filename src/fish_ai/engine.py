@@ -12,7 +12,6 @@ from binaryornot.check import is_binary
 from subprocess import run, PIPE, DEVNULL, Popen
 from itertools import islice
 from sys import argv
-import re
 
 from fish_ai.redact import redact
 from fish_ai.config import get_config
@@ -353,6 +352,10 @@ def remove_thinking_tokens(response):
     :param response: The response from the backend.
     :return: The output without any thinking tokens.
     """
+    if not response.strip().startswith('<think>'):
+        return response.strip()
+
+    import re
     match = re.search(r'<think>(.*?)</think>(.*)', response, re.DOTALL)
     if match:
         return match.group(2).strip()
