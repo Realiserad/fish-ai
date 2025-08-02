@@ -403,6 +403,9 @@ The following information is redacted:
 - PEM-encoded private keys stored in files
 - Bearer tokens, provided to e.g. cURL
 
+If you trust the LLM provider (e.g. because you are hosting locally)
+you can disable redaction using the `redact = False` option.
+
 ## 🔨 Development
 
 If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)

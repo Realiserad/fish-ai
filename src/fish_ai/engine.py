@@ -235,7 +235,8 @@ def create_system_prompt(messages):
 
 
 def get_response(messages):
-    messages = redact(messages)
+    if get_config('redact') != 'False':
+        messages = redact(messages)
 
     start_time = time_ns()
 
