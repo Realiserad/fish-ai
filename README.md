@@ -399,8 +399,9 @@ the `<REDACTED>` placeholder.
 
 The following information is redacted:
 
-- Passwords and API keys supplied on the commandline.
-- PEM-encoded private keys.
+- Passwords and API keys supplied as commandline arguments
+- PEM-encoded private keys stored in files
+- Bearer tokens, provided to e.g. cURL
 
 ## 🔨 Development
 

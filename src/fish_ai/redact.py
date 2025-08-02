@@ -18,6 +18,7 @@ def redact_content(content):
     r = redact_cli_parameter('secret', r)
     r = redact_pem_encoded_private_key(r)
     r = redact_pem_encoded_private_key_block(r)
+    r = redact_bearer_token(r)
     return r
 
 
@@ -58,3 +59,12 @@ def redact_pem_encoded_private_key_block(content):
         replace_with,
         content,
         flags=re.DOTALL)
+
+
+def redact_bearer_token(content):
+    pattern = r'Authorization: Bearer [A-Za-z0-9]+'
+    replace_with = r'Authorization: Bearer <REDACTED>'
+    return re.sub(
+        pattern,
+        replace_with,
+        content)
