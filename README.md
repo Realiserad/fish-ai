@@ -41,6 +41,18 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ## 👨‍🔧 How to install
 
+### Optionally change the default key bindings
+
+By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
+may want to change this if there is interference with any existing key
+bindings on your system.
+
+To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
+(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
+**Ctrl + Space**) to the key binding escape sequence of the key binding
+you want to use. To get the correct key binding escape sequence, use
+[`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
+
 ### Install `fish-ai`
 
 Make sure `git` and either [`uv`](https://github.com/astral-sh/uv), or
@@ -224,18 +236,6 @@ api_key = <your API key>
 Instead of putting the API key in the configuration file, you can let
 `fish-ai` load it from your keyring. To save a new API key or transfer
 an existing API key to your keyring, run `fish_ai_put_api_key`.
-
-### Change the default key bindings
-
-By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
-may want to change this if there is interference with any existing key
-bindings on your system.
-
-To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
-(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
-**Ctrl + Space**) to the key binding escape sequence of the key binding
-you want to use. To get the correct key binding escape sequence, use
-[`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
 
 ## 🙉 How to use
 
