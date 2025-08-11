@@ -21,7 +21,7 @@ dependencies = [
   "mistralai==1.7.0",
   "binaryornot==0.4.4",
   "anthropic==0.61.0",
-  "cohere==5.16.2",
+  "cohere==5.16.3",
   "keyring==25.6.0",
   "groq==0.31.0",
   "google-genai==1.29.0"
