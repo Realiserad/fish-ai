@@ -20,7 +20,7 @@ dependencies = [
   "iterfzf==1.8.0.62.0",
   "mistralai==1.7.0",
   "binaryornot==0.4.4",
-  "anthropic==0.63.0",
+  "anthropic==0.64.0",
   "cohere==5.17.0",
   "keyring==25.6.0",
   "groq==0.31.0",
