@@ -24,7 +24,7 @@ dependencies = [
   "cohere==5.17.0",
   "keyring==25.6.0",
   "groq==0.31.0",
-  "google-genai==1.30.0"
+  "google-genai==1.31.0"
 ]
 
 [project.urls]
