@@ -8,12 +8,15 @@ set -g install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-
 set -g config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
 ##
-## This section contains the keybindings for fish-ai. If you want to change the
-## default keybindings, add this to your `fish-ai.ini`:
+## This section contains the keybindings for fish-ai.
+##  keymap_1 - codify or explain, defaults to Ctrl + P
+##  keymap_2 - autocomplete or fix, defaults to Ctrl + Space
+##
+## If you want to change the default keybindings, add this to your `fish-ai.ini`:
 ##  ```
 ##  [fish-ai]
-##  keymap_1 = <your keybinding> (defaults to Ctrl + P)
-##  keymap_2 = <your keybinding> (defaults to Ctrl + Space)
+##  keymap_1 = <your keybinding>
+##  keymap_2 = <your keybinding>
 ##  ```
 ## or use the environment variables:
 ##
