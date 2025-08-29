@@ -19,12 +19,12 @@ set -g config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.
 ## the command `fish_key_reader`.
 ##
 if test -n "$FISH_AI_KEYMAP_1"
-    set -g keymap_1 "$FISH_AI_KEYMAP_1"
+    set -g keymap_1 $FISH_AI_KEYMAP_1
 else
     set -g keymap_1 \cp
 end
 if test -n "$FISH_AI_KEYMAP_2"
-    set -g keymap_2 "$FISH_AI_KEYMAP_2"
+    set -g keymap_2 $FISH_AI_KEYMAP_2
 else
     if type -q sw_vers
         # macOS
