@@ -41,18 +41,6 @@ If you like it, please add a ⭐. If you don't like it, create a PR. 😆
 
 ## 👨‍🔧 How to install
 
-### Optionally change the default key bindings
-
-By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
-may want to change this if there is interference with any existing key
-bindings on your system.
-
-To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
-(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
-**Ctrl + Space**) to the key binding escape sequence of the key binding
-you want to use. To get the correct key binding escape sequence, use
-[`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
-
 ### Install `fish-ai`
 
 Make sure `git` and either [`uv`](https://github.com/astral-sh/uv), or
@@ -266,7 +254,36 @@ to let `fish-ai` suggest a fix!
 ## 🤸 Additional options
 
 You can tweak the behaviour of `fish-ai` by putting additional options in your
-`fish-ai.ini` configuration file.
+`fish-ai.ini` configuration file or by environment variables.
+
+### Change the default key bindings
+
+By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
+may want to change this if there is interference with any existing key
+bindings on your system.
+
+To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
+(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
+**Ctrl + Space**) to the key binding escape sequence of the key binding
+you want to use. To get the correct key binding escape sequence, use
+[`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
+
+A shell restart is required for the new key bindings to take effect.
+Alternatively, you can run `source ~/.config/fish/conf.d/fish_ai.fish` manually.
+
+For example:
+
+```shell
+$ fish_key_reader
+Press a key:
+bind <key 1> 'do something'
+$ fish_key_reader
+Press a key:
+bind <key 2> 'do something'
+$ set -Ux FISH_AI_KEYMAP_1 <key 1>
+$ set -Ux FISH_AI_KEYMAP_2 <key 2>
+$ source ~/.config/fish/conf.d/fish_ai.fish
+```
 
 ### Explain in a different language
 
