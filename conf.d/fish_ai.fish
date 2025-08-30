@@ -35,7 +35,9 @@ function _fish_ai_get_conf_value -a key
     end
     while read -l -d '=' read_key value
         if string match -q (string trim $key $read_key)
-            echo (string trim $value)
+            # sketcy way to handle backslash escapes
+            echo $value | read -t value rest
+            echo (string trim $value $rest)
             return 0
         end
     end < $config_path
@@ -44,14 +46,14 @@ end
 
 set -g keymap_1 $FISH_AI_KEYMAP_1
 if test -z "$keymap_1"
-	set -g keymap_1 (_fish_ai_get_conf_value keymap_1)
+    set -g keymap_1 (_fish_ai_get_conf_value keymap_1)
 end
 if test -z "$keymap_1"
     set -g keymap_1 \cp
 end
 set -g keymap_2 $FISH_AI_KEYMAP_2
 if test -z "$keymap_2"
-	set -g keymap_2 (_fish_ai_get_conf_value keymap_2)
+    set -g keymap_2 (_fish_ai_get_conf_value keymap_2)
 end
 if test -z "$keymap_2"
     if type -q sw_vers
