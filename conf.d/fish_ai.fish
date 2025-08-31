@@ -265,10 +265,12 @@ function _fish_ai_show_progress_indicator --description "Show a progress indicat
 end
 
 function _fish_ai_notify_custom_keybindings --description "Print a message when custom keybindings are used."
-    if test -n "$FISH_AI_KEYMAP_1"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_1' instead of Ctrl+P."
+	set -l keymap_1 (test -n "$FISH_AI_KEYMAP_1"; and echo "$FISH_AI_KEYMAP_1"; or _fish_ai_get_conf_value keymap_1)
+    if test -n "$keymap_1"
+        echo "🎹 Using custom keyboard shortcut '$keymap_1' instead of Ctrl+P."
     end
-    if test -n "$FISH_AI_KEYMAP_2"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_2' instead of Ctrl+Space."
+	set -l keymap_2 (test -n "$FISH_AI_KEYMAP_2"; and echo "$FISH_AI_KEYMAP_2"; or _fish_ai_get_conf_value keymap_2)
+    if test -n "$keymap_2"
+        echo "🎹 Using custom keyboard shortcut '$keymap_2' instead of Ctrl+Space."
     end
 end
