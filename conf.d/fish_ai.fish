@@ -35,9 +35,7 @@ function _fish_ai_get_conf_value -a key
     end
     while read -l -d '=' read_key value
         if string match -q (string trim $key $read_key)
-            # sketcy way to handle backslash escapes
-            echo $value | read -t value rest
-            echo (string trim $value $rest)
+            echo (string trim (string unescape $value))
             return 0
         end
     end < $config_path
