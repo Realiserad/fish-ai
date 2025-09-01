@@ -254,7 +254,7 @@ to let `fish-ai` suggest a fix!
 ## 🤸 Additional options
 
 You can tweak the behaviour of `fish-ai` by putting additional options in your
-`fish-ai.ini` configuration file or by environment variables.
+`fish-ai.ini` configuration file or using environment variables.
 
 ### Change the default key bindings
 
