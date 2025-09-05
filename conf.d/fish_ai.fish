@@ -8,24 +8,52 @@ set -g install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-
 set -g config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
 ##
-## This section contains the keybindings for fish-ai. If you want to change the
-## default keybindings, use the environment variables:
+## This section contains the keybindings for fish-ai.
+##  keymap_1 - codify or explain, defaults to Ctrl + P
+##  keymap_2 - autocomplete or fix, defaults to Ctrl + Space
 ##
-##   - FISH_AI_KEYMAP_1 (defaults to Ctrl + P)
-##   - FISH_AI_KEYMAP_2 (defaults to Ctrl + Space)
+## If you want to change the default keybindings, add this to your `fish-ai.ini`:
+##  ```
+##  [fish-ai]
+##  keymap_1 = <your keybinding>
+##  keymap_2 = <your keybinding>
+##  ```
+## or use the environment variables:
+##
+##   - FISH_AI_KEYMAP_1
+##   - FISH_AI_KEYMAP_2
 ##
 ## These should be set to the key binding escape sequence for a keyboard shortcut
 ## you want to use + any flags. You can get the key binding escape sequence using
 ## the command `fish_key_reader`.
 ##
-if test -n "$FISH_AI_KEYMAP_1"
-    set -g keymap_1 $FISH_AI_KEYMAP_1
-else
+## Note: shell restart is required for new keybindings to take effect.
+##
+function _fish_ai_get_conf_value -a key
+    if test ! -f "$config_path" -o -z "$key"
+        return 1
+    end
+    while read -l -d '=' read_key value
+        if string match -q (string trim $key $read_key)
+            echo (string trim (string unescape $value))
+            return 0
+        end
+    end < $config_path
+    return 1
+end
+
+set -g keymap_1 $FISH_AI_KEYMAP_1
+if test -z "$keymap_1"
+    set -g keymap_1 (_fish_ai_get_conf_value keymap_1)
+end
+if test -z "$keymap_1"
     set -g keymap_1 \cp
 end
-if test -n "$FISH_AI_KEYMAP_2"
-    set -g keymap_2 $FISH_AI_KEYMAP_2
-else
+set -g keymap_2 $FISH_AI_KEYMAP_2
+if test -z "$keymap_2"
+    set -g keymap_2 (_fish_ai_get_conf_value keymap_2)
+end
+if test -z "$keymap_2"
     if type -q sw_vers
         # macOS
         set -g keymap_2 ctrl-space
@@ -237,10 +265,14 @@ function _fish_ai_show_progress_indicator --description "Show a progress indicat
 end
 
 function _fish_ai_notify_custom_keybindings --description "Print a message when custom keybindings are used."
-    if test -n "$FISH_AI_KEYMAP_1"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_1' instead of Ctrl+P."
+    set -l keymap_1 (test -n "$FISH_AI_KEYMAP_1"; and echo "$FISH_AI_KEYMAP_1"; or _fish_ai_get_conf_value keymap_1)
+    if test -n "$keymap_1"
+        set -l keymap_1 (string escape -n -- $keymap_1)
+        echo "🎹 Using custom keyboard shortcut '$keymap_1' instead of Ctrl+P."
     end
-    if test -n "$FISH_AI_KEYMAP_2"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_2' instead of Ctrl+Space."
+    set -l keymap_2 (test -n "$FISH_AI_KEYMAP_2"; and echo "$FISH_AI_KEYMAP_2"; or _fish_ai_get_conf_value keymap_2)
+    if test -n "$keymap_2"
+        set -l keymap_2 (string escape -n -- $keymap_2)
+        echo "🎹 Using custom keyboard shortcut '$keymap_2' instead of Ctrl+Space."
     end
 end

@@ -258,15 +258,25 @@ You can tweak the behaviour of `fish-ai` by putting additional options in your
 
 ### Change the default key bindings
 
-By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
-may want to change this if there is interference with any existing key
-bindings on your system.
+By default, `fish-ai` binds to **Ctrl + P** ('codify or explain' - `keymap_1`)
+and **Ctrl + Space** ('autocomplete or fix' - `keymap_2`). You may want to change
+this if there is interference with any existing key bindings on your system.
 
-To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
-(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
-**Ctrl + Space**) to the key binding escape sequence of the key binding
-you want to use. To get the correct key binding escape sequence, use
+To change the key bindings, you can set them to the key binding escape sequence of
+the key binding you want to use. To get the correct key binding escape sequence, use
 [`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
+
+You can set them either in config file:
+
+```ini
+[fish-ai]
+keymap_1 = <key 1>
+keymap_2 = <key 2>
+```
+
+Or set the environment variables `FISH_AI_KEYMAP_1` and `FISH_AI_KEYMAP_2`.
+
+Environment variables will override config file.
 
 A shell restart is required for the new key bindings to take effect.
 Alternatively, you can run `source ~/.config/fish/conf.d/fish_ai.fish` manually.
