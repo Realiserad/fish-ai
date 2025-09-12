@@ -10,14 +10,14 @@ if ! type -q yq
     exit 1
 end
 
-set tested_versions (yq '.jobs.python-tests.strategy.matrix.python-version[]' \
+set -l tested_versions (yq '.jobs.python-tests.strategy.matrix.python-version[]' \
     .github/workflows/python-tests.yaml)
 
 source conf.d/fish_ai.fish
 
-if test "$tested_versions" != "$supported_versions"
-    echo "Supported versions: '$supported_versions'"
+if test "$tested_versions" != "$_fish_ai_supported_versions"
+    echo "Supported versions: '$_fish_ai_supported_versions'"
     echo "Tested versions: '$tested_versions'"
-    echo "Update the 'supported_versions' variable in the 'conf.d/fish_ai.fish' file."
+    echo "Update the '_fish_ai_supported_versions' variable in the 'conf.d/fish_ai.fish' file."
     exit 1
 end

@@ -7,10 +7,10 @@ if ! type -q what-bump
 end
 
 git fetch --all >/dev/null
-set start_hash (git show-ref --hash refs/remotes/origin/main)
-set main_version (git show $start_hash:pyproject.toml | grep version | head -n 1 | cut -d'"' -f2)
-set current_version (cat pyproject.toml | grep version | head -n 1 | cut -d '"' -f2)
-set next_version (what-bump --from $main_version $start_hash)
+set -l start_hash (git show-ref --hash refs/remotes/origin/main)
+set -l main_version (git show $start_hash:pyproject.toml | grep version | head -n 1 | cut -d'"' -f2)
+set -l current_version (cat pyproject.toml | grep version | head -n 1 | cut -d '"' -f2)
+set -l next_version (what-bump --from $main_version $start_hash)
 if test "$main_version" = "$next_version"
     exit 0
 end
