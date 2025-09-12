@@ -8,39 +8,38 @@ set -g _fish_ai_install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/sh
 set -g _fish_ai_config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
 ##
-## This section contains the keybindings for fish-ai. If you want to change the
-## default keybindings, use the environment variables:
+## This section creates the keybindings for fish-ai. Modify your `fish-ai.ini`
+## to change the keybindings from their defaults.
 ##
-##   - FISH_AI_KEYMAP_1 (defaults to Ctrl + P)
-##   - FISH_AI_KEYMAP_2 (defaults to Ctrl + Space)
-##
-## These should be set to the key binding escape sequence for a keyboard shortcut
-## you want to use + any flags. You can get the key binding escape sequence using
-## the command `fish_key_reader`.
-##
-if test -n "$FISH_AI_KEYMAP_1"
-    set -g _fish_ai_keymap_1 $FISH_AI_KEYMAP_1
-else
-    set -g _fish_ai_keymap_1 \cp
-end
-if test -n "$FISH_AI_KEYMAP_2"
-    set -g _fish_ai_keymap_2 $FISH_AI_KEYMAP_2
-else
-    if type -q sw_vers
-        # macOS
-        set -g _fish_ai_keymap_2 ctrl-space
+function _fish_ai_bind --description "Create keybindings for fish-ai."
+    if test -n ("$_fish_ai_install_dir/bin/lookup_setting" keymap_1)
+        "$_fish_ai_install_dir/bin/lookup_setting" keymap_1 | string unescape | read -g -a _fish_ai_keymap_1
     else
-        # Linux
-        set -g _fish_ai_keymap_2 -k nul
+        set -g _fish_ai_keymap_1 \cp
     end
+    if test -n ("$_fish_ai_install_dir/bin/lookup_setting" keymap_2)
+        "$_fish_ai_install_dir/bin/lookup_setting" keymap_2 | string unescape | read -g -a _fish_ai_keymap_2
+    else
+        if type -q sw_vers
+            # macOS
+            set -g _fish_ai_keymap_2 ctrl-space
+        else
+            # Linux
+            set -g _fish_ai_keymap_2 -k nul
+        end
+    end
+    if test "$fish_key_bindings" = fish_vi_key_bindings
+        set -g _fish_ai_bind_command bind -M insert
+    else
+        set -g _fish_ai_bind_command bind
+    end
+    $_fish_ai_bind_command $_fish_ai_keymap_1 _fish_ai_codify_or_explain
+    $_fish_ai_bind_command $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
 end
-if test "$fish_key_bindings" = fish_vi_key_bindings
-    set -g _fish_ai_bind_command bind -M insert
-else
-    set -g _fish_ai_bind_command bind
+
+if test -d "$_fish_ai_install_dir"
+    _fish_ai_bind
 end
-$_fish_ai_bind_command $_fish_ai_keymap_1 _fish_ai_codify_or_explain
-$_fish_ai_bind_command $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
 
 ##
 ## This section contains the plugin lifecycle hooks invoked by the fisher package
@@ -67,9 +66,9 @@ function _fish_ai_install --on-event fish_ai_install
         return 2
     end
     _fish_ai_python_version_check
-    _fish_ai_notify_custom_keybindings
     _fish_ai_symlink_truststore
     _fish_ai_autoconfig_gh_models
+    _fish_ai_bind
     if ! test -f "$_fish_ai_config_path"
         echo "🤗 You must create a configuration file before the plugin can be used!"
     end
@@ -89,6 +88,17 @@ function _fish_ai_update --on-event fish_ai_update
     set -l provider ("$_fish_ai_install_dir/bin/lookup_setting" provider)
     if test "$provider" = huggingface
         echo "🌇 The provider for Hugging Face has been removed. Switch to a different provider."
+    end
+    # Upgrade to fish-ai 2.3.0
+    if test -n "$FISH_AI_KEYMAP_1"
+        echo "👷 Migrating custom keybinding FISH_AI_KEYMAP_1 to '$_fish_ai_config_path'."
+        "$_fish_ai_install_dir/bin/put_setting" fish-ai keymap_1 (echo -n "$FISH_AI_KEYMAP_1" | string escape)
+        set -e -Ug FISH_AI_KEYMAP_1
+    end
+    if test -n "$FISH_AI_KEYMAP_2"
+        echo "👷 Migrating custom keybinding FISH_AI_KEYMAP_2 to '$_fish_ai_config_path'."
+        "$_fish_ai_install_dir/bin/put_setting" fish-ai keymap_2 (echo -n "$FISH_AI_KEYMAP_2" | string escape)
+        set -e -Ug FISH_AI_KEYMAP_2
     end
 
     _fish_ai_set_python_version
@@ -110,7 +120,6 @@ function _fish_ai_update --on-event fish_ai_update
         return 2
     end
     _fish_ai_python_version_check
-    _fish_ai_notify_custom_keybindings
     _fish_ai_symlink_truststore
     _fish_ai_warn_plaintext_api_keys
 end
@@ -234,13 +243,4 @@ function _fish_ai_show_progress_indicator --description "Show a progress indicat
     # Move the cursor to the end of the line and insert progress indicator
     tput hpa (math $COLUMNS - $rplen - 1 - $pilen)
     echo -n "$progress_indicator"
-end
-
-function _fish_ai_notify_custom_keybindings --description "Print a message when custom keybindings are used."
-    if test -n "$FISH_AI_KEYMAP_1"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_1' instead of Ctrl+P."
-    end
-    if test -n "$FISH_AI_KEYMAP_2"
-        echo "🎹 Using custom keyboard shortcut '$FISH_AI_KEYMAP_2' instead of Ctrl+Space."
-    end
 end

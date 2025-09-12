@@ -17,9 +17,9 @@ of parameters and switches.
 [`thefuck`](https://github.com/nvbn/thefuck)).
 - Not sure what to type next or just lazy? Let the LLM autocomplete
 your commands with a built in fuzzy finder.
-- Everything is done using two keyboard shortcuts, no mouse needed!
+- Everything is done using two (configurable) keyboard shortcuts, no mouse needed!
 - It can be hooked up to the LLM of your choice (even a self-hosted one!).
-- Everything is open source, hopefully somewhat easy to read and
+- The whole thing is open source, hopefully somewhat easy to read and
 around 2000 lines of code, which means that you can audit the code
 yourself in an afternoon.
 - Install and update with ease using [`fisher`](https://github.com/jorgebucaran/fisher).
@@ -254,7 +254,7 @@ to let `fish-ai` suggest a fix!
 ## 🤸 Additional options
 
 You can tweak the behaviour of `fish-ai` by putting additional options in your
-`fish-ai.ini` configuration file or using environment variables.
+`fish-ai.ini` configuration file.
 
 ### Change the default key bindings
 
@@ -262,28 +262,33 @@ By default, `fish-ai` binds to **Ctrl + P** and **Ctrl + Space**. You
 may want to change this if there is interference with any existing key
 bindings on your system.
 
-To change the key bindings, set the environment variables `FISH_AI_KEYMAP_1`
-(defaults to **Ctrl + P**) and `FISH_AI_KEYMAP_2` (defaults to
-**Ctrl + Space**) to the key binding escape sequence of the key binding
-you want to use. To get the correct key binding escape sequence, use
+To change the key bindings, set `keymap_1` (defaults to **Ctrl + P**)
+and `keymap_2` (defaults to **Ctrl + Space**) to the key binding escape
+sequence of the key binding you want to use.
+
+To get the correct key binding escape sequence, use
 [`fish_key_reader`](https://fishshell.com/docs/current/cmds/fish_key_reader.html).
 
-A shell restart is required for the new key bindings to take effect.
-Alternatively, you can run `source ~/.config/fish/conf.d/fish_ai.fish` manually.
-
-For example:
+For example, if you have the following output from `fish_key_reader`:
 
 ```shell
 $ fish_key_reader
 Press a key:
-bind <key 1> 'do something'
+bind \cP 'do something'
 $ fish_key_reader
 Press a key:
-bind <key 2> 'do something'
-$ set -Ux FISH_AI_KEYMAP_1 <key 1>
-$ set -Ux FISH_AI_KEYMAP_2 <key 2>
-$ source ~/.config/fish/conf.d/fish_ai.fish
+bind -k nul 'do something'
 ```
+
+Then put the following in your configuration file:
+
+```ini
+[fish-ai]
+keymap_1 = \cP
+keymap_2 = '-k nul'
+```
+
+Restart the shell for the changes to take effect.
 
 ### Explain in a different language
 

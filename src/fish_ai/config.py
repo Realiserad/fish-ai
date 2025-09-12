@@ -23,6 +23,12 @@ def lookup_setting():
         print('')
 
 
+def put_setting():
+    config.set(section=sys.argv[1], option=sys.argv[2], value=sys.argv[3])
+    with open(get_config_path(), 'w') as f:
+        config.write(f)
+
+
 def get_config(key):
     if not config.has_section('fish-ai'):
         # There is no configuration file or the user made a mistake.
