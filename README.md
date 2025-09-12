@@ -33,7 +33,11 @@ to a proprietary terminal emulator.
 This plugin was originally based on [Tom Dörr's `fish.codex` repository](https://github.com/tom-doerr/codex.fish).
 Without Tom, this repository would not exist!
 
-If you like it, please add a ⭐. If you don't like it, create a PR. 😆
+If you like it, please add a ⭐.
+
+Bug fixes are welcome! I consider this project largely feature complete.
+Before opening a PR for a feature request, consider opening an issue where
+you explain what you want to add and why, and we can talk about it first.
 
 ## 🎥 Demo
 
