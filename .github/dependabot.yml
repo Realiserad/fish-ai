@@ -13,6 +13,8 @@ updates:
     interval: "daily"
   labels:
   - "deps/python"
+  cooldown:
+    default-days: 7
 - package-ecosystem: "docker"
   directory: ".devcontainer"
   schedule:
