@@ -278,18 +278,18 @@ For example, if you have the following output from `fish_key_reader`:
 ```shell
 $ fish_key_reader
 Press a key:
-bind \cP 'do something'
+bind ctrl-p 'do something'
 $ fish_key_reader
 Press a key:
-bind -k nul 'do something'
+bind ctrl-space 'do something'
 ```
 
 Then put the following in your configuration file:
 
 ```ini
 [fish-ai]
-keymap_1 = \cP
-keymap_2 = '-k nul'
+keymap_1 = 'ctrl-p'
+keymap_2 = 'ctrl-space'
 ```
 
 Restart the shell for the changes to take effect.

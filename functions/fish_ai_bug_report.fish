@@ -54,7 +54,7 @@ function print_environment
 end
 
 function print_key_bindings
-    bind --key | grep --color=never _fish_ai
+    bind | grep --color=never _fish_ai
     echo ""
     echo "Key bindings in use: $fish_key_bindings"
     echo ""
