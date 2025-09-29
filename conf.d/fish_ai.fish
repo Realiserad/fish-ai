@@ -15,17 +15,21 @@ function _fish_ai_bind --description "Create keybindings for fish-ai."
     if test -n ("$_fish_ai_install_dir/bin/lookup_setting" keymap_1)
         "$_fish_ai_install_dir/bin/lookup_setting" keymap_1 | string unescape | read -g -a _fish_ai_keymap_1
     else
-        set -g _fish_ai_keymap_1 \cp
+        # prefer fish key names above fish 4.x
+        if string match -r '^[0-3]\.' "$FISH_VERSION" &>/dev/null
+            set -g _fish_ai_keymap_1 \cp
+        else
+            set -g _fish_ai_keymap_1 ctrl-p
+        end
     end
     if test -n ("$_fish_ai_install_dir/bin/lookup_setting" keymap_2)
         "$_fish_ai_install_dir/bin/lookup_setting" keymap_2 | string unescape | read -g -a _fish_ai_keymap_2
     else
-        if type -q sw_vers
-            # macOS
-            set -g _fish_ai_keymap_2 ctrl-space
-        else
-            # Linux
+        # prefer fish key names above fish 4.x
+        if string match -r '^[0-3]\.' "$FISH_VERSION" &>/dev/null
             set -g _fish_ai_keymap_2 -k nul
+        else
+            set -g _fish_ai_keymap_2 ctrl-space
         end
     end
     if test "$fish_key_bindings" = fish_vi_key_bindings
