@@ -8,7 +8,7 @@ jobs:
   supply-chain-security:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Scan for CVEs
       uses: pypa/gh-action-pip-audit@v1.1.0
       with:

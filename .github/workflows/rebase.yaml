@@ -13,7 +13,7 @@ jobs:
         contains(github.event.comment.body, '/autosquash')
       )
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         token: ${{ secrets.TOKEN }}
         fetch-depth: 0
