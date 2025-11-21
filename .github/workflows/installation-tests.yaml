@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-15
     if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
     - uses: astral-sh/setup-uv@v7
@@ -41,7 +41,7 @@ jobs:
         - fedora
     if: "${{ !startsWith(github.event.head_commit.message, 'docs: ') && !startsWith(github.event.head_commit.message, 'chore: ') && !startsWith(github.event.head_commit.message, 'style: ') }}"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 0
     - name: Install on ${{ matrix.os }}
