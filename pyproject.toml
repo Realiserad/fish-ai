@@ -22,7 +22,7 @@ dependencies = [
   "binaryornot==0.4.4",
   "anthropic==0.73.0",
   "cohere==5.20.0",
-  "keyring==25.6.0",
+  "keyring==25.7.0",
   "groq==0.34.0",
   "google-genai==1.47.0"
 ]
