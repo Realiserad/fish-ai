@@ -11,6 +11,8 @@ repos:
   - id: markdownlint
     args:
     - --fix
+    - --ignore
+    - .github/ISSUE_TEMPLATE
     - --disable=MD041
     - --disable=MD059
 - repo: https://github.com/pre-commit/pre-commit-hooks
