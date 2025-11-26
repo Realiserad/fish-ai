@@ -90,7 +90,7 @@ def fix():
 
     try:
         engine.get_logger().debug('Fixing command: ' + previous_command)
-        engine.get_logger().debug('Command output: ' + error_message)
+        engine.get_logger().debug('Command output: ' + str(error_message))
         response = engine.get_response(
             messages=get_messages(previous_command, error_message))
         print(response, end='')
