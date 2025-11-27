@@ -2,8 +2,7 @@
 ## Supported major.minor versions of Python.
 ## Unit tests are run in CI against these versions.
 ##
-# TODO: Add 3.14. It's currently broken with uv, not sure why.
-set -g _fish_ai_supported_versions 3.9 3.10 3.11 3.12 3.13
+set -g _fish_ai_supported_versions 3.10 3.11 3.12 3.13 3.14
 
 set -g _fish_ai_install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-ai"; or echo "$XDG_DATA_HOME/fish-ai")
 set -g _fish_ai_config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
