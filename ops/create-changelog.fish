@@ -8,6 +8,7 @@ set -l previous_tag (git tag --sort=-creatordate | sed -n 2p)
 # $A..$B selects all commits in B not in A
 set -l commits (git log $previous_tag..$current_tag --format='%H')
 set -l breaking_changes (git log --grep='BREAKING CHANGE:' $previous_tag..$current_tag --format='%H')
+set -l python_deps (cat pyproject.toml | awk '/dependencies = \[/,/\]/' | sed '1d;$d' | tr -d '", ' | awk -F'==' '{print $1}')
 
 for commit in $commits
     set -l message_header (git log --format=%s -n 1 $commit)
@@ -30,6 +31,9 @@ for commit in $commits
         # bump <dependency> from <version> to <new_version>
         set -l dependency (string split ' ' "$commit_description" | sed -n 2p)
         set -l new_version (string split ' ' "$commit_description" | sed -n 6p)
+        if not contains "$dependency" $python_deps
+            continue
+        end
         # if a dependency has been bumped more than once, only add the latest bump (first commit in $commits) to the changelog
         if not contains "$dependency" $bumped_deps
             set -a bumped_deps (echo -n "$dependency")
