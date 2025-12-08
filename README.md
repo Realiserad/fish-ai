@@ -63,6 +63,52 @@ Create a configuration file `$XDG_CONFIG_HOME/fish-ai.ini` (use
 you specify which LLM `fish-ai` should talk to. If you're not sure,
 use GitHub Models.
 
+#### Anthropic
+
+To use [Anthropic](https://www.anthropic.com):
+
+```ini
+[anthropic]
+provider = anthropic
+api_key = <your API key>
+```
+
+#### Azure OpenAI
+
+To use [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service):
+
+```ini
+[fish-ai]
+configuration = azure
+
+[azure]
+provider = azure
+server = https://<your instance>.openai.azure.com
+model = <your deployment name>
+api_key = <your API key>
+```
+
+#### Cohere
+
+To use [Cohere](https://cohere.com):
+
+```ini
+[cohere]
+provider = cohere
+api_key = <your API key>
+```
+
+#### DeepSeek
+
+To use [DeepSeek](https://www.deepseek.com):
+
+```ini
+[deepseek]
+provider = deepseek
+api_key = <your API key>
+model = deepseek-chat
+```
+
 #### GitHub Models
 
 To use [GitHub Models](https://github.com/marketplace/models):
@@ -78,8 +124,71 @@ api_key = <paste GitHub PAT here>
 model = gpt-4o-mini
 ```
 
+#### Google
+
+To use [Gemini](https://ai.google.com) from Google:
+
+```ini
+[google]
+provider = google
+api_key = <your API key>
+```
+
 You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
 The PAT does not require any permissions.
+
+#### Groq
+
+To use [Groq](https://groq.com):
+
+```ini
+[groq]
+provider = groq
+api_key = <your API key>
+```
+
+#### Mistral
+
+To use [Mistral](https://mistral.ai):
+
+```ini
+[fish-ai]
+configuration = mistral
+
+[mistral]
+provider = mistral
+api_key = <your API key>
+```
+
+#### OpenAI
+
+To use [OpenAI](https://platform.openai.com):
+
+```ini
+[fish-ai]
+configuration = openai
+
+[openai]
+provider = openai
+model = gpt-4o
+api_key = <your API key>
+organization = <your organization>
+```
+
+#### OpenRouter
+
+To use [OpenRouter](https://openrouter.ai):
+
+```ini
+[fish-ai]
+configuration = openrouter
+
+[openrouter]
+provider = self-hosted
+server = https://openrouter.ai/api/v1
+model = google/gemini-2.0-flash-lite-001
+api_key = <your API key>
+```
 
 #### Self-hosted
 
@@ -112,116 +221,7 @@ model = llama3.3
 server = http://localhost:11434/v1
 ```
 
-#### OpenRouter
-
-To use [OpenRouter](https://openrouter.ai):
-
-```ini
-[fish-ai]
-configuration = openrouter
-
-[openrouter]
-provider = self-hosted
-server = https://openrouter.ai/api/v1
-model = google/gemini-2.0-flash-lite-001
-api_key = <your API key>
-```
-
 Available models are listed [here](https://openrouter.ai/models).
-
-#### OpenAI
-
-To use [OpenAI](https://platform.openai.com):
-
-```ini
-[fish-ai]
-configuration = openai
-
-[openai]
-provider = openai
-model = gpt-4o
-api_key = <your API key>
-organization = <your organization>
-```
-
-#### Azure OpenAI
-
-To use [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service):
-
-```ini
-[fish-ai]
-configuration = azure
-
-[azure]
-provider = azure
-server = https://<your instance>.openai.azure.com
-model = <your deployment name>
-api_key = <your API key>
-```
-
-#### Mistral
-
-To use [Mistral](https://mistral.ai):
-
-```ini
-[fish-ai]
-configuration = mistral
-
-[mistral]
-provider = mistral
-api_key = <your API key>
-```
-
-#### Anthropic
-
-To use [Anthropic](https://www.anthropic.com):
-
-```ini
-[anthropic]
-provider = anthropic
-api_key = <your API key>
-```
-
-#### Cohere
-
-To use [Cohere](https://cohere.com):
-
-```ini
-[cohere]
-provider = cohere
-api_key = <your API key>
-```
-
-#### DeepSeek
-
-To use [DeepSeek](https://www.deepseek.com):
-
-```ini
-[deepseek]
-provider = deepseek
-api_key = <your API key>
-model = deepseek-chat
-```
-
-#### Groq
-
-To use [Groq](https://groq.com):
-
-```ini
-[groq]
-provider = groq
-api_key = <your API key>
-```
-
-#### Google
-
-To use [Gemini](https://ai.google.com) from Google:
-
-```ini
-[google]
-provider = google
-api_key = <your API key>
-```
 
 ### Put the API key on your keyring
 
