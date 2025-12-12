@@ -143,7 +143,31 @@ def get_system_prompt():
     }
 
 
+def get_custom_headers():
+    """
+    Parse custom headers from config.
+
+    The headers config option should be in the format:
+    headers = Header-Name: value, Another-Header: value
+
+    This is useful for authentication headers like Cloudflare Access.
+    """
+    headers_config = get_config('headers')
+    if not headers_config:
+        return None
+
+    headers = {}
+    for header in headers_config.split(','):
+        header = header.strip()
+        if ':' in header:
+            key, value = header.split(':', 1)
+            headers[key.strip()] = value.strip()
+    return headers if headers else None
+
+
 def get_openai_client():
+    custom_headers = get_custom_headers()
+
     if (get_config('provider') == 'azure'):
         from openai import AzureOpenAI
         return AzureOpenAI(
@@ -151,30 +175,35 @@ def get_openai_client():
             api_version='2023-07-01-preview',
             api_key=get_config('api_key'),
             azure_deployment=get_config('azure_deployment'),
+            default_headers=custom_headers,
         )
     elif (get_config('provider') == 'self-hosted'):
         from openai import OpenAI
         return OpenAI(
             base_url=get_config('server'),
             api_key=get_config('api_key') or 'dummy',
+            default_headers=custom_headers,
         )
     elif (get_config('provider') == 'openai'):
         from openai import OpenAI
         return OpenAI(
             api_key=get_config('api_key'),
             organization=get_config('organization'),
+            default_headers=custom_headers,
         )
     elif (get_config('provider') == 'deepseek'):
         # DeepSeek is compatible with OpenAI Python SDK
         from openai import OpenAI
         return OpenAI(
             api_key=get_config('api_key'),
-            base_url='https://api.deepseek.com'
+            base_url='https://api.deepseek.com',
+            default_headers=custom_headers,
         )
     elif (get_config('provider') == 'groq'):
         from groq import Groq
         return Groq(
             api_key=get_config('api_key'),
+            default_headers=custom_headers,
         )
     else:
         raise Exception('Unknown provider "{}".'
@@ -240,13 +269,19 @@ def get_response(messages):
 
     start_time = time_ns()
 
+    custom_headers = get_custom_headers()
+
     if get_config('provider') == 'mistral':
         from mistralai import Mistral
 
-        client = Mistral(
-            api_key=get_config('api_key'),
-            server_url=get_config('server') or 'https://api.mistral.ai'
-        )
+        mistral_kwargs = {
+            'api_key': get_config('api_key'),
+            'server_url': get_config('server') or 'https://api.mistral.ai',
+        }
+        if custom_headers:
+            from httpx import Client
+            mistral_kwargs['http_client'] = Client(headers=custom_headers)
+        client = Mistral(**mistral_kwargs)
         params = {
             'model': get_config('model') or 'mistral-large-latest',
             'messages': messages,
@@ -260,7 +295,8 @@ def get_response(messages):
         from anthropic import Anthropic
 
         client = Anthropic(
-            api_key=get_config('api_key')
+            api_key=get_config('api_key'),
+            default_headers=custom_headers,
         )
         system_messages, user_messages = get_messages_for_anthropic(messages)
         params = {
@@ -277,8 +313,11 @@ def get_response(messages):
     elif get_config('provider') == 'cohere':
         from cohere import ClientV2
 
-        api_key = get_config('api_key')
-        client = ClientV2(api_key)
+        cohere_kwargs = {'api_key': get_config('api_key')}
+        if custom_headers:
+            from httpx import Client
+            cohere_kwargs['httpx_client'] = Client(headers=custom_headers)
+        client = ClientV2(**cohere_kwargs)
         params = {
             'model': get_config('model') or 'command-r-plus-08-2024',
             'messages': messages,
@@ -310,7 +349,11 @@ def get_response(messages):
         response = completions.choices[0].message.content
     elif get_config('provider') == 'google':
         from google import genai
-        client = genai.Client(api_key=get_config('api_key'))
+        google_kwargs = {'api_key': get_config('api_key')}
+        if custom_headers:
+            from google.genai.types import HttpOptions
+            google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
+        client = genai.Client(**google_kwargs)
         response = client.models.generate_content(
             model=get_config('model') or 'gemini-2.0-flash',
             contents=get_messages_for_gemini(messages),
