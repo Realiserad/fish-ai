@@ -23,7 +23,7 @@ dependencies = [
   "anthropic==0.75.0",
   "cohere==5.20.0",
   "keyring==25.7.0",
-  "groq==0.37.0",
+  "groq==0.37.1",
   "google-genai==1.53.0"
 ]
 
