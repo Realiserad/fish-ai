@@ -11,6 +11,8 @@ repos:
   - id: markdownlint
     args:
     - --fix
+    - --config
+    - .markdownlint.yaml
     - --ignore
     - .github/ISSUE_TEMPLATE
     - --disable=MD041
