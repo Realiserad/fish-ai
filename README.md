@@ -392,6 +392,16 @@ more characters.
 progress_indicator = wait...
 ```
 
+### Use custom headers
+
+You can send custom HTTP headers using the `headers` option. Specify one
+or more headers using comma-separated `Key: Value` pairs. For example:
+
+```ini
+[fish-ai]
+headers = Header-1: value1, Header-2: value2
+```
+
 ## 🎭 Switch between contexts
 
 You can switch between different sections in the configuration using the
