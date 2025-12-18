@@ -53,7 +53,7 @@ function _fish_ai_install --on-event fish_ai_install
     _fish_ai_set_python_version
     if type -q uv
         echo "🥡 Setting up a virtual environment using uv..."
-        uv venv --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
+        uv venv --quiet --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
     else
         echo "🥡 Setting up a virtual environment using venv..."
         python$_fish_ai_python_version -m venv "$_fish_ai_install_dir"
@@ -85,8 +85,10 @@ function _fish_ai_update --on-event fish_ai_update
         mv "$HOME/.fish-ai" "$_fish_ai_install_dir"
     end
     if test -f "$HOME/.config/fish-ai.ini"
-        echo "👷 Moving configuration file to '$_fish_ai_config_path'."
-        mv "$HOME/.config/fish-ai.ini" "$_fish_ai_config_path"
+        if test "$_fish_ai_config_path" != "$HOME/.config/fish-ai.ini"
+            echo "👷 Moving configuration file to '$_fish_ai_config_path'."
+            mv "$HOME/.config/fish-ai.ini" "$_fish_ai_config_path"
+        end
     end
     # Upgrade to fish-ai 2.0.0
     set -l provider ("$_fish_ai_install_dir/bin/lookup_setting" provider)
@@ -107,7 +109,7 @@ function _fish_ai_update --on-event fish_ai_update
 
     _fish_ai_set_python_version
     if type -q uv
-        uv venv --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
+        uv venv --quiet --clear --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
     else
         python$_fish_ai_python_version -m venv --upgrade "$_fish_ai_install_dir"
     end
