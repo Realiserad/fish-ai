@@ -349,6 +349,7 @@ def get_response(messages):
         response = completions.choices[0].message.content
     elif get_config('provider') == 'google':
         from google import genai
+        from google.genai import types
         google_kwargs = {'api_key': get_config('api_key')}
         if custom_headers:
             from google.genai.types import HttpOptions
@@ -357,10 +358,10 @@ def get_response(messages):
         response = client.models.generate_content(
             model=get_config('model') or 'gemini-2.0-flash',
             contents=get_messages_for_gemini(messages),
-            config={
-                'candidate_count': 1,
-                'temperature': float(get_config('temperature') or '0.2'),
-            },
+            config=types.GenerateContentConfig(
+                thinking_config=types.ThinkingConfig(
+                    thinking_level='low')
+            ),
         ).text
     else:
         params = {
