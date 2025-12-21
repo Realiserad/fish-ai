@@ -356,7 +356,7 @@ def get_response(messages):
             google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
         response = client.models.generate_content(
-            model=get_config('model') or 'gemini-2.0-flash',
+            model=get_config('model') or 'gemini-2.5-flash-lite',
             contents=get_messages_for_gemini(messages),
             config=types.GenerateContentConfig(
                 thinking_config=types.ThinkingConfig(
