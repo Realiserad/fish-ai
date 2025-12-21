@@ -119,7 +119,7 @@ configuration = github
 
 [github]
 provider = self-hosted
-server = https://models.inference.ai.azure.com
+server = https://models.github.ai/inference
 api_key = <paste GitHub PAT here>
 model = gpt-4o-mini
 ```
