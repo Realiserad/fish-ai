@@ -124,6 +124,9 @@ api_key = <paste GitHub PAT here>
 model = gpt-4o-mini
 ```
 
+You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
+The PAT does not require any permissions.
+
 #### Google
 
 To use [Gemini](https://ai.google.com) from Google:
@@ -132,10 +135,8 @@ To use [Gemini](https://ai.google.com) from Google:
 [google]
 provider = google
 api_key = <your API key>
+model = gemini-3-pro-preview
 ```
-
-You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
-The PAT does not require any permissions.
 
 #### Groq
 
