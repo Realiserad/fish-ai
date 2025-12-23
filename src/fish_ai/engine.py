@@ -355,13 +355,29 @@ def get_response(messages):
             from google.genai.types import HttpOptions
             google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
+        model = get_config('model') or 'gemini-2.5-flash-lite'
+
+        model_info = client.models.get(model=model)
+        if not getattr(model_info, 'thinking', False):
+            thinking_config = types.GenerateContentConfig()
+        elif 'gemini-2.5' in model:
+            # Gemini 2.5 uses thinking_budget (512 to 32768 tokens)
+            # Note: gemini-2.5-flash-lite supports 512 to 24576 tokens
+            thinking_config = types.ThinkingConfig(thinking_budget=1024)
+        elif 'gemini-3' in model:
+            # Gemini 3 uses thinking_level (one of
+            # ['minimal', 'low', 'medium', 'high'])
+            thinking_config = types.ThinkingConfig(thinking_level='low')
+        else:
+            get_logger().debug(
+                (f"Unknown model '{model}'. Making API call without a "
+                 'thinking config. If this is unexpected, file a feature '
+                 'request at https://github.com/Realiserad/fish-ai/issues'))
+            thinking_config = None
         response = client.models.generate_content(
-            model=get_config('model') or 'gemini-2.5-flash-lite',
+            model=model,
             contents=get_messages_for_gemini(messages),
-            config=types.GenerateContentConfig(
-                thinking_config=types.ThinkingConfig(
-                    thinking_level='low')
-            ),
+            config=types.GenerateContentConfig(thinking_config=thinking_config)
         ).text
     else:
         params = {
