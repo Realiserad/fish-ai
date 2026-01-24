@@ -10,7 +10,9 @@ def get_instructions(commandline):
             'role': 'system',
             'content': textwrap.dedent('''\
             Respond with a fish shell command which carries out the user's
-            task. Do not explain. Only respond with a single line.''')
+            task. Do not explain. Only respond with a single line. Use
+            environment variables (for example $some_variable) as parameters.
+            ''')
         },
         {
             'role': 'user',
@@ -31,11 +33,11 @@ def get_instructions(commandline):
         {
             'role': 'user',
             'content': 'Substitute all occurrences of the string "foo" with ' +
-            'the string "bar" in the file "docker-compose.yml"'
+            'the string "bar"'
         },
         {
             'role': 'assistant',
-            'content': 'sed -i "s/foo/bar/g" docker-compose.yml'
+            'content': 'sed -i "s/foo/bar/g" $file'
         },
         {
             'role': 'user',
