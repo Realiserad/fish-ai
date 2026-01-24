@@ -1,6 +1,7 @@
 #!/usr/bin/env fish
 
 argparse c/contributors -- $argv
+argparse s/sponsors -- $argv
 or return
 
 set -l current_tag (git tag --sort=-creatordate | sed -n 1p)
@@ -103,5 +104,35 @@ if set -q _flag_contributors
     set -l contributors (git log $current_tag...$previous_tag --pretty=format:"%an ([%ae](mailto:%ae))" | sort -u)
     for contributor in $contributors
         echo "- $contributor"
+    end
+end
+
+if set -q _flag_sponsors
+    set sponsors (gh api graphql -f query='
+        query {
+            user(login: "realiserad") {
+                sponsorshipsAsMaintainer(first: 100) {
+                    nodes {
+                        sponsorEntity {
+                            ... on User { login }
+                            ... on Organization { login }
+                        }
+                        tier {
+                            name
+                            monthlyPriceInDollars
+                        }
+                    }
+                }
+            }
+        }' | jq -r .data.user.sponsorshipsAsMaintainer.nodes[].sponsorEntity.login)
+    if test -n "$sponsors"
+        echo ""
+        echo "## ♥ Sponsors"
+        echo ""
+        echo "This release is sponsored by:"
+        echo ""
+        for sponsor in $sponsors
+            echo "- @$sponsor"
+        end
     end
 end
