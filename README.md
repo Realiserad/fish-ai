@@ -308,23 +308,6 @@ language = Swedish
 This will only work well if the LLM you are using has been trained on a dataset
 with the chosen language.
 
-### Change the temperature
-
-Temperature is a decimal number between 0 and 1 controlling the randomness of
-the output. Higher values make the LLM more creative, but may impact accuracy.
-The default value is `0.2`.
-
-Here is an example of how to increase the temperature to `0.5`.
-
-```ini
-[fish-ai]
-temperature = 0.5
-```
-
-Some reasoning models, such as OpenAI's o3, does not support the
-temperature parameter, and you need to explicitly disable it by
-setting `temperature = None`.
-
 ### Number of completions
 
 To change the number of completions suggested by the LLM when pressing

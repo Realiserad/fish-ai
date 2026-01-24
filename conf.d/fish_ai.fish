@@ -106,6 +106,13 @@ function _fish_ai_update --on-event fish_ai_update
         "$_fish_ai_install_dir/bin/put_setting" fish-ai keymap_2 (echo -n "$FISH_AI_KEYMAP_2" | string escape)
         set -e -Ug FISH_AI_KEYMAP_2
     end
+    # Upgrade to fish-ai 2.8.0
+    if test -f "$_fish_ai_config_path"
+        if grep -q '^temperature\s*=' "$_fish_ai_config_path"
+            sed -i '/^temperature\s*=/d' "$_fish_ai_config_path"
+            echo "🌇 The 'temperature' parameter is no longer supported and has been removed from your configuration."
+        end
+    end
 
     _fish_ai_set_python_version
     if type -q uv

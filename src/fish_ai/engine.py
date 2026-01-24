@@ -286,9 +286,6 @@ def get_response(messages):
             'model': get_config('model') or 'mistral-large-latest',
             'messages': messages,
         }
-        temp = get_config('temperature')
-        if temp != 'None':
-            params['temperature'] = float(temp or '0.2')
         completions = client.chat.complete(**params)
         response = completions.choices[0].message.content
     elif get_config('provider') == 'anthropic':
@@ -305,9 +302,6 @@ def get_response(messages):
             'messages': user_messages,
             'max_tokens': 4096
         }
-        temp = get_config('temperature')
-        if temp != 'None':
-            params['temperature'] = float(temp or '0.2')
         completions = client.messages.create(**params)
         response = completions.content[0].text
     elif get_config('provider') == 'cohere':
@@ -322,9 +316,6 @@ def get_response(messages):
             'model': get_config('model') or 'command-r-plus-08-2024',
             'messages': messages,
         }
-        temp = get_config('temperature')
-        if temp != 'None':
-            params['temperature'] = float(temp or '0.2')
         completions = client.chat(**params)
         response = completions.message.content[0].text
     elif get_config('provider') == 'groq':
@@ -339,9 +330,6 @@ def get_response(messages):
             'top_p': 0.95,
             'n': 1,
         }
-        temp = get_config('temperature')
-        if temp != 'None':
-            params['temperature'] = float(temp or '0.6')
         # This removes the thinking tokens for the qwen-qwq-32b model:
         if model in groq_qwen_reasoning_models:
             params['reasoning_format'] = 'parsed'
@@ -386,9 +374,6 @@ def get_response(messages):
             'stream': False,
             'n': 1,
         }
-        temp = get_config('temperature')
-        if temp != 'None':
-            params['temperature'] = float(temp or '0.2')
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
