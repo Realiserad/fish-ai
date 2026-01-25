@@ -3,7 +3,7 @@
 function _fish_ai_autocomplete_or_fix --description "Autocomplete the current command or fix the previous command using AI."
     set -f previous_status (string join '+' $pipestatus | math)
 
-    set -f input (commandline --current-buffer)
+    set -f input (commandline --current-buffer | string collect)
 
     _fish_ai_show_progress_indicator
 

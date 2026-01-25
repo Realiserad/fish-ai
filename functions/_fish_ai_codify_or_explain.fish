@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 function _fish_ai_codify_or_explain --description "Transform a command into a comment and vice versa using AI."
-    set -f input (commandline --current-buffer)
+    set -f input (commandline --current-buffer | string collect)
 
     if test -z "$input"
         return

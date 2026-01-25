@@ -22,8 +22,9 @@ def get_instructions(commandline,
             user. The █ character in the commandline marks the position of the
             cursor where the user is typing. Respond with the number of
             autocompleted commands given by the user. Each autocompleted
-            command should be provided on a separate line. Do not explain.
-            Only respond with the autocompleted commands.
+            command should be separated by a blank line. Preserve any
+            indentation. Do not explain. Only respond with the autocompleted
+            commands.
 
             You may use the following commandline history to personalise
             the output:
@@ -54,6 +55,7 @@ def get_instructions(commandline,
             'role': 'assistant',
             'content': '''\
             docker run -it --rm python:3
+
             docker run -it --rm --entrypoint /bin/sh python:3'''
         },
         {
@@ -170,7 +172,8 @@ def yield_completions(commandline,
 
     try:
         response = engine.get_response(messages=messages)
-        for completion in response.split('\n'):
+        empty_line = '\n\n'
+        for completion in response.split(empty_line):
             engine.get_logger().debug('Created completion: ' + completion)
             yield completion
     except Exception as e:
@@ -219,18 +222,25 @@ def autocomplete():
         completions_generator = yield_completions(
             commandline, cursor_position, completions_count)
 
+        fzf_preview_height = 100 if '\n' in commandline else 20
+        fzf_extra = [
+            f'--height={fzf_preview_height}%',
+            '--layout=reverse',
+            '--margin=1,1'
+        ]
+        if '\n' in commandline:
+            fzf_extra.append('--highlight-line')
+            fzf_extra.append('--gap')
+
         selected_completion = iterfzf(
             completions_generator,
             prompt='🤖 ',
             cycle=True,
+            read0=True,
             bind={
                 'ctrl-p': get_reload_command(commandline, cursor_position),
             },
-            __extra__=[
-                  '--height=20%',
-                  '--layout=reverse',
-                  '--margin=1,1'
-                ])
+            __extra__=fzf_extra)
         if selected_completion:
             print(selected_completion, end='')
         else:
