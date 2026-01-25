@@ -1,6 +1,6 @@
 name: Bump version
 on:
-  pull_request_target:
+  pull_request:
 jobs:
   bump-version:
     runs-on: ubuntu-latest
