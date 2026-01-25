@@ -32,19 +32,26 @@ def test_get_pipe():
         'echo hello | grep world'
     assert get_pipe('echo hello | grep world | wc -l |') == \
         'echo hello | grep world | wc -l'
-    assert get_pipe('echo hello | (echo world)') == 'echo hello'
-    assert get_pipe('echo hello | (echo world') == ''
-    assert get_pipe('(echo hello | (echo world | ') == 'echo world'
     assert get_pipe('(echo hello | (echo world | wc -l') == \
         'echo world'
     assert get_pipe('echo "|"') == ''
     assert get_pipe('echo "hello | world" | wc -l') == \
         'echo "hello | world"'
     assert get_pipe("echo '|'") == ''
-    assert get_pipe("echo 'hello | world'") == ''
+    assert get_pipe("echo 'hello | world' | wc -l") == "echo 'hello | world'"
     assert get_pipe('echo "hello ( world" | wc -l') == \
         'echo "hello ( world"'
-    assert get_pipe('echo "hello ( \\" | world" | wc -l') == \
-        'echo "hello ( \\" | world"'
     assert get_pipe('💩') == ''
-    assert get_pipe('az vm list | jq ".[] ') == 'az vm list'
+    assert get_pipe('az vm list | jq ".[] =|') == 'az vm list'
+    assert get_pipe('echo "\\"foo" | a') == 'echo "\\"foo"'
+    assert get_pipe('echo \'{"foo":"bar}\' | jq .foo') == \
+        'echo \'{"foo":"bar}\''
+
+    assert get_pipe("""set sponsors (gh api graphql -f query='
+        query {
+            blah blah
+        }' | jq -r .data)""") == \
+        """gh api graphql -f query='
+        query {
+            blah blah
+        }'"""

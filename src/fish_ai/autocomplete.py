@@ -3,8 +3,8 @@
 from fish_ai import engine
 from iterfzf import iterfzf
 import textwrap
-from subprocess import getoutput
 from fish_ai.config import get_config
+from subprocess import run, PIPE, DEVNULL
 from base64 import b64encode, b64decode
 
 
@@ -93,9 +93,16 @@ def get_instructions(commandline,
     pipe = get_pipe(before_cursor)
     if (get_config('preview_pipe') == 'True' and pipe != ''):
         engine.get_logger().debug('Detected pipe: ' + pipe)
-        output = getoutput(pipe)
-        if len(output) > 2000:
-            short_output = output[:2000] + ' [...]'
+        pipe_process = run(
+            pipe,
+            shell=True,
+            executable='/usr/bin/fish',
+            stdout=PIPE,
+            stderr=DEVNULL
+        )
+        output = pipe_process.stdout.decode('utf-8')
+        if len(output) > 16000:
+            short_output = output[:16000] + ' [...]'
         else:
             short_output = output
         instructions[-1]['content'] = textwrap.dedent('''\
@@ -123,29 +130,51 @@ def get_instructions(commandline,
 
 
 def get_pipe(buffer):
-    opening_parens_pos = [-1]
-    last_pipe_pos = -1
-    processing_string = False
+    # strip the last process from the pipe
+    escape = False
+    string_char = None
+    pipe_pos = None
     for i, char in enumerate(buffer):
-        escape_chars = 0
-        j = i - 1
-        while buffer[j] == '\\' and j >= 0:
-            escape_chars += 1
-            j -= 1
-        escape = escape_chars % 2 == 1
-        if not escape and (char == '"' or char == "'"):
-            processing_string = not processing_string
-        if not processing_string:
-            if char == '(':
-                opening_parens_pos.append(i)
-            elif char == ')' and len(opening_parens_pos) > 1:
-                opening_parens_pos.pop()
-            elif char == '|':
-                last_pipe_pos = i
-    if last_pipe_pos > -1:
-        return buffer[opening_parens_pos[-1] + 1:last_pipe_pos].strip(' ')
-    else:
+        if char == '\\':
+            escape = not escape
+            continue
+        if escape:
+            escape = False
+            continue
+        if char == "'" or char == '"':
+            if string_char is None:
+                string_char = char
+            elif string_char == char:
+                string_char = None
+            continue
+        if char == '|' and string_char is None:
+            pipe_pos = i
+    if pipe_pos is None:
+        # no pipe detected
         return ''
+    buffer = buffer[:pipe_pos - 1]
+    # start pipe at last unterminated paranthesis
+    escape = False
+    string_char = None
+    parens = [-1]
+    for i, char in enumerate(buffer):
+        if char == '\\':
+            escape = not escape
+            continue
+        if escape:
+            escape = False
+            continue
+        if char == "'" or char == '"':
+            if string_char is None:
+                string_char = char
+            elif string_char == char:
+                string_char = None
+            continue
+        if char == '(' and string_char is None:
+            parens.append(i)
+        elif char == ')' and string_char is None:
+            parens.pop()
+    return buffer[parens[-1] + 1:].strip()
 
 
 def get_messages(commandline,
