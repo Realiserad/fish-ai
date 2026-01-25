@@ -456,9 +456,7 @@ log = /tmp/fish-ai.log
 ### Run the tests
 
 [The installation tests](https://github.com/Realiserad/fish-ai/actions/workflows/installation-tests.yaml)
-(currently running on macOS, Fedora, Ubuntu and Arch Linux) are executed by the
-GitHub runner when you push to the  repository. Pull requests are blocked until
-all installation tests pass.
+are currently running on macOS, Fedora, Ubuntu and Arch Linux.
 
 The Python modules containing most of the business logic can be tested using `pytest`.
 
