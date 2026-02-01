@@ -374,6 +374,9 @@ def get_response(messages):
             'stream': False,
             'n': 1,
         }
+        if get_config('extra_body'):
+            import json
+            params['extra_body'] = json.loads(get_config('extra_body'))
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
