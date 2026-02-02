@@ -15,7 +15,7 @@ function _fish_ai_autocomplete_or_fix --description "Autocomplete the current co
     else if test -n "$input"
         # Autocomplete the current command.
         set -l cursor_position (commandline --cursor)
-        set -l output (_fish_ai_autocomplete "$input" "$cursor_position")
+        set -l output (_fish_ai_autocomplete "$input" "$cursor_position" | string collect)
         set -l completion_length (math (string length "$output") - (string length "$input"))
         commandline --replace "$output"
         commandline --cursor (math $cursor_position + $completion_length)
