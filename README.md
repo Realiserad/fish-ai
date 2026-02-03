@@ -187,8 +187,9 @@ configuration = openrouter
 [openrouter]
 provider = self-hosted
 server = https://openrouter.ai/api/v1
-model = google/gemini-2.0-flash-lite-001
+model = google/gemini-3-flash-preview
 api_key = <your API key>
+extra_body = {"reasoning": {"effort": "minimal", "exclude": true}}
 ```
 
 #### Self-hosted
