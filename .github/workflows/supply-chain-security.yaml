@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
-    - name: Scan for CVEs
-      uses: pypa/gh-action-pip-audit@v1.1.0
-      with:
-        inputs: .
+    - name: Install pip-audit
+      run: pip3 install pip-audit
+    - name: Print audit report
+      run: pip-audit --strict --progress-spinner off .
