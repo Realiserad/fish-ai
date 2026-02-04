@@ -17,6 +17,10 @@ jobs:
         sudo apt install jq
     - name: Create changelog
       run: ops/create-changelog.fish -s > CHANGELOG.md
+    - name: Create SBOM
+      run: |
+        pip-audit --format cyclonedx-json --output sbom.json --progress-spinner off .
     - uses: softprops/action-gh-release@v2.5.0
       with:
         body_path: CHANGELOG.md
+        files: sbom.json
