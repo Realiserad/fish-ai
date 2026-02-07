@@ -8,5 +8,5 @@ function _fish_ai_autocomplete --description "Autocomplete the current command u
         set -f selected_completion ("$_fish_ai_install_dir/bin/autocomplete" "$command" "$cursor_position" | \
             string collect 2> /dev/null)
     end
-    printf "$selected_completion"
+    printf '%s' "$selected_completion"
 end

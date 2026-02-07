@@ -10,5 +10,5 @@ function _fish_ai_codify --description "Turn a comment into a command using AI."
             fish_indent | \
             string collect 2> /dev/null)
     end
-    printf "$output"
+    printf '%s' "$output"
 end

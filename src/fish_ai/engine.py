@@ -383,7 +383,7 @@ def get_response(messages):
     response = '\n'.join(line.strip(' `') for line in response.split('\n'))
 
     end_time = time_ns()
-    get_logger().debug('Response received from backend: ' + response)
+    get_logger().debug('Response received from backend: ' + repr(response))
     get_logger().debug('Processing time: ' +
                        str(round((end_time - start_time) / 1000000)) + ' ms.')
     return remove_thinking_tokens(response)
