@@ -192,7 +192,6 @@ def yield_completions(commandline,
                       cursor_position,
                       completions_count,
                       additional_instructions=None):
-    yield commandline
     messages = get_messages(
         commandline=commandline,
         cursor_position=cursor_position,
@@ -270,10 +269,10 @@ def autocomplete():
                 'ctrl-p': get_reload_command(commandline, cursor_position),
             },
             __extra__=fzf_extra)
-        if selected_completion:
-            print(selected_completion, end='')
-        else:
-            print(commandline, end='')
+        print(selected_completion, end='')
+    except KeyboardInterrupt:
+        # User pressed Ctrl+C or Esc in fzf
+        print(commandline, end='')
     except Exception as e:
         engine.get_logger().exception(e)
         print('# An error occurred when running fish-ai. More info: ' +
