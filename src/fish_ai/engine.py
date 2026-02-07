@@ -380,8 +380,6 @@ def get_response(messages):
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
-    response = '\n'.join(line.strip(' `') for line in response.split('\n'))
-
     end_time = time_ns()
     get_logger().debug('Response received from backend: ' + repr(response))
     get_logger().debug('Processing time: ' +
