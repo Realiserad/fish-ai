@@ -10,9 +10,9 @@ function _fish_ai_codify_or_explain --description "Transform a command into a co
     _fish_ai_show_progress_indicator
 
     if test (string sub --length 2 "$input") = "# "
-        set -f output (_fish_ai_codify "$input")
+        set -f output (_fish_ai_codify "$input" | string collect)
     else
-        set -f output (_fish_ai_explain "$input")
+        set -f output (_fish_ai_explain "$input" | string collect)
     end
 
     commandline --replace "$output"

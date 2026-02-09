@@ -10,7 +10,7 @@ function _fish_ai_autocomplete_or_fix --description "Autocomplete the current co
     if test -z "$input" && test $previous_status -ne 0
         # Fix the previous command.
         set -l previous_command (history | head -1)
-        set -l output (_fish_ai_fix "$previous_command")
+        set -l output (_fish_ai_fix "$previous_command" | string collect)
         commandline --replace "$output"
     else if test -n "$input"
         # Autocomplete the current command.
