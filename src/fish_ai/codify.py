@@ -10,8 +10,9 @@ def get_instructions(commandline):
             'role': 'system',
             'content': textwrap.dedent('''\
             Respond with a fish shell command which carries out the user's
-            task. Do not explain. Only respond with a single line. Use
-            environment variables (for example $some_variable) as parameters.
+            task. Do not explain. Do not use markdown formatting. Only respond
+            with a single line. Use environment variables (for example
+            $some_variable) as parameters.
             ''')
         },
         {

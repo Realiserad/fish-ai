@@ -23,8 +23,8 @@ def get_instructions(commandline,
             cursor where the user is typing. Respond with the number of
             autocompleted commands given by the user. Each autocompleted
             command should be separated by a blank line. Preserve any
-            indentation. Do not explain. Only respond with the autocompleted
-            commands.
+            indentation. Do not explain. Do not use markdown formatting. Only
+            respond with the autocompleted commands.
 
             You may use the following commandline history to personalise
             the output:
