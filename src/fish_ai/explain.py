@@ -9,11 +9,14 @@ def get_instructions(commandline):
         {
             'role': 'system',
             'content': textwrap.dedent('''\
-            Respond with a maximum of three sentences which explain the fish
-            shell command given by the user.
+            Respond with a couple of sentences in a single paragraph which
+            explain the fish shell command(s) given by the user. Try to keep
+            it brief. Do not use markdown formatting or numbered lists.
 
-            The response must begin with a verb. The sentences should be
-            written in {language}.
+            The response must begin with a verb. Use imperative mood (also
+            known as instructional writing).
+
+            The sentences should be written in {language}.
 
             You may use the following manpage to help explain the command:
 
