@@ -68,7 +68,14 @@ def explain():
     try:
         engine.get_logger().debug('Explaining commandline: ' + commandline)
         response = engine.get_response(messages=get_messages(commandline))
-        print('# ' + response.replace('\n', ' '), end='')
+        if len(commandline.split('\n')) > 1:
+            commandline_as_comment = '\n'.join(f'# {line}' for line in
+                                               commandline.split('\n'))
+            print('# ' + response + '\n\n# Example command:\n\n' +
+                  commandline_as_comment,
+                  end='')
+        else:
+            print('# ' + response + ' Example command: ' + commandline, end='')
     except Exception as e:
         engine.get_logger().exception(e)
         print('# An error occurred when running fish-ai. More info: ' +
