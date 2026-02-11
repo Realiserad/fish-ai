@@ -9,7 +9,8 @@ from fish_ai.explain import explain
 @patch('fish_ai.engine.get_response', lambda messages: 'print hello')
 def test_successful_explain(capsys):
     explain()
-    assert capsys.readouterr().out == '# print hello'
+    assert capsys.readouterr().out == '# print hello \
+Example command: echo hello'
     assert capsys.readouterr().err == ''
 
 
