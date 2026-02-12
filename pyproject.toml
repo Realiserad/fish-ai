@@ -24,7 +24,7 @@ dependencies = [
   "cohere==5.20.2",
   "keyring==25.7.0",
   "groq==1.0.0",
-  "google-genai==1.61.0",
+  "google-genai==1.62.0",
   "httpx[socks]==0.28.1"
 ]
 
