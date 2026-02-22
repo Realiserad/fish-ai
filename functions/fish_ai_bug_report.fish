@@ -1,6 +1,9 @@
 #!/usr/bin/env fish
 
 function fish_ai_bug_report
+    # Test failure
+    return 1
+
     print_header Environment
     print_environment
 
