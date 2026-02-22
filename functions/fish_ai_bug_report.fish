@@ -162,7 +162,7 @@ function print_logs
         return
     end
     print_last_section "$log_file"
-    if test ("$_fish_ai_install_dir/bin/lookup_setting debug") != True
+    if test ("$_fish_ai_install_dir/bin/lookup_setting" debug) != True
         echo ""
         echo "🙏 Consider enabling debug mode to get more log output."
     end
