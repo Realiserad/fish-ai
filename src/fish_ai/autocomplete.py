@@ -299,8 +299,8 @@ def refine_completions():
                                 instructions=instructions
     ))
 
-    for completion in yield_completions(commandline,
-                                        cursor_position,
-                                        refined_completions_count,
-                                        instructions):
-        print(completion)
+    refined_completions = yield_completions(commandline,
+                                            cursor_position,
+                                            refined_completions_count,
+                                            instructions)
+    print('\0'.join([e.strip('\n\t ') for e in refined_completions]), end='')
