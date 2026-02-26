@@ -297,7 +297,7 @@ def get_response(messages):
         )
         system_messages, user_messages = get_messages_for_anthropic(messages)
         params = {
-            'model': get_config('model') or 'claude-3-7-sonnet-latest',
+            'model': get_config('model') or 'claude-sonnet-4-6',
             'system': '\n'.join(system_messages),
             'messages': user_messages,
             'max_tokens': 4096
