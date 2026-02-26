@@ -71,6 +71,7 @@ To use [Anthropic](https://www.anthropic.com):
 [anthropic]
 provider = anthropic
 api_key = <your API key>
+model = claude-sonnet-4-6
 ```
 
 #### Azure OpenAI
