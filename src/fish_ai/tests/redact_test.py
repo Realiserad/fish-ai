@@ -111,6 +111,16 @@ def test_nothing_to_redact():
     assert redact_content(input_str) == input_str
 
 
+def test_redact_bearer_token():
+    input_str = 'Authorization: Bearer abc123.def456-XYZ'
+    expected_output = 'Authorization: Bearer <REDACTED>'
+    assert redact_content(input_str) == expected_output
+
+    input_str = 'authorization: bearer token.with.dots'
+    expected_output = 'authorization: bearer <REDACTED>'
+    assert redact_content(input_str) == expected_output
+
+
 def test_do_not_redact():
     input_str = 'import-key --keyring /etc/apk/keys/foo.gpg'
     assert redact_content(input_str) == input_str

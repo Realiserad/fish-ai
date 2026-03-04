@@ -62,9 +62,10 @@ def redact_pem_encoded_private_key_block(content):
 
 
 def redact_bearer_token(content):
-    pattern = r'Authorization: Bearer [A-Za-z0-9]+'
-    replace_with = r'Authorization: Bearer <REDACTED>'
+    pattern = r'(authorization:\s*bearer)\s+[A-Za-z0-9._-]+'
+    replace_with = r'\1 <REDACTED>'
     return re.sub(
         pattern,
         replace_with,
-        content)
+        content,
+        flags=re.IGNORECASE)
