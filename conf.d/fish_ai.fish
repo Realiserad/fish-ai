@@ -41,7 +41,7 @@ function _fish_ai_bind --description "Create keybindings for fish-ai."
     $_fish_ai_bind_command $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
 end
 
-if test -d "$_fish_ai_install_dir"
+if status is-interactive && test -d "$_fish_ai_install_dir"
     _fish_ai_bind
 end
 
