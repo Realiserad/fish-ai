@@ -1,4 +1,4 @@
-name: Dependabot automerge
+name: Automerge dependency updates
 on: pull_request
 permissions:
   contents: write
@@ -15,6 +15,15 @@ jobs:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: Automerge PR
       if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
+      run: gh pr merge --auto --rebase "$PR_URL"
+      env:
+        PR_URL: ${{ github.event.pull_request.html_url }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pre-commit-ci:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'pre-commit-ci[bot]'
+    steps:
+    - name: Automerge PR
       run: gh pr merge --auto --rebase "$PR_URL"
       env:
         PR_URL: ${{ github.event.pull_request.html_url }}
