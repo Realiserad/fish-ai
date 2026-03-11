@@ -9,7 +9,7 @@ set -g _fish_ai_config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config
 
 ##
 ## This section creates the keybindings for fish-ai. Modify your `fish-ai.ini`
-## to change the keybindings from their defaults.
+## and restart the terminal emulator to change the keybindings from their defaults.
 ##
 function _fish_ai_bind --description "Create keybindings for fish-ai."
     if test -n ("$_fish_ai_install_dir/bin/lookup_setting" keymap_1)
@@ -37,8 +37,10 @@ function _fish_ai_bind --description "Create keybindings for fish-ai."
     else
         set -g _fish_ai_bind_command bind
     end
-    $_fish_ai_bind_command $_fish_ai_keymap_1 _fish_ai_codify_or_explain
-    $_fish_ai_bind_command $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
+    bind -M insert $_fish_ai_keymap_1 _fish_ai_codify_or_explain
+    bind $_fish_ai_keymap_1 _fish_ai_codify_or_explain
+    bind -M insert $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
+    bind $_fish_ai_keymap_2 _fish_ai_autocomplete_or_fix
 end
 
 if status is-interactive && test -d "$_fish_ai_install_dir"
