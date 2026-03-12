@@ -14,7 +14,8 @@ def get_config_path():
 
 
 def lookup_setting():
-    value = get_config(sys.argv[1] or '')
+    key = sys.argv[1] if len(sys.argv) > 1 else ''
+    value = get_config(key)
     if value is not None:
         print(value)
     elif len(sys.argv) > 2:
