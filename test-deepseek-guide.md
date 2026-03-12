@@ -135,6 +135,7 @@ codify "显示当前日期"
 **症状**: `401 Unauthorized` 或 `Invalid API key`
 
 **解决**:
+
 - 确认 API Key 完整复制（通常以 `sk-` 开头）
 - 确认没有多余的空格或换行
 - 在 DeepSeek 平台确认 API Key 已激活
@@ -144,6 +145,7 @@ codify "显示当前日期"
 **症状**: `402 Payment Required` 或 `Insufficient balance`
 
 **解决**:
+
 - 登录 DeepSeek 平台充值
 - 新用户通常有免费额度
 
@@ -152,6 +154,7 @@ codify "显示当前日期"
 **症状**: `400 Bad Request` 或 `Model not found`
 
 **解决**:
+
 - 使用正确的模型名：`deepseek-chat` 或 `deepseek-coder`
 - 确认模型已开通
 
@@ -160,6 +163,7 @@ codify "显示当前日期"
 **症状**: `Connection timeout` 或 `Network error`
 
 **解决**:
+
 - 检查网络连接
 - 尝试使用代理
 - 确认 DeepSeek API 可访问
@@ -258,7 +262,7 @@ start = time()
 try:
     response = module(messages)
     response_time = time() - start
-    
+
     print(f"✅ Response received in {response_time:.2f}s")
     print()
     print("=" * 50)
@@ -267,7 +271,7 @@ try:
     print("=" * 50)
     print()
     print("🎉 DeepSeek 集成测试成功！")
-    
+
 except Exception as e:
     print(f"❌ Request failed: {e}")
     print(f"Error type: {type(e).__name__}")
@@ -329,12 +333,12 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, ...):
             stream=False,
         )
         return chat_module, 'lazyllm'
-    
+
     # 其他供应商...
 ```
 
 ---
 
-**测试时间**: 2026-03-12  
-**测试者**: 小褚 📋  
+**测试时间**: 2026-03-12
+**测试者**: 小褚 📋
 **状态**: ✅ 模块创建成功，待真实 API Key 测试

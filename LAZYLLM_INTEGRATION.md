@@ -129,6 +129,7 @@ model = deepseek-chat
 ```
 
 **环境变量方式**：
+
 ```bash
 export FISHAI_PROVIDER=deepseek
 export FISHAI_DEEPSEEK_API_KEY=sk-your-deepseek-key
@@ -323,6 +324,7 @@ pytest src/fish_ai/tests/engine_test.py -v
 **症状**: `Failed to create LazyLLM module`
 
 **解决**:
+
 1. 检查 API 密钥是否正确
 2. 确认网络连接正常
 3. 查看日志：`debug = True`
@@ -332,6 +334,7 @@ pytest src/fish_ai/tests/engine_test.py -v
 **症状**: 修改配置后仍使用旧供应商
 
 **解决**:
+
 1. 确认 `[fish-ai] configuration = xxx` 已更新
 2. 重启 fish shell 或重新加载插件
 3. 检查 API 密钥是否对应新供应商
@@ -341,6 +344,7 @@ pytest src/fish_ai/tests/engine_test.py -v
 **症状**: Anthropic/Cohere/Google 报错
 
 **解决**:
+
 1. 确认已安装对应 SDK：`pip install anthropic/cohere/google-genai`
 2. 检查 API 密钥格式
 3. 查看错误日志
@@ -361,6 +365,6 @@ pytest src/fish_ai/tests/engine_test.py -v
 
 ---
 
-**版本**: 1.0  
-**更新日期**: 2026-03-12  
+**版本**: 1.0
+**更新日期**: 2026-03-12
 **维护**: LazyLLM 社区 + fish-ai 维护者

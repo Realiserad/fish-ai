@@ -171,10 +171,10 @@ def get_custom_headers():
 def get_messages_for_anthropic(messages):
     """
     Convert OpenAI format messages to Anthropic format.
-    
+
     Args:
         messages: List of messages in OpenAI format
-        
+
     Returns:
         Tuple of (system_messages, user_messages)
     """
@@ -194,10 +194,10 @@ def get_messages_for_gemini(messages):
     Google uses a different chat history format than OpenAI.
     The message content should be put in a parts array and
     system messages are not supported.
-    
+
     Args:
         messages: List of messages in OpenAI format
-        
+
     Returns:
         List of messages in Gemini format
     """
@@ -240,20 +240,20 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, server_url=None,
                             azure_deployment=None):
     """
     Get LLM chat module from LazyLLM OnlineChatModule.
-    
+
     使用 LazyLLM 的 OnlineChatModule 统一接入各 LLM 供应商。
     通过配置 source 和 base_url 来支持不同供应商。
-    
+
     Args:
         provider_name: Provider name (openai, anthropic, google, etc.)
         model_name: Model name
         api_key: API key (支持 FISHAI_API_KEY 或 FISHAI_{PROVIDER}_API_KEY)
         server_url: Custom server URL (for self-hosted or Azure)
         azure_deployment: Azure deployment name
-        
+
     Returns:
         LazyLLM OnlineChatModule instance (callable)
-        
+
     Raises:
         Exception: If provider is not supported
     """
@@ -269,13 +269,13 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, server_url=None,
         'mistral': 'openai',  # Mistral 兼容 OpenAI API
         # 以下供应商需要特殊处理（不兼容 OpenAI API）
         # 'anthropic': 需要单独处理
-        # 'cohere': 需要单独处理  
+        # 'cohere': 需要单独处理
         # 'google': 需要单独处理
     }
-    
+
     # 检查是否是 LazyLLM 原生支持的供应商
     lazyllm_source = provider_map.get(provider_name)
-    
+
     # 构建 base_url（用于 OpenAI 兼容模式）
     base_url = None
     if provider_name == 'azure':
@@ -289,7 +289,7 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, server_url=None,
         base_url = 'https://api.groq.com/openai/v1'
     elif provider_name == 'mistral':
         base_url = 'https://api.mistral.ai/v1'
-    
+
     # 对于 LazyLLM 原生支持的供应商，直接创建 OnlineChatModule
     if lazyllm_source:
         try:
@@ -300,19 +300,19 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, server_url=None,
                 'stream': False,  # fish-ai 不使用流式输出
                 'return_trace': False,
             }
-            
+
             if base_url:
                 kwargs['base_url'] = base_url
-            
+
             chat_module = lazyllm.OnlineChatModule(**kwargs)
             get_logger().debug('Created LazyLLM OnlineChatModule: source={}, model={}'.format(
                 lazyllm_source, model_name))
             return chat_module, 'lazyllm'
-            
+
         except Exception as e:
             get_logger().error('Failed to create LazyLLM module: {}'.format(str(e)))
             raise
-    
+
     # 对于 LazyLLM 不支持的供应商（anthropic, cohere, google），返回 None 表示需要单独处理
     get_logger().debug('Provider {} not natively supported by LazyLLM, using fallback'.format(
         provider_name))
@@ -322,16 +322,16 @@ def get_lazyllm_chat_module(provider_name, model_name, api_key, server_url=None,
 def get_response(messages):
     """
     Get response from LLM using LazyLLM where possible.
-    
+
     优先使用 LazyLLM OnlineChatModule 统一接入支持的供应商。
     对于 LazyLLM 不支持的供应商（anthropic, cohere, google），使用原有实现。
-    
+
     Args:
         messages: List of messages in OpenAI format
-        
+
     Returns:
         Response text from LLM
-        
+
     Raises:
         Exception: If provider call fails
     """
@@ -343,18 +343,18 @@ def get_response(messages):
     # 从配置读取参数
     provider_name = get_config('provider')
     model_name = get_config('model')
-    
+
     # 支持两种 API Key 配置方式：
     # 1. 供应商专用：FISHAI_{PROVIDER}_API_KEY（推荐）
     # 2. 通用：FISHAI_API_KEY
     api_key = get_config('{}_api_key'.format(provider_name))
     if not api_key:
         api_key = get_config('api_key')
-    
+
     server_url = get_config('server')
     azure_deployment = get_config('azure_deployment')
     custom_headers = get_custom_headers()
-    
+
     # 模型默认值
     if not model_name:
         if provider_name == 'mistral':
@@ -369,7 +369,7 @@ def get_response(messages):
             model_name = 'gemini-2.5-flash-lite'
         else:
             model_name = 'gpt-4o'
-    
+
     # 尝试使用 LazyLLM
     chat_module, mode = get_lazyllm_chat_module(
         provider_name=provider_name,
@@ -378,7 +378,7 @@ def get_response(messages):
         server_url=server_url,
         azure_deployment=azure_deployment,
     )
-    
+
     try:
         if mode == 'lazyllm':
             # 使用 LazyLLM OnlineChatModule
@@ -386,7 +386,7 @@ def get_response(messages):
             # 提取最后一条用户消息
             user_message = messages[-1]['content'] if messages else ''
             response_text = chat_module(user_message)
-            
+
         elif mode == 'fallback':
             # LazyLLM 不支持的供应商，使用原有实现
             # 这里保留原有代码，确保 anthropic/cohere/google 正常工作
@@ -396,7 +396,7 @@ def get_response(messages):
             )
         else:
             raise Exception('Unknown mode: {}'.format(mode))
-            
+
     except Exception as e:
         get_logger().error('LLM provider call failed: {}'.format(str(e)))
         raise
@@ -412,14 +412,14 @@ def _get_response_fallback(messages, provider_name, model_name, api_key,
                            server_url, azure_deployment, custom_headers):
     """
     Fallback implementation for providers not supported by LazyLLM.
-    
+
     保留原有实现，确保 anthropic/cohere/google 正常工作。
     未来如果 LazyLLM 支持这些供应商，可以移除这个函数。
     """
     # 保留原有实现代码...
     # 为了简洁，这里省略，实际应该复制原来的 if-elif 逻辑
     # 但只针对 anthropic/cohere/google 三个供应商
-    
+
     if provider_name == 'anthropic':
         from anthropic import Anthropic
         system_messages, user_messages = get_messages_for_anthropic(messages)
@@ -432,7 +432,7 @@ def _get_response_fallback(messages, provider_name, model_name, api_key,
         }
         completions = client.messages.create(**params)
         return completions.content[0].text
-    
+
     elif provider_name == 'cohere':
         from cohere import ClientV2
         cohere_kwargs = {'api_key': api_key}
@@ -446,7 +446,7 @@ def _get_response_fallback(messages, provider_name, model_name, api_key,
         }
         completions = client.chat(**params)
         return completions.message.content[0].text
-    
+
     elif provider_name == 'google':
         from google import genai
         from google.genai import types
@@ -455,7 +455,7 @@ def _get_response_fallback(messages, provider_name, model_name, api_key,
             from google.genai.types import HttpOptions
             google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
-        
+
         model_info = client.models.get(model=model_name)
         if not getattr(model_info, 'thinking', False):
             thinking_config = types.GenerateContentConfig()
@@ -465,14 +465,14 @@ def _get_response_fallback(messages, provider_name, model_name, api_key,
             thinking_config = types.ThinkingConfig(thinking_level='low')
         else:
             thinking_config = None
-        
+
         response = client.models.generate_content(
             model=model_name,
             contents=get_messages_for_gemini(messages),
             config=types.GenerateContentConfig(thinking_config=thinking_config)
         ).text
         return response
-    
+
     else:
         raise Exception('Fallback not implemented for provider: {}'.format(provider_name))
 
