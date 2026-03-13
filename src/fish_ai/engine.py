@@ -288,9 +288,15 @@ def get_response(messages):
             api_key=api_key,
             stream=False,
         )
-        # LazyLLM expects string input, not message list
-        user_message = messages[-1]['content'] if messages else ''
-        response = module(user_message)
+        # Convert OpenAI format messages to string with history context
+        # LazyLLM expects a single string with conversation history
+        conversation = []
+        for msg in messages:
+            role = 'User' if msg.get('role') == 'user' else 'Assistant'
+            content = msg.get('content', '')
+            conversation.append(f'{role}: {content}')
+        prompt = '\n'.join(conversation)
+        response = module(prompt)
 
     elif get_config('provider') == 'mistral':
         from mistralai import Mistral
