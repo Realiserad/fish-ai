@@ -271,7 +271,28 @@ def get_response(messages):
 
     custom_headers = get_custom_headers()
 
-    if get_config('provider') == 'mistral':
+    if get_config('provider') == 'lazyllm':
+        # Use LazyLLM for unified LLM provider access
+        # Supports: OpenAI, DeepSeek, GLM, Kimi, Qwen, SenseNova, etc.
+        # Configure via FISHAI_LAZYLLM_SOURCE to switch backend provider
+        import lazyllm
+        
+        source = get_config('lazyllm_source') or 'openai'
+        model = get_config('model')
+        # Read API key from FISHAI_{SOURCE}_API_KEY (e.g., FISHAI_QWEN_API_KEY)
+        api_key = get_config('{}_api_key'.format(source))
+        
+        module = lazyllm.OnlineChatModule(
+            source=source,
+            model=model,
+            api_key=api_key,
+            stream=False,
+        )
+        # LazyLLM expects string input, not message list
+        user_message = messages[-1]['content'] if messages else ''
+        response = module(user_message)
+
+    elif get_config('provider') == 'mistral':
         from mistralai import Mistral
 
         mistral_kwargs = {
