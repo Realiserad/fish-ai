@@ -288,15 +288,24 @@ def get_response(messages):
             api_key=api_key,
             stream=False,
         )
-        # Convert OpenAI format messages to string with history context
-        # LazyLLM expects a single string with conversation history
-        conversation = []
+        # Convert OpenAI format messages to LazyLLM's format:
+        # - input: current user input (last user message)
+        # - llm_chat_history: previous conversation (excluding current input)
+        # Format: [[role, content], [role, content], ...]
+        llm_chat_history = []
+        current_input = ''
+        
         for msg in messages:
-            role = 'User' if msg.get('role') == 'user' else 'Assistant'
+            role = msg.get('role', 'user')
             content = msg.get('content', '')
-            conversation.append(f'{role}: {content}')
-        prompt = '\n'.join(conversation)
-        response = module(prompt)
+            if role == 'user' and msg == messages[-1]:
+                # Last user message is the current input
+                current_input = content
+            else:
+                # Previous messages go to history
+                llm_chat_history.append([role, content])
+        
+        response = module(current_input, llm_chat_history=llm_chat_history)
 
     elif get_config('provider') == 'mistral':
         from mistralai import Mistral
