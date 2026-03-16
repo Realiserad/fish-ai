@@ -276,12 +276,12 @@ def get_response(messages):
         # Supports: OpenAI, DeepSeek, GLM, Kimi, Qwen, SenseNova, etc.
         # Configure via FISHAI_LAZYLLM_SOURCE to switch backend provider
         import lazyllm
-        
+
         source = get_config('lazyllm_source') or 'openai'
         model = get_config('model')
         # Read API key from FISHAI_{SOURCE}_API_KEY (e.g., FISHAI_QWEN_API_KEY)
         api_key = get_config('{}_api_key'.format(source))
-        
+
         module = lazyllm.OnlineChatModule(
             source=source,
             model=model,
