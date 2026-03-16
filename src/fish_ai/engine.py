@@ -288,8 +288,13 @@ def get_response(messages):
             api_key=api_key,
             stream=False,
         )
-        # Pass messages directly like other providers
-        response = module(messages)
+        # Convert OpenAI format messages to LazyLLM format:
+        # - input: current user input (last user message)
+        # - llm_chat_history: [[role, content], ...] (all messages including system)
+        # LazyLLM's ChatPrompter will handle the conversation properly
+        current_input = messages[-1]['content'] if messages and messages[-1].get('role') == 'user' else ''
+        llm_chat_history = [[msg.get('role', 'user'), msg.get('content', '')] for msg in messages]
+        response = module(current_input, llm_chat_history=llm_chat_history)
 
     elif get_config('provider') == 'mistral':
         from mistralai import Mistral
