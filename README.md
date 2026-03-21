@@ -89,6 +89,32 @@ model = <your deployment name>
 api_key = <your API key>
 ```
 
+#### Bedrock
+
+To use models on [AWS Bedrock](https://aws.amazon.com/bedrock/) via the
+[OpenAI-compatible API](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html):
+
+```ini
+[fish-ai]
+configuration = bedrock
+
+[bedrock]
+provider = bedrock
+aws_region = us-east-1
+```
+
+If no `api_key` is configured, a short-term token is automatically
+generated from your
+[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
+(SSO, IAM roles, environment variables, etc.). You can also specify
+an `api_key` directly if you prefer to use a
+[Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
+
+This uses the Bedrock Mantle gateway which supports all models available
+on Bedrock. See the
+[supported regions](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
+for available regions.
+
 #### Cohere
 
 To use [Cohere](https://cohere.com):

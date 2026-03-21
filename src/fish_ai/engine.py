@@ -199,6 +199,18 @@ def get_openai_client():
             base_url='https://api.deepseek.com',
             default_headers=custom_headers,
         )
+    elif (get_config('provider') == 'bedrock'):
+        from openai import OpenAI
+        aws_region = get_config('aws_region') or 'us-east-1'
+        api_key = get_config('api_key')
+        if not api_key:
+            from aws_bedrock_token_generator import provide_token
+            api_key = provide_token(region=aws_region)
+        return OpenAI(
+            base_url='https://bedrock-mantle.{}.api.aws/v1'.format(aws_region),
+            api_key=api_key,
+            default_headers=custom_headers,
+        )
     elif (get_config('provider') == 'groq'):
         from groq import Groq
         return Groq(

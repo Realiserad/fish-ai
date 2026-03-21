@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "2.10.6"
+version = "2.11.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -24,7 +24,8 @@ dependencies = [
   "keyring==25.7.0",
   "groq==1.1.1",
   "google-genai==1.68.0",
-  "httpx[socks]==0.28.1"
+  "httpx[socks]==0.28.1",
+  "aws-bedrock-token-generator==1.1.0"
 ]
 
 [project.urls]
