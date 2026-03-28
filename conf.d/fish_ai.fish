@@ -115,6 +115,13 @@ function _fish_ai_update --on-event fish_ai_update
             echo "🌇 The 'temperature' parameter is no longer supported and has been removed from your configuration."
         end
     end
+    # Upgrade to fish-ai 2.10.6
+    if test "$provider" = cohere
+        set -l model ("$_fish_ai_install_dir/bin/lookup_setting" model)
+        if test -z "$model"
+            echo "👋 Please specify the Cohere model you want to use in '$_fish_ai_config_path'."
+        end
+    end
 
     _fish_ai_set_python_version
     if type -q uv

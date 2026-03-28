@@ -205,6 +205,14 @@ def get_openai_client():
             api_key=get_config('api_key'),
             default_headers=custom_headers,
         )
+    elif (get_config('provider') == 'cohere'):
+        # https://docs.cohere.com/docs/compatibility-api
+        from openai import OpenAI
+        return OpenAI(
+            api_key=get_config('api_key'),
+            base_url='https://api.cohere.ai/compatibility/v1',
+            default_headers=custom_headers,
+        )
     else:
         raise Exception('Unknown provider "{}".'
                         .format(get_config('provider')))
@@ -304,20 +312,6 @@ def get_response(messages):
         }
         completions = client.messages.create(**params)
         response = completions.content[0].text
-    elif get_config('provider') == 'cohere':
-        from cohere import ClientV2
-
-        cohere_kwargs = {'api_key': get_config('api_key')}
-        if custom_headers:
-            from httpx import Client
-            cohere_kwargs['httpx_client'] = Client(headers=custom_headers)
-        client = ClientV2(**cohere_kwargs)
-        params = {
-            'model': get_config('model') or 'command-r-plus-08-2024',
-            'messages': messages,
-        }
-        completions = client.chat(**params)
-        response = completions.message.content[0].text
     elif get_config('provider') == 'groq':
         default_groq_model = 'qwen/qwen3-32b'
         groq_qwen_reasoning_models = ['qwen/qwen3-32b', 'qwen-qwq-32b']

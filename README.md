@@ -97,6 +97,7 @@ To use [Cohere](https://cohere.com):
 [cohere]
 provider = cohere
 api_key = <your API key>
+model = command-a-03-2025
 ```
 
 #### DeepSeek
