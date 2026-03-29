@@ -163,7 +163,7 @@ To use [Gemini](https://ai.google.com) from Google:
 [google]
 provider = google
 api_key = <your API key>
-model = gemini-3-pro-preview
+model = gemini-3.1-pro-preview
 ```
 
 #### Groq

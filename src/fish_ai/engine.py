@@ -349,7 +349,7 @@ def get_response(messages):
             from google.genai.types import HttpOptions
             google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
-        model = get_config('model') or 'gemini-2.5-flash-lite'
+        model = get_config('model') or 'gemini-3.1-pro-preview'
 
         model_info = client.models.get(model=model)
         if not getattr(model_info, 'thinking', False):
