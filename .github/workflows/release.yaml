@@ -18,6 +18,8 @@ jobs:
     - name: Install pip-audit
       run: |
         pip3 install pip-audit
+    - name: Print audit report
+      run: pip-audit --strict --progress-spinner off .
     - name: Create changelog
       run: ops/create-changelog.fish -s > CHANGELOG.md
     - name: Create SBOM
