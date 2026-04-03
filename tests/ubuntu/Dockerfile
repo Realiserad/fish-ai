@@ -7,7 +7,7 @@ RUN apt update && \
 
 RUN apt install -y python3 python3-pip python3-venv
 
-RUN apt-add-repository ppa:fish-shell/release-3 && \
+RUN apt-add-repository ppa:fish-shell/release-4 && \
     apt update && \
     apt install -y fish
 
@@ -34,7 +34,7 @@ RUN apt update && \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     . $HOME/.local/bin/env
 
-RUN apt-add-repository ppa:fish-shell/release-3 && \
+RUN apt-add-repository ppa:fish-shell/release-4 && \
     apt update && \
     apt install -y fish
 
