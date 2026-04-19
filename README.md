@@ -131,7 +131,6 @@ aws_profile = my-profile
 
 The Converse API uses `boto3` directly and requires `bedrock:InvokeModel`
 permission.
-[Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
 #### Cohere
 
