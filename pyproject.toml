@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "2.11.1"
+version = "2.12.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -25,6 +25,7 @@ dependencies = [
   "groq==1.2.0",
   "google-genai==1.74.0",
   "httpx[socks]==0.28.1",
+  "boto3==1.43.6",
   "aws-bedrock-token-generator==1.1.0"
 ]
 
@@ -51,6 +52,12 @@ put_api_key = "fish_ai.put_api_key:put_api_key"
 lookup_setting = "fish_ai.config:lookup_setting"
 put_setting = "fish_ai.config:put_setting"
 refine = "fish_ai.autocomplete:refine_completions"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "single"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

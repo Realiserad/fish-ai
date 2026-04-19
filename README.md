@@ -91,29 +91,54 @@ api_key = <your API key>
 
 #### Bedrock
 
-To use models on [AWS Bedrock](https://aws.amazon.com/bedrock/) via the
-[OpenAI-compatible API](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html):
-
-```ini
-[fish-ai]
-configuration = bedrock
-
-[bedrock]
-provider = bedrock
-aws_region = us-east-1
-```
+[AWS Bedrock](https://aws.amazon.com/bedrock) provides LLMs hosted by AWS. They
+can be accessed either through the Mantle gateway or the Converse API.
 
 If no `api_key` is configured, a short-term token is automatically
 generated from your
-[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
-(SSO, IAM roles, environment variables, etc.). You can also specify
-an `api_key` directly if you prefer to use a
+[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html).
+You can also specifyan `api_key` directly if you prefer to use a
 [Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
-This uses the Bedrock Mantle gateway which supports all models available
-on Bedrock. See the
-[supported regions](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
-for available regions.
+Use `aws_profile` to select a named profile from your AWS configuration. If omitted,
+the default credential chain is used.
+
+Available model IDs are listed in the [Bedrock documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html).
+
+#### Converse API
+
+To use the [Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/converse-api.html):
+
+```ini
+[fish-ai]
+configuration = aws-converse
+
+[aws-converse]
+provider = bedrock
+bedrock_api = converse
+model = anthropic.claude-haiku-4-5-20251001-v1:0
+aws_region = us-east-1
+aws_profile = default
+```
+
+It requires the `bedrock:InvokeModel` permission.
+
+##### Mantle gateway
+
+To use the [Mantle gateway](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html):
+
+```ini
+[fish-ai]
+configuration = aws-mantle
+
+[aws-mantle]
+provider = bedrock
+model = anthropic.claude-haiku-4-5
+aws_region = us-east-1
+aws_profile = default
+```
+
+It requires the `bedrock-mantle:CreateInference` permission.
 
 #### Cohere
 
