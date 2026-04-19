@@ -92,7 +92,7 @@ api_key = <your API key>
 #### Bedrock
 
 To use models on [AWS Bedrock](https://aws.amazon.com/bedrock/) via the
-[OpenAI-compatible API](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html):
+[Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html):
 
 ```ini
 [fish-ai]
@@ -100,24 +100,20 @@ configuration = bedrock
 
 [bedrock]
 provider = bedrock
+model = us.anthropic.claude-sonnet-4-20250514-v1:0
 aws_region = us-east-1
 aws_profile = my-profile
 ```
 
-If no `api_key` is configured, a short-term token is automatically
-generated from your
-[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
-(SSO, IAM roles, environment variables, etc.). You can also specify
-an `api_key` directly if you prefer to use a
-[Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
+Authentication uses the standard
+[AWS credential chain](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
+(SSO, IAM roles, environment variables, etc.) via `boto3`.
 
 Use `aws_profile` to select a named profile from your AWS configuration.
 If omitted, the default credential chain is used.
 
-This uses the Bedrock Mantle gateway which supports all models available
-on Bedrock. See the
-[supported regions](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
-for available regions.
+The IAM principal must have `bedrock:InvokeModel` permission for the
+configured model.
 
 #### Cohere
 
