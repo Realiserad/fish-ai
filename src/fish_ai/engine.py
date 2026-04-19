@@ -445,7 +445,7 @@ def get_response(messages):
             config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
     elif get_config("provider") == "bedrock":
-        bedrock_api = get_config("bedrock_api") or "converse"
+        bedrock_api = get_config("bedrock_api") or "mantle"
         if bedrock_api == "converse":
             client = get_bedrock_client()
             model = get_config("model") or "us.anthropic.claude-haiku-4-5-20251001-v1:0"

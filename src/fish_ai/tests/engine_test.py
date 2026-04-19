@@ -12,7 +12,7 @@ def test_get_commandline_history_disabled(mock_get_logger, mock_get_config):
     mock_get_logger.assert_called_once()
 
 
-# ── Converse API (default) ──────────────────────────────────────────────
+# ── Converse API ─────────────────────────────────────────────────────────
 
 
 @patch("fish_ai.engine.get_config")
@@ -20,6 +20,7 @@ def test_bedrock_converse_happy_path(mock_get_config):
     def config_side_effect(key):
         config = {
             "provider": "bedrock",
+            "bedrock_api": "converse",
             "aws_region": "us-west-2",
             "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
             "redact": "False",
@@ -62,6 +63,7 @@ def test_bedrock_converse_default_model(mock_get_config):
     def config_side_effect(key):
         config = {
             "provider": "bedrock",
+            "bedrock_api": "converse",
             "aws_region": "us-west-2",
             "redact": "False",
         }
@@ -90,30 +92,28 @@ def test_bedrock_converse_default_model(mock_get_config):
 
 
 @patch("fish_ai.engine.get_config")
-def test_bedrock_converse_is_default_api(mock_get_config):
-    """When bedrock_api is not set, converse should be used."""
+def test_bedrock_mantle_is_default_api(mock_get_config):
+    """When bedrock_api is not set, mantle should be used."""
 
     def config_side_effect(key):
         config = {
             "provider": "bedrock",
             "aws_region": "us-west-2",
+            "api_key": "test-api-key",
+            "model": "anthropic.claude-haiku-4-5-20251001-v1:0",
             "redact": "False",
         }
         return config.get(key)
 
     mock_get_config.side_effect = config_side_effect
 
-    mock_bedrock_client = MagicMock()
-    mock_bedrock_client.converse.return_value = {
-        "output": {
-            "message": {
-                "content": [{"text": "echo hello"}],
-            }
-        }
-    }
+    mock_completions = MagicMock()
+    mock_completions.choices = [MagicMock(message=MagicMock(content="echo hello"))]
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = mock_completions
 
     with patch(
-        "fish_ai.engine.get_bedrock_client", return_value=mock_bedrock_client
+        "fish_ai.engine.get_openai_client", return_value=mock_client
     ) as mock_get_client:
         get_response(
             [
@@ -122,7 +122,7 @@ def test_bedrock_converse_is_default_api(mock_get_config):
             ]
         )
         mock_get_client.assert_called_once()
-        mock_bedrock_client.converse.assert_called_once()
+        mock_client.chat.completions.create.assert_called_once()
 
 
 @patch("fish_ai.engine.get_config")
@@ -224,6 +224,7 @@ def test_bedrock_converse_thinking_tokens_removed(mock_get_config):
     def config_side_effect(key):
         config = {
             "provider": "bedrock",
+            "bedrock_api": "converse",
             "aws_region": "us-west-2",
             "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
             "redact": "False",

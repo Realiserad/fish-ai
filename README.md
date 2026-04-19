@@ -92,7 +92,7 @@ api_key = <your API key>
 #### Bedrock
 
 To use models on [AWS Bedrock](https://aws.amazon.com/bedrock/) via the
-[Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html):
+[OpenAI-compatible API](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html):
 
 ```ini
 [fish-ai]
@@ -100,35 +100,37 @@ configuration = bedrock
 
 [bedrock]
 provider = bedrock
-model = us.anthropic.claude-sonnet-4-20250514-v1:0
 aws_region = us-east-1
 aws_profile = my-profile
 ```
 
-Authentication uses the standard
-[AWS credential chain](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
-(SSO, IAM roles, environment variables, etc.) via `boto3`.
+If no `api_key` is configured, a short-term token is automatically
+generated from your
+[AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
+(SSO, IAM roles, environment variables, etc.). You can also specify
+an `api_key` directly if you prefer to use a
+[Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
 Use `aws_profile` to select a named profile from your AWS configuration.
 If omitted, the default credential chain is used.
 
-The IAM principal must have `bedrock:InvokeModel` permission for the
-configured model.
+The Mantle gateway requires `bedrock-mantle:CreateInference` permission.
 
-Alternatively, you can use the
-[Bedrock Mantle gateway](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
-(OpenAI-compatible API) by setting `bedrock_api = mantle`:
+Alternatively, you can use the standard
+[Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html)
+by setting `bedrock_api = converse`:
 
 ```ini
 [bedrock]
 provider = bedrock
-bedrock_api = mantle
+bedrock_api = converse
+model = us.anthropic.claude-haiku-4-5-20251001-v1:0
 aws_region = us-east-1
 aws_profile = my-profile
 ```
 
-The Mantle gateway requires `bedrock-mantle:CreateInference` permission.
-You can also specify an `api_key` directly if you prefer to use a
+The Converse API uses `boto3` directly and requires `bedrock:InvokeModel`
+permission.
 [Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
 #### Cohere
