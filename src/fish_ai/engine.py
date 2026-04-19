@@ -18,22 +18,22 @@ from fish_ai.config import get_config
 
 logger = logging.getLogger()
 
-if exists("/dev/log"):
+if exists('/dev/log'):
     # Syslog on Linux
-    handler = SysLogHandler(address="/dev/log")
+    handler = SysLogHandler(address='/dev/log')
     logger.addHandler(handler)
-elif exists("/var/run/syslog"):
+elif exists('/var/run/syslog'):
     # Syslog on macOS
-    handler = SysLogHandler(address="/var/run/syslog")
+    handler = SysLogHandler(address='/var/run/syslog')
     logger.addHandler(handler)
 
-if get_config("log"):
+if get_config('log'):
     handler = RotatingFileHandler(
-        expanduser(get_config("log")), backupCount=0, maxBytes=1024 * 1024
+        expanduser(get_config('log')), backupCount=0, maxBytes=1024 * 1024
     )
     logger.addHandler(handler)
 
-if get_config("debug") == "True":
+if get_config('debug') == 'True':
     logger.setLevel(logging.DEBUG)
 
 
@@ -46,36 +46,36 @@ def get_args():
 
 
 def get_os():
-    if system() == "Linux":
-        if isfile("/etc/os-release"):
-            with open("/etc/os-release") as f:
+    if system() == 'Linux':
+        if isfile('/etc/os-release'):
+            with open('/etc/os-release') as f:
                 for line in f:
-                    if line.startswith("PRETTY_NAME="):
-                        return line.split("=")[1].strip('"')
-        return "Linux"
-    if system() == "Darwin":
-        return "macOS " + mac_ver()[0]
-    return "Unknown"
+                    if line.startswith('PRETTY_NAME='):
+                        return line.split('=')[1].strip('"')
+        return 'Linux'
+    if system() == 'Darwin':
+        return 'macOS ' + mac_ver()[0]
+    return 'Unknown'
 
 
 def get_manpage(command):
     try:
         get_logger().debug('Retrieving manpage for command "{}"'.format(command))
-        helppage = run(["fish", "-c", command + " --help"], stdout=PIPE, stderr=DEVNULL)
+        helppage = run(['fish', '-c', command + ' --help'], stdout=PIPE, stderr=DEVNULL)
         if helppage.returncode == 0:
-            output = helppage.stdout.decode("utf-8")
+            output = helppage.stdout.decode('utf-8')
             if len(output) > 2000:
-                return output[:2000] + " [...]"
+                return output[:2000] + ' [...]'
             else:
                 return output
-        return "No manpage available."
+        return 'No manpage available.'
     except Exception as e:
         get_logger().debug(
             'Failed to retrieve manpage for command "{}". Reason: {}'.format(
                 command, str(e)
             )
         )
-        return "No manpage available."
+        return 'No manpage available.'
 
 
 def get_file_info(words):
@@ -84,8 +84,8 @@ def get_file_info(words):
     contents.
     """
     for word in words.split():
-        filename = word.rstrip(",.!").strip("\"'")
-        if not match(r"[A-Za-z0-9_\-]+\.[a-z]+", filename.split("/")[-1]):
+        filename = word.rstrip(',.!').strip("\"'")
+        if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
             continue
         if not isfile(filename):
             continue
@@ -93,25 +93,25 @@ def get_file_info(words):
             continue
         if is_binary(filename):
             continue
-        with open(filename, "r") as file:
-            get_logger().debug("Loading file: " + filename)
+        with open(filename, 'r') as file:
+            get_logger().debug('Loading file: ' + filename)
             return filename, file.read(3072)
     return None, None
 
 
 def get_commandline_history(commandline, cursor_position):
-    history_size = int(get_config("history_size") or 0)
+    history_size = int(get_config('history_size') or 0)
     if history_size == 0:
-        get_logger().debug("Commandline history disabled.")
-        return "No commandline history available."
+        get_logger().debug('Commandline history disabled.')
+        return 'No commandline history available.'
 
     def yield_history():
-        command = commandline.split(" ")[0]
+        command = commandline.split(' ')[0]
         before_cursor = commandline[:cursor_position]
         after_cursor = commandline[cursor_position:]
 
         proc = Popen(
-            ["fish", "-c", 'history search --prefix "{}"'.format(command)],
+            ['fish', '-c', 'history search --prefix "{}"'.format(command)],
             stdout=PIPE,
             stderr=DEVNULL,
         )
@@ -119,21 +119,21 @@ def get_commandline_history(commandline, cursor_position):
             line = proc.stdout.readline()
             if not line:
                 break
-            item = line.decode("utf-8").strip()
+            item = line.decode('utf-8').strip()
             if item.startswith(before_cursor) and item.endswith(after_cursor):
                 yield item
 
     history = list(islice(yield_history(), history_size))
 
     if len(history) == 0:
-        return "No commandline history available."
-    return "\n".join(history)
+        return 'No commandline history available.'
+    return '\n'.join(history)
 
 
 def get_system_prompt():
     return {
-        "role": "system",
-        "content": textwrap.dedent("""\
+        'role': 'system',
+        'content': textwrap.dedent("""\
         You are a shell scripting assistant working inside a fish shell.
         The operating system is {os}. Your output must to be shell runnable.
         You may consult Stack Overflow and the official Fish shell
@@ -151,15 +151,15 @@ def get_custom_headers():
 
     This is useful for authentication headers like Cloudflare Access.
     """
-    headers_config = get_config("headers")
+    headers_config = get_config('headers')
     if not headers_config:
         return None
 
     headers = {}
-    for header in headers_config.split(","):
+    for header in headers_config.split(','):
         header = header.strip()
-        if ":" in header:
-            key, value = header.split(":", 1)
+        if ':' in header:
+            key, value = header.split(':', 1)
             headers[key.strip()] = value.strip()
     return headers if headers else None
 
@@ -171,8 +171,8 @@ def get_bedrock_client():
     """
     import boto3
 
-    aws_region = get_config("aws_region") or "us-east-1"
-    aws_profile = get_config("aws_profile")
+    aws_region = get_config('aws_region') or 'us-east-1'
+    aws_profile = get_config('aws_profile')
     if aws_profile:
         session = boto3.Session(
             profile_name=aws_profile,
@@ -180,7 +180,7 @@ def get_bedrock_client():
         )
     else:
         session = boto3.Session(region_name=aws_region)
-    return session.client("bedrock-runtime")
+    return session.client('bedrock-runtime')
 
 
 def get_messages_for_bedrock(messages):
@@ -192,13 +192,13 @@ def get_messages_for_bedrock(messages):
     system_prompts = []
     converse_messages = []
     for message in messages:
-        if message.get("role") == "system":
-            system_prompts.append({"text": message.get("content")})
+        if message.get('role') == 'system':
+            system_prompts.append({'text': message.get('content')})
         else:
             converse_messages.append(
                 {
-                    "role": message.get("role"),
-                    "content": [{"text": message.get("content")}],
+                    'role': message.get('role'),
+                    'content': [{'text': message.get('content')}],
                 }
             )
     return system_prompts, converse_messages
@@ -207,48 +207,48 @@ def get_messages_for_bedrock(messages):
 def get_openai_client():
     custom_headers = get_custom_headers()
 
-    if get_config("provider") == "azure":
+    if get_config('provider') == 'azure':
         from openai import AzureOpenAI
 
         return AzureOpenAI(
-            azure_endpoint=get_config("server"),
-            api_version="2023-07-01-preview",
-            api_key=get_config("api_key"),
-            azure_deployment=get_config("azure_deployment"),
+            azure_endpoint=get_config('server'),
+            api_version='2023-07-01-preview',
+            api_key=get_config('api_key'),
+            azure_deployment=get_config('azure_deployment'),
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "self-hosted":
+    elif get_config('provider') == 'self-hosted':
         from openai import OpenAI
 
         return OpenAI(
-            base_url=get_config("server"),
-            api_key=get_config("api_key") or "dummy",
+            base_url=get_config('server'),
+            api_key=get_config('api_key') or 'dummy',
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "openai":
+    elif get_config('provider') == 'openai':
         from openai import OpenAI
 
         return OpenAI(
-            api_key=get_config("api_key"),
-            organization=get_config("organization"),
+            api_key=get_config('api_key'),
+            organization=get_config('organization'),
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "deepseek":
+    elif get_config('provider') == 'deepseek':
         # DeepSeek is compatible with OpenAI Python SDK
         from openai import OpenAI
 
         return OpenAI(
-            api_key=get_config("api_key"),
-            base_url="https://api.deepseek.com",
+            api_key=get_config('api_key'),
+            base_url='https://api.deepseek.com',
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "bedrock":
+    elif get_config('provider') == 'bedrock':
         from openai import OpenAI
 
-        aws_region = get_config("aws_region") or "us-east-1"
-        api_key = get_config("api_key")
+        aws_region = get_config('aws_region') or 'us-east-1'
+        api_key = get_config('api_key')
         if not api_key:
-            aws_profile = get_config("aws_profile")
+            aws_profile = get_config('aws_profile')
             if aws_profile:
                 from botocore.session import Session as BotocoreSession
                 from aws_bedrock_token_generator import BedrockTokenGenerator
@@ -268,36 +268,36 @@ def get_openai_client():
 
                 api_key = provide_token(region=aws_region)
         return OpenAI(
-            base_url="https://bedrock-mantle.{}.api.aws/v1".format(aws_region),
+            base_url='https://bedrock-mantle.{}.api.aws/v1'.format(aws_region),
             api_key=api_key,
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "groq":
+    elif get_config('provider') == 'groq':
         from groq import Groq
 
         return Groq(
-            api_key=get_config("api_key"),
+            api_key=get_config('api_key'),
             default_headers=custom_headers,
         )
-    elif get_config("provider") == "cohere":
+    elif get_config('provider') == 'cohere':
         # https://docs.cohere.com/docs/compatibility-api
         from openai import OpenAI
 
         return OpenAI(
-            api_key=get_config("api_key"),
-            base_url="https://api.cohere.ai/compatibility/v1",
+            api_key=get_config('api_key'),
+            base_url='https://api.cohere.ai/compatibility/v1',
             default_headers=custom_headers,
         )
     else:
-        raise Exception('Unknown provider "{}".'.format(get_config("provider")))
+        raise Exception('Unknown provider "{}".'.format(get_config('provider')))
 
 
 def get_messages_for_anthropic(messages):
     user_messages = []
     system_messages = []
     for message in messages:
-        if message.get("role") == "system":
-            system_messages.append(message.get("content"))
+        if message.get('role') == 'system':
+            system_messages.append(message.get('content'))
         else:
             user_messages.append(message)
     return system_messages, user_messages
@@ -314,128 +314,128 @@ def get_messages_for_gemini(messages):
     system_messages = []
     other_messages = []
     for message in messages:
-        if message.get("role") == "system":
-            system_messages.append({"text": message.get("content")})
+        if message.get('role') == 'system':
+            system_messages.append({'text': message.get('content')})
         else:
             other_messages.append(message)
 
     for i in range(len(other_messages)):
         message = other_messages[i]
-        if message.get("role") == "user":
+        if message.get('role') == 'user':
             outputs.append(
                 {
-                    "role": "user",
-                    "parts": system_messages + [{"text": message.get("content")}]
+                    'role': 'user',
+                    'parts': system_messages + [{'text': message.get('content')}]
                     if i == 0
-                    else [{"text": message.get("content")}],
+                    else [{'text': message.get('content')}],
                 }
             )
-        elif message.get("role") == "assistant":
+        elif message.get('role') == 'assistant':
             outputs.append(
-                {"role": "model", "parts": [{"text": message.get("content")}]}
+                {'role': 'model', 'parts': [{'text': message.get('content')}]}
             )
     return outputs
 
 
 def create_system_prompt(messages):
-    return "\n\n".join(
+    return '\n\n'.join(
         list(
             map(
-                lambda message: message.get("content"),
-                list(filter(lambda message: message.get("role") == "system", messages)),
+                lambda message: message.get('content'),
+                list(filter(lambda message: message.get('role') == 'system', messages)),
             )
         )
     )
 
 
 def get_response(messages):
-    if get_config("redact") != "False":
+    if get_config('redact') != 'False':
         messages = redact(messages)
 
     start_time = time_ns()
 
     custom_headers = get_custom_headers()
 
-    if get_config("provider") == "mistral":
+    if get_config('provider') == 'mistral':
         from mistralai import Mistral
 
         mistral_kwargs = {
-            "api_key": get_config("api_key"),
-            "server_url": get_config("server") or "https://api.mistral.ai",
+            'api_key': get_config('api_key'),
+            'server_url': get_config('server') or 'https://api.mistral.ai',
         }
         if custom_headers:
             from httpx import Client
 
-            mistral_kwargs["http_client"] = Client(headers=custom_headers)
+            mistral_kwargs['http_client'] = Client(headers=custom_headers)
         client = Mistral(**mistral_kwargs)
         params = {
-            "model": get_config("model") or "mistral-large-latest",
-            "messages": messages,
+            'model': get_config('model') or 'mistral-large-latest',
+            'messages': messages,
         }
         completions = client.chat.complete(**params)
         response = completions.choices[0].message.content
-    elif get_config("provider") == "anthropic":
+    elif get_config('provider') == 'anthropic':
         from anthropic import Anthropic
 
         client = Anthropic(
-            api_key=get_config("api_key"),
+            api_key=get_config('api_key'),
             default_headers=custom_headers,
         )
         system_messages, user_messages = get_messages_for_anthropic(messages)
         params = {
-            "model": get_config("model") or "claude-sonnet-4-6",
-            "system": "\n".join(system_messages),
-            "messages": user_messages,
-            "max_tokens": 4096,
+            'model': get_config('model') or 'claude-sonnet-4-6',
+            'system': '\n'.join(system_messages),
+            'messages': user_messages,
+            'max_tokens': 4096,
         }
         completions = client.messages.create(**params)
         response = completions.content[0].text
-    elif get_config("provider") == "groq":
-        default_groq_model = "qwen/qwen3-32b"
-        groq_qwen_reasoning_models = ["qwen/qwen3-32b", "qwen-qwq-32b"]
-        model = get_config("model") or default_groq_model
+    elif get_config('provider') == 'groq':
+        default_groq_model = 'qwen/qwen3-32b'
+        groq_qwen_reasoning_models = ['qwen/qwen3-32b', 'qwen-qwq-32b']
+        model = get_config('model') or default_groq_model
         params = {
-            "model": model,
-            "messages": messages,
-            "stream": False,
-            "max_completion_tokens": 4096,
-            "top_p": 0.95,
-            "n": 1,
+            'model': model,
+            'messages': messages,
+            'stream': False,
+            'max_completion_tokens': 4096,
+            'top_p': 0.95,
+            'n': 1,
         }
         # This removes the thinking tokens for the qwen-qwq-32b model:
         if model in groq_qwen_reasoning_models:
-            params["reasoning_format"] = "parsed"
+            params['reasoning_format'] = 'parsed'
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
-    elif get_config("provider") == "google":
+    elif get_config('provider') == 'google':
         from google import genai
         from google.genai import types
 
-        google_kwargs = {"api_key": get_config("api_key")}
+        google_kwargs = {'api_key': get_config('api_key')}
         if custom_headers:
             from google.genai.types import HttpOptions
 
-            google_kwargs["http_options"] = HttpOptions(headers=custom_headers)
+            google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
-        model = get_config("model") or "gemini-3.1-pro-preview"
+        model = get_config('model') or 'gemini-3.1-pro-preview'
 
         model_info = client.models.get(model=model)
-        if not getattr(model_info, "thinking", False):
+        if not getattr(model_info, 'thinking', False):
             thinking_config = types.GenerateContentConfig()
-        elif "gemini-2.5" in model:
+        elif 'gemini-2.5' in model:
             # Gemini 2.5 uses thinking_budget (512 to 32768 tokens)
             # Note: gemini-2.5-flash-lite supports 512 to 24576 tokens
             thinking_config = types.ThinkingConfig(thinking_budget=1024)
-        elif "gemini-3" in model:
+        elif 'gemini-3' in model:
             # Gemini 3 uses thinking_level (one of
             # ['minimal', 'low', 'medium', 'high'])
-            thinking_config = types.ThinkingConfig(thinking_level="low")
+            thinking_config = types.ThinkingConfig(thinking_level='low')
         else:
             get_logger().debug(
                 (
                     f"Unknown model '{model}'. Making API call without a "
-                    "thinking config. If this is unexpected, file a feature "
-                    "request at https://github.com/Realiserad/fish-ai/issues"
+                    'thinking config. If this is unexpected, file a feature '
+                    'request at https://github.com/Realiserad/fish-ai/issues'
                 )
             )
             thinking_config = None
@@ -444,32 +444,32 @@ def get_response(messages):
             contents=get_messages_for_gemini(messages),
             config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
-    elif get_config("provider") == "bedrock":
-        bedrock_api = get_config("bedrock_api") or "mantle"
-        if bedrock_api == "converse":
+    elif get_config('provider') == 'bedrock':
+        bedrock_api = get_config('bedrock_api') or 'mantle'
+        if bedrock_api == 'converse':
             client = get_bedrock_client()
-            model = get_config("model") or "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+            model = get_config('model') or 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
             system_prompts, converse_messages = get_messages_for_bedrock(messages)
             params = {
-                "modelId": model,
-                "messages": converse_messages,
+                'modelId': model,
+                'messages': converse_messages,
             }
             if system_prompts:
-                params["system"] = system_prompts
+                params['system'] = system_prompts
             converse_response = client.converse(**params)
-            response = converse_response["output"]["message"]["content"][0]["text"]
-        elif bedrock_api == "mantle":
+            response = converse_response['output']['message']['content'][0]['text']
+        elif bedrock_api == 'mantle':
             params = {
-                "model": get_config("model")
-                or "anthropic.claude-haiku-4-5-20251001-v1:0",
-                "messages": messages,
-                "stream": False,
-                "n": 1,
+                'model': get_config('model')
+                or 'anthropic.claude-haiku-4-5-20251001-v1:0',
+                'messages': messages,
+                'stream': False,
+                'n': 1,
             }
-            if get_config("extra_body"):
+            if get_config('extra_body'):
                 import json
 
-                params["extra_body"] = json.loads(get_config("extra_body"))
+                params['extra_body'] = json.loads(get_config('extra_body'))
             completions = get_openai_client().chat.completions.create(**params)
             response = completions.choices[0].message.content
         else:
@@ -480,22 +480,22 @@ def get_response(messages):
             )
     else:
         params = {
-            "model": get_config("model") or "gpt-4o",
-            "messages": messages,
-            "stream": False,
-            "n": 1,
+            'model': get_config('model') or 'gpt-4o',
+            'messages': messages,
+            'stream': False,
+            'n': 1,
         }
-        if get_config("extra_body"):
+        if get_config('extra_body'):
             import json
 
-            params["extra_body"] = json.loads(get_config("extra_body"))
+            params['extra_body'] = json.loads(get_config('extra_body'))
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
     end_time = time_ns()
-    get_logger().debug("Response received from backend: " + repr(response))
+    get_logger().debug('Response received from backend: ' + repr(response))
     get_logger().debug(
-        "Processing time: " + str(round((end_time - start_time) / 1000000)) + " ms."
+        'Processing time: ' + str(round((end_time - start_time) / 1000000)) + ' ms.'
     )
     return remove_thinking_tokens(response)
 
@@ -512,12 +512,12 @@ def remove_thinking_tokens(response):
     :param response: The response from the backend.
     :return: The output without any thinking tokens.
     """
-    if not response.strip().startswith("<think>"):
+    if not response.strip().startswith('<think>'):
         return response.strip()
 
     import re
 
-    match = re.search(r"<think>(.*?)</think>(.*)", response, re.DOTALL)
+    match = re.search(r'<think>(.*?)</think>(.*)', response, re.DOTALL)
     if match:
         return match.group(2).strip()
     else:
@@ -525,7 +525,7 @@ def remove_thinking_tokens(response):
 
 
 def get_install_dir():
-    if "XDG_DATA_HOME" in environ:
-        return expandvars("$XDG_DATA_HOME/fish-ai")
+    if 'XDG_DATA_HOME' in environ:
+        return expandvars('$XDG_DATA_HOME/fish-ai')
     else:
-        return expanduser("~/.local/share/fish-ai")
+        return expanduser('~/.local/share/fish-ai')
