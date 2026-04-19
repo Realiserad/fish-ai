@@ -115,6 +115,22 @@ If omitted, the default credential chain is used.
 The IAM principal must have `bedrock:InvokeModel` permission for the
 configured model.
 
+Alternatively, you can use the
+[Bedrock Mantle gateway](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
+(OpenAI-compatible API) by setting `bedrock_api = mantle`:
+
+```ini
+[bedrock]
+provider = bedrock
+bedrock_api = mantle
+aws_region = us-east-1
+aws_profile = my-profile
+```
+
+The Mantle gateway requires `bedrock-mantle:CreateInference` permission.
+You can also specify an `api_key` directly if you prefer to use a
+[Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
+
 #### Cohere
 
 To use [Cohere](https://cohere.com):
