@@ -243,9 +243,34 @@ def get_openai_client():
             default_headers=custom_headers,
         )
     elif get_config("provider") == "bedrock":
-        raise Exception(
-            "The bedrock provider uses the Converse API directly. "
-            "Use get_bedrock_client() instead of get_openai_client()."
+        from openai import OpenAI
+
+        aws_region = get_config("aws_region") or "us-east-1"
+        api_key = get_config("api_key")
+        if not api_key:
+            aws_profile = get_config("aws_profile")
+            if aws_profile:
+                from botocore.session import Session as BotocoreSession
+                from aws_bedrock_token_generator import BedrockTokenGenerator
+
+                session = BotocoreSession(profile=aws_profile)
+                credentials = session.get_credentials()
+                if credentials is None:
+                    raise RuntimeError(
+                        'No AWS credentials found for profile "{}".'.format(aws_profile)
+                    )
+                api_key = BedrockTokenGenerator().get_token(
+                    credentials=credentials,
+                    region=aws_region,
+                )
+            else:
+                from aws_bedrock_token_generator import provide_token
+
+                api_key = provide_token(region=aws_region)
+        return OpenAI(
+            base_url="https://bedrock-mantle.{}.api.aws/v1".format(aws_region),
+            api_key=api_key,
+            default_headers=custom_headers,
         )
     elif get_config("provider") == "groq":
         from groq import Groq
@@ -420,17 +445,39 @@ def get_response(messages):
             config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
     elif get_config("provider") == "bedrock":
-        client = get_bedrock_client()
-        model = get_config("model") or "us.anthropic.claude-haiku-4-5-20251001-v1:0"
-        system_prompts, converse_messages = get_messages_for_bedrock(messages)
-        params = {
-            "modelId": model,
-            "messages": converse_messages,
-        }
-        if system_prompts:
-            params["system"] = system_prompts
-        converse_response = client.converse(**params)
-        response = converse_response["output"]["message"]["content"][0]["text"]
+        bedrock_api = get_config("bedrock_api") or "converse"
+        if bedrock_api == "converse":
+            client = get_bedrock_client()
+            model = get_config("model") or "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+            system_prompts, converse_messages = get_messages_for_bedrock(messages)
+            params = {
+                "modelId": model,
+                "messages": converse_messages,
+            }
+            if system_prompts:
+                params["system"] = system_prompts
+            converse_response = client.converse(**params)
+            response = converse_response["output"]["message"]["content"][0]["text"]
+        elif bedrock_api == "mantle":
+            params = {
+                "model": get_config("model")
+                or "anthropic.claude-haiku-4-5-20251001-v1:0",
+                "messages": messages,
+                "stream": False,
+                "n": 1,
+            }
+            if get_config("extra_body"):
+                import json
+
+                params["extra_body"] = json.loads(get_config("extra_body"))
+            completions = get_openai_client().chat.completions.create(**params)
+            response = completions.choices[0].message.content
+        else:
+            raise Exception(
+                'Unknown bedrock_api "{}". Use "converse" or "mantle".'.format(
+                    bedrock_api
+                )
+            )
     else:
         params = {
             "model": get_config("model") or "gpt-4o",
