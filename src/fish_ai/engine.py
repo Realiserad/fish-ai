@@ -164,6 +164,46 @@ def get_custom_headers():
     return headers if headers else None
 
 
+def get_bedrock_client():
+    """
+    Create a boto3 Bedrock Runtime client using the standard AWS credential
+    chain. Supports named profiles via the aws_profile config option.
+    """
+    import boto3
+
+    aws_region = get_config("aws_region") or "us-east-1"
+    aws_profile = get_config("aws_profile")
+    if aws_profile:
+        session = boto3.Session(
+            profile_name=aws_profile,
+            region_name=aws_region,
+        )
+    else:
+        session = boto3.Session(region_name=aws_region)
+    return session.client("bedrock-runtime")
+
+
+def get_messages_for_bedrock(messages):
+    """
+    Convert OpenAI-format messages to the Bedrock Converse API format.
+    System messages are extracted separately since the Converse API
+    accepts them as a top-level parameter.
+    """
+    system_prompts = []
+    converse_messages = []
+    for message in messages:
+        if message.get("role") == "system":
+            system_prompts.append({"text": message.get("content")})
+        else:
+            converse_messages.append(
+                {
+                    "role": message.get("role"),
+                    "content": [{"text": message.get("content")}],
+                }
+            )
+    return system_prompts, converse_messages
+
+
 def get_openai_client():
     custom_headers = get_custom_headers()
 
@@ -203,34 +243,9 @@ def get_openai_client():
             default_headers=custom_headers,
         )
     elif get_config("provider") == "bedrock":
-        from openai import OpenAI
-
-        aws_region = get_config("aws_region") or "us-east-1"
-        api_key = get_config("api_key")
-        if not api_key:
-            aws_profile = get_config("aws_profile")
-            if aws_profile:
-                from botocore.session import Session as BotocoreSession
-                from aws_bedrock_token_generator import BedrockTokenGenerator
-
-                session = BotocoreSession(profile=aws_profile)
-                credentials = session.get_credentials()
-                if credentials is None:
-                    raise RuntimeError(
-                        'No AWS credentials found for profile "{}".'.format(aws_profile)
-                    )
-                api_key = BedrockTokenGenerator().get_token(
-                    credentials=credentials,
-                    region=aws_region,
-                )
-            else:
-                from aws_bedrock_token_generator import provide_token
-
-                api_key = provide_token(region=aws_region)
-        return OpenAI(
-            base_url="https://bedrock-mantle.{}.api.aws/v1".format(aws_region),
-            api_key=api_key,
-            default_headers=custom_headers,
+        raise Exception(
+            "The bedrock provider uses the Converse API directly. "
+            "Use get_bedrock_client() instead of get_openai_client()."
         )
     elif get_config("provider") == "groq":
         from groq import Groq
@@ -404,6 +419,18 @@ def get_response(messages):
             contents=get_messages_for_gemini(messages),
             config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
+    elif get_config("provider") == "bedrock":
+        client = get_bedrock_client()
+        model = get_config("model") or "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+        system_prompts, converse_messages = get_messages_for_bedrock(messages)
+        params = {
+            "modelId": model,
+            "messages": converse_messages,
+        }
+        if system_prompts:
+            params["system"] = system_prompts
+        converse_response = client.converse(**params)
+        response = converse_response["output"]["message"]["content"][0]["text"]
     else:
         params = {
             "model": get_config("model") or "gpt-4o",
