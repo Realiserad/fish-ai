@@ -10,7 +10,8 @@ iterfzf
 mistralai
 binaryornot
 anthropic
-cohere
 keyring
 groq
 google-genai
+httpx[socks]
+aws-bedrock-token-generator
