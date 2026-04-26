@@ -28,6 +28,15 @@ dependencies = [
   "aws-bedrock-token-generator==1.1.0"
 ]
 
+[project.optional-dependencies]
+dev = [
+  "pre-commit",
+  "coverage",
+  "pytest",
+  "pyfakefs",
+  "mutatest"
+]
+
 [project.urls]
 "Homepage" = "https://github.com/realiserad/fish-ai"
 "Bug Tracker" = "https://github.com/realiserad/fish-ai/issues"

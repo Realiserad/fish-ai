@@ -10,7 +10,7 @@ COPY requirements-dev.txt .
 RUN pip3 install \
     --no-cache-dir \
     --break-system-packages \
-    -r requirements-dev.txt
+    ".[dev]"
 
 COPY --from=what-bump /what-bump /bin/what-bump
 COPY --from=yq /usr/bin/yq /bin/yq
