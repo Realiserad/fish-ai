@@ -101,6 +101,7 @@ configuration = bedrock
 [bedrock]
 provider = bedrock
 aws_region = us-east-1
+aws_profile = my-profile
 ```
 
 If no `api_key` is configured, a short-term token is automatically
@@ -110,10 +111,26 @@ generated from your
 an `api_key` directly if you prefer to use a
 [Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
-This uses the Bedrock Mantle gateway which supports all models available
-on Bedrock. See the
-[supported regions](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)
-for available regions.
+Use `aws_profile` to select a named profile from your AWS configuration.
+If omitted, the default credential chain is used.
+
+The Mantle gateway requires `bedrock-mantle:CreateInference` permission.
+
+Alternatively, you can use the standard
+[Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html)
+by setting `bedrock_api = converse`:
+
+```ini
+[bedrock]
+provider = bedrock
+bedrock_api = converse
+model = us.anthropic.claude-haiku-4-5-20251001-v1:0
+aws_region = us-east-1
+aws_profile = my-profile
+```
+
+The Converse API uses `boto3` directly and requires `bedrock:InvokeModel`
+permission.
 
 #### Cohere
 

@@ -28,9 +28,9 @@ elif exists('/var/run/syslog'):
     logger.addHandler(handler)
 
 if get_config('log'):
-    handler = RotatingFileHandler(expanduser(get_config('log')),
-                                  backupCount=0,
-                                  maxBytes=1024*1024)
+    handler = RotatingFileHandler(
+        expanduser(get_config('log')), backupCount=0, maxBytes=1024 * 1024
+    )
     logger.addHandler(handler)
 
 if get_config('debug') == 'True':
@@ -62,12 +62,8 @@ def get_os():
 
 def get_manpage(command):
     try:
-        get_logger().debug('Retrieving manpage for command "{}"'
-                           .format(command))
-        helppage = run(
-            ['fish', '-c', command + ' --help'],
-            stdout=PIPE,
-            stderr=DEVNULL)
+        get_logger().debug('Retrieving manpage for command "{}"'.format(command))
+        helppage = run(['fish', '-c', command + ' --help'], stdout=PIPE, stderr=DEVNULL)
         if helppage.returncode == 0:
             output = helppage.stdout.decode('utf-8')
             if len(output) > 2000:
@@ -78,7 +74,9 @@ def get_manpage(command):
     except Exception as e:
         get_logger().debug(
             'Failed to retrieve manpage for command "{}". Reason: {}'.format(
-                command, str(e)))
+                command, str(e)
+            )
+        )
         return 'No manpage available.'
 
 
@@ -88,7 +86,7 @@ def get_file_info(words):
     contents.
     """
     for word in words.split():
-        filename = word.rstrip(',.!').strip('"\'')
+        filename = word.rstrip(',.!').strip("\"'")
         if not match(r'[A-Za-z0-9_\-]+\.[a-z]+', filename.split('/')[-1]):
             continue
         if not isfile(filename):
@@ -117,7 +115,8 @@ def get_commandline_history(commandline, cursor_position):
         proc = Popen(
             ['fish', '-c', 'history search --prefix "{}"'.format(command)],
             stdout=PIPE,
-            stderr=DEVNULL)
+            stderr=DEVNULL,
+        )
         while True:
             line = proc.stdout.readline()
             if not line:
@@ -136,12 +135,12 @@ def get_commandline_history(commandline, cursor_position):
 def get_system_prompt():
     return {
         'role': 'system',
-        'content': textwrap.dedent('''\
+        'content': textwrap.dedent("""\
         You are a shell scripting assistant working inside a fish shell.
         The operating system is {os}. Your output must to be shell runnable.
         You may consult Stack Overflow and the official Fish shell
         documentation for answers.
-        ''').format(os=get_os())
+        """).format(os=get_os()),
     }
 
 
@@ -167,11 +166,52 @@ def get_custom_headers():
     return headers if headers else None
 
 
+def get_bedrock_client():
+    """
+    Create a boto3 Bedrock Runtime client using the standard AWS credential
+    chain. Supports named profiles via the aws_profile config option.
+    """
+    import boto3
+
+    aws_region = get_config('aws_region') or 'us-east-1'
+    aws_profile = get_config('aws_profile')
+    if aws_profile:
+        session = boto3.Session(
+            profile_name=aws_profile,
+            region_name=aws_region,
+        )
+    else:
+        session = boto3.Session(region_name=aws_region)
+    return session.client('bedrock-runtime')
+
+
+def get_messages_for_bedrock(messages):
+    """
+    Convert OpenAI-format messages to the Bedrock Converse API format.
+    System messages are extracted separately since the Converse API
+    accepts them as a top-level parameter.
+    """
+    system_prompts = []
+    converse_messages = []
+    for message in messages:
+        if message.get('role') == 'system':
+            system_prompts.append({'text': message.get('content')})
+        else:
+            converse_messages.append(
+                {
+                    'role': message.get('role'),
+                    'content': [{'text': message.get('content')}],
+                }
+            )
+    return system_prompts, converse_messages
+
+
 def get_openai_client():
     custom_headers = get_custom_headers()
 
-    if (get_config('provider') == 'azure'):
+    if get_config('provider') == 'azure':
         from openai import AzureOpenAI
+
         return AzureOpenAI(
             azure_endpoint=get_config('server'),
             api_version='2023-07-01-preview',
@@ -179,57 +219,79 @@ def get_openai_client():
             azure_deployment=get_config('azure_deployment'),
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'self-hosted'):
+    elif get_config('provider') == 'self-hosted':
         from openai import OpenAI
+
         return OpenAI(
             base_url=get_config('server'),
             api_key=get_config('api_key') or 'dummy',
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'openai'):
+    elif get_config('provider') == 'openai':
         from openai import OpenAI
+
         return OpenAI(
             api_key=get_config('api_key'),
             organization=get_config('organization'),
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'deepseek'):
+    elif get_config('provider') == 'deepseek':
         # DeepSeek is compatible with OpenAI Python SDK
         from openai import OpenAI
+
         return OpenAI(
             api_key=get_config('api_key'),
             base_url='https://api.deepseek.com',
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'bedrock'):
+    elif get_config('provider') == 'bedrock':
         from openai import OpenAI
+
         aws_region = get_config('aws_region') or 'us-east-1'
         api_key = get_config('api_key')
         if not api_key:
-            from aws_bedrock_token_generator import provide_token
-            api_key = provide_token(region=aws_region)
+            aws_profile = get_config('aws_profile')
+            if aws_profile:
+                from botocore.session import Session as BotocoreSession
+                from aws_bedrock_token_generator import BedrockTokenGenerator
+
+                session = BotocoreSession(profile=aws_profile)
+                credentials = session.get_credentials()
+                if credentials is None:
+                    raise RuntimeError(
+                        'No AWS credentials found for profile "{}".'.format(aws_profile)
+                    )
+                api_key = BedrockTokenGenerator().get_token(
+                    credentials=credentials,
+                    region=aws_region,
+                )
+            else:
+                from aws_bedrock_token_generator import provide_token
+
+                api_key = provide_token(region=aws_region)
         return OpenAI(
             base_url='https://bedrock-mantle.{}.api.aws/v1'.format(aws_region),
             api_key=api_key,
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'groq'):
+    elif get_config('provider') == 'groq':
         from groq import Groq
+
         return Groq(
             api_key=get_config('api_key'),
             default_headers=custom_headers,
         )
-    elif (get_config('provider') == 'cohere'):
+    elif get_config('provider') == 'cohere':
         # https://docs.cohere.com/docs/compatibility-api
         from openai import OpenAI
+
         return OpenAI(
             api_key=get_config('api_key'),
             base_url='https://api.cohere.ai/compatibility/v1',
             default_headers=custom_headers,
         )
     else:
-        raise Exception('Unknown provider "{}".'
-                        .format(get_config('provider')))
+        raise Exception('Unknown provider "{}".'.format(get_config('provider')))
 
 
 def get_messages_for_anthropic(messages):
@@ -262,27 +324,30 @@ def get_messages_for_gemini(messages):
     for i in range(len(other_messages)):
         message = other_messages[i]
         if message.get('role') == 'user':
-            outputs.append({
-                'role': 'user',
-                'parts': system_messages + [{'text': message.get('content')}]
-                if i == 0 else [{'text': message.get('content')}]
-            })
+            outputs.append(
+                {
+                    'role': 'user',
+                    'parts': system_messages + [{'text': message.get('content')}]
+                    if i == 0
+                    else [{'text': message.get('content')}],
+                }
+            )
         elif message.get('role') == 'assistant':
-            outputs.append({
-                'role': 'model',
-                'parts': [{'text': message.get('content')}]
-            })
+            outputs.append(
+                {'role': 'model', 'parts': [{'text': message.get('content')}]}
+            )
     return outputs
 
 
 def create_system_prompt(messages):
     return '\n\n'.join(
         list(
-            map(lambda message: message.get('content'),
-                list(
-                    filter(
-                        lambda message: message.get('role') == 'system',
-                        messages)))))
+            map(
+                lambda message: message.get('content'),
+                list(filter(lambda message: message.get('role') == 'system', messages)),
+            )
+        )
+    )
 
 
 def get_response(messages):
@@ -302,6 +367,7 @@ def get_response(messages):
         }
         if custom_headers:
             from httpx import Client
+
             mistral_kwargs['http_client'] = Client(headers=custom_headers)
         client = Mistral(**mistral_kwargs)
         params = {
@@ -322,7 +388,7 @@ def get_response(messages):
             'model': get_config('model') or 'claude-sonnet-4-6',
             'system': '\n'.join(system_messages),
             'messages': user_messages,
-            'max_tokens': 4096
+            'max_tokens': 4096,
         }
         completions = client.messages.create(**params)
         response = completions.content[0].text
@@ -346,9 +412,11 @@ def get_response(messages):
     elif get_config('provider') == 'google':
         from google import genai
         from google.genai import types
+
         google_kwargs = {'api_key': get_config('api_key')}
         if custom_headers:
             from google.genai.types import HttpOptions
+
             google_kwargs['http_options'] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
         model = get_config('model') or 'gemini-3.1-pro-preview'
@@ -366,15 +434,52 @@ def get_response(messages):
             thinking_config = types.ThinkingConfig(thinking_level='low')
         else:
             get_logger().debug(
-                (f"Unknown model '{model}'. Making API call without a "
-                 'thinking config. If this is unexpected, file a feature '
-                 'request at https://github.com/Realiserad/fish-ai/issues'))
+                (
+                    f"Unknown model '{model}'. Making API call without a "
+                    'thinking config. If this is unexpected, file a feature '
+                    'request at https://github.com/Realiserad/fish-ai/issues'
+                )
+            )
             thinking_config = None
         response = client.models.generate_content(
             model=model,
             contents=get_messages_for_gemini(messages),
-            config=types.GenerateContentConfig(thinking_config=thinking_config)
+            config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
+    elif get_config('provider') == 'bedrock':
+        bedrock_api = get_config('bedrock_api') or 'mantle'
+        if bedrock_api == 'converse':
+            client = get_bedrock_client()
+            model = get_config('model') or 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
+            system_prompts, converse_messages = get_messages_for_bedrock(messages)
+            params = {
+                'modelId': model,
+                'messages': converse_messages,
+            }
+            if system_prompts:
+                params['system'] = system_prompts
+            converse_response = client.converse(**params)
+            response = converse_response['output']['message']['content'][0]['text']
+        elif bedrock_api == 'mantle':
+            params = {
+                'model': get_config('model')
+                or 'anthropic.claude-haiku-4-5-20251001-v1:0',
+                'messages': messages,
+                'stream': False,
+                'n': 1,
+            }
+            if get_config('extra_body'):
+                import json
+
+                params['extra_body'] = json.loads(get_config('extra_body'))
+            completions = get_openai_client().chat.completions.create(**params)
+            response = completions.choices[0].message.content
+        else:
+            raise Exception(
+                'Unknown bedrock_api "{}". Use "converse" or "mantle".'.format(
+                    bedrock_api
+                )
+            )
     else:
         params = {
             'model': get_config('model') or 'gpt-4o',
@@ -384,14 +489,16 @@ def get_response(messages):
         }
         if get_config('extra_body'):
             import json
+
             params['extra_body'] = json.loads(get_config('extra_body'))
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
     end_time = time_ns()
     get_logger().debug('Response received from backend: ' + repr(response))
-    get_logger().debug('Processing time: ' +
-                       str(round((end_time - start_time) / 1000000)) + ' ms.')
+    get_logger().debug(
+        'Processing time: ' + str(round((end_time - start_time) / 1000000)) + ' ms.'
+    )
     return remove_thinking_tokens(response)
 
 
@@ -411,6 +518,7 @@ def remove_thinking_tokens(response):
         return response.strip()
 
     import re
+
     match = re.search(r'<think>(.*?)</think>(.*)', response, re.DOTALL)
     if match:
         return match.group(2).strip()
