@@ -4,8 +4,7 @@ If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://githu
 first.
 
 This repository ships with a `devcontainer.json` which can be used with
-GitHub Codespaces or Visual Studio Code with
-[the Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+GitHub Codespaces or an editor [such as Zed](https://zed.dev/docs/dev-containers).
 
 To install `fish-ai` from a local copy, use `fisher`:
 
