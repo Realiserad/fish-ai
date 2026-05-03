@@ -5,8 +5,6 @@ FROM mcr.microsoft.com/devcontainers/python:3.11-buster
 
 WORKDIR /home/vscode
 
-COPY requirements-dev.txt .
-
 RUN pip3 install \
     --no-cache-dir \
     --break-system-packages \
