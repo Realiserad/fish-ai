@@ -20,7 +20,7 @@ dependencies = [
   "iterfzf==1.9.0.67.0",
   "mistralai==2.4.3",
   "binaryornot==0.6.0",
-  "anthropic==0.96.0",
+  "anthropic==0.97.0",
   "keyring==25.7.0",
   "groq==1.2.0",
   "google-genai==1.73.1",
