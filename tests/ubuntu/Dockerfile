@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS install-with-pip
+FROM ubuntu:26.04 AS install-with-pip
 
 ARG SOURCE=.
 
@@ -24,7 +24,7 @@ RUN fisher install $SOURCE
 
 RUN fish_ai_bug_report
 
-FROM ubuntu:24.04 AS install-with-uv
+FROM ubuntu:26.04 AS install-with-uv
 
 ARG SOURCE=.
 
