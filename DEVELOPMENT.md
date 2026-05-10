@@ -3,13 +3,22 @@
 If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)
 first.
 
-This repository ships with a `devcontainer.json` which can be used with
-GitHub Codespaces or an editor [such as Zed](https://zed.dev/docs/dev-containers).
+To create a virtual environment with the tools needed for development,
+simply run `uv sync`. When using an editor such as Zed, everything should
+work out of the box.
 
 To install `fish-ai` from a local copy, use `fisher`:
 
 ```shell
 fisher install .
+```
+
+## Install the pre-commit hooks
+
+To install the pre-commit hooks, run:
+
+```shell
+pre-commit install -t pre-commit -t commit-msg -t post-commit
 ```
 
 ## Enable debug logging

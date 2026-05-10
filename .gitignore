@@ -8,3 +8,5 @@ lcov.info
 
 pdm.lock
 .pdm-python
+
+uv.lock

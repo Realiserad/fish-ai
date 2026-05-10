@@ -29,7 +29,7 @@ dependencies = [
   "aws-bedrock-token-generator==1.1.0"
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "pre-commit",
   "coverage",
