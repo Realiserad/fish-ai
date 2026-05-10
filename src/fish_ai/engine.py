@@ -298,9 +298,7 @@ def get_openai_client():
             default_headers=custom_headers,
         )
     else:
-        raise Exception(
-            'Unknown provider "{}".'.format(get_config("provider"))
-        )
+        raise Exception('Unknown provider "{}".'.format(get_config("provider")))
 
 
 def get_messages_for_anthropic(messages):
@@ -459,9 +457,7 @@ def get_response(messages):
         response = client.models.generate_content(
             model=model,
             contents=get_messages_for_gemini(messages),
-            config=types.GenerateContentConfig(
-                thinking_config=thinking_config
-            ),
+            config=types.GenerateContentConfig(thinking_config=thinking_config),
         ).text
     elif get_config("provider") == "bedrock":
         bedrock_api = get_config("bedrock_api") or "mantle"

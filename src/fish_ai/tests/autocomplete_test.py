@@ -31,8 +31,7 @@ def test_get_pipe():
     assert get_pipe("echo hello") == ""
     assert get_pipe("echo hello | grep world") == "echo hello"
     assert (
-        get_pipe("echo hello | grep world | wc -l")
-        == "echo hello | grep world"
+        get_pipe("echo hello | grep world | wc -l") == "echo hello | grep world"
     )
     assert (
         get_pipe("echo hello | grep world | wc -l |")
