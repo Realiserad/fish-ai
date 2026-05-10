@@ -16,6 +16,12 @@ repos:
           - .github/ISSUE_TEMPLATE
           - --disable=MD041
           - --disable=MD059
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -29,15 +35,10 @@ repos:
       - id: check-toml
       - id: debug-statements
       - id: destroyed-symlinks
-      - id: double-quote-string-fixer
       - id: end-of-file-fixer
       - id: mixed-line-ending
       - id: name-tests-test
       - id: trailing-whitespace
-  - repo: https://github.com/pycqa/flake8
-    rev: "7.3.0"
-    hooks:
-      - id: flake8
   - repo: local
     hooks:
       - id: supported-versions-check

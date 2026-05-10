@@ -54,10 +54,7 @@ put_setting = "fish_ai.config:put_setting"
 refine = "fish_ai.autocomplete:refine_completions"
 
 [tool.ruff]
-line-length = 79
-
-[tool.ruff.format]
-quote-style = "single"
+line-length = 80
 
 [tool.pytest.ini_options]
 minversion = "6.0"

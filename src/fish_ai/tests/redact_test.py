@@ -5,12 +5,12 @@ import textwrap
 
 
 def test_redact_api_key():
-    input_str = '--api-key=sk-1234'
-    expected_output = '--api-key=<REDACTED>'
+    input_str = "--api-key=sk-1234"
+    expected_output = "--api-key=<REDACTED>"
     assert redact_content(input_str) == expected_output
 
-    input_str = '--api-key sk-1234'
-    expected_output = '--api-key <REDACTED>'
+    input_str = "--api-key sk-1234"
+    expected_output = "--api-key <REDACTED>"
     assert redact_content(input_str) == expected_output
 
     input_str = "--api-key 'sk-1234'"
@@ -23,12 +23,12 @@ def test_redact_api_key():
 
 
 def test_redact_password():
-    input_str = 'login --username foo --password=samba123'
-    expected_output = 'login --username foo --password=<REDACTED>'
+    input_str = "login --username foo --password=samba123"
+    expected_output = "login --username foo --password=<REDACTED>"
     assert redact_content(input_str) == expected_output
 
-    input_str = 'login --username foo --password samba123'
-    expected_output = 'login --username foo --password <REDACTED>'
+    input_str = "login --username foo --password samba123"
+    expected_output = "login --username foo --password <REDACTED>"
     assert redact_content(input_str) == expected_output
 
     input_str = "login --username foo --password 'samba123'"
@@ -107,20 +107,20 @@ def test_redact_content():
 
 
 def test_nothing_to_redact():
-    input_str = 'Nothing to redact here...'
+    input_str = "Nothing to redact here..."
     assert redact_content(input_str) == input_str
 
 
 def test_redact_bearer_token():
-    input_str = 'Authorization: Bearer abc123.def456-XYZ'
-    expected_output = 'Authorization: Bearer <REDACTED>'
+    input_str = "Authorization: Bearer abc123.def456-XYZ"
+    expected_output = "Authorization: Bearer <REDACTED>"
     assert redact_content(input_str) == expected_output
 
-    input_str = 'authorization: bearer token.with.dots'
-    expected_output = 'authorization: bearer <REDACTED>'
+    input_str = "authorization: bearer token.with.dots"
+    expected_output = "authorization: bearer <REDACTED>"
     assert redact_content(input_str) == expected_output
 
 
 def test_do_not_redact():
-    input_str = 'import-key --keyring /etc/apk/keys/foo.gpg'
+    input_str = "import-key --keyring /etc/apk/keys/foo.gpg"
     assert redact_content(input_str) == input_str

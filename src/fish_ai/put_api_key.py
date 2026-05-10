@@ -12,41 +12,47 @@ def select_section(config, sections):
         return sections[0]
     else:
         options = [
-            '{} (provided by {})'.format(section, config.get(
-                section=section,
-                option='provider'))
-            for section in sections]
+            "{} (provided by {})".format(
+                section, config.get(section=section, option="provider")
+            )
+            for section in sections
+        ]
         terminal_menu = TerminalMenu(options)
-        terminal_menu.title = 'Select context'
+        terminal_menu.title = "Select context"
         index = terminal_menu.show()
         if index is None:
             return
-        return options[index].split(' ')[0]
+        return options[index].split(" ")[0]
 
 
 def put_api_key():
     configuration_file = ConfigParser()
     configuration_file.read(get_config_path())
     sections = configuration_file.sections()
-    sections.remove('fish-ai')
+    sections.remove("fish-ai")
     selected_section = select_section(configuration_file, sections)
 
-    if configuration_file.has_option(section=selected_section,
-                                     option='api_key'):
+    if configuration_file.has_option(
+        section=selected_section, option="api_key"
+    ):
         # Move API key from the configuration to the keyring
-        api_key = configuration_file.get(section=selected_section,
-                                         option='api_key')
-        keyring.set_password('fish-ai', selected_section, api_key)
-        configuration_file.remove_option(selected_section, 'api_key')
-        configuration_file.write(open(get_config_path(), 'w'))
+        api_key = configuration_file.get(
+            section=selected_section, option="api_key"
+        )
+        keyring.set_password("fish-ai", selected_section, api_key)
+        configuration_file.remove_option(selected_section, "api_key")
+        configuration_file.write(open(get_config_path(), "w"))
     else:
         # Ask for the API key and put it on the keyring
-        p = (f'Provide an API key for \033[92m{selected_section}\033[0m.\n'
-             '🔑 ')
-        print(p, end='')
+        p = f"Provide an API key for \033[92m{selected_section}\033[0m.\n🔑 "
+        print(p, end="")
         sys.stdout.flush()
         api_key = sys.stdin.readline().strip()
-        keyring.set_password('fish-ai', selected_section, api_key)
+        keyring.set_password("fish-ai", selected_section, api_key)
 
-    print((f'🔒 The API key for \033[92m{selected_section}\033[0m is now on '
-           'your keyring.'))
+    print(
+        (
+            f"🔒 The API key for \033[92m{selected_section}\033[0m is now on "
+            "your keyring."
+        )
+    )
