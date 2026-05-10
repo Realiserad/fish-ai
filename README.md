@@ -105,7 +105,7 @@ the default credential chain is used.
 
 Available model IDs are listed in the [Bedrock documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html).
 
-#### Converse API
+##### Converse API
 
 To use the [Converse API](https://docs.aws.amazon.com/bedrock/latest/userguide/converse-api.html):
 
