@@ -55,6 +55,9 @@ refine = "fish_ai.autocomplete:refine_completions"
 [tool.ruff]
 line-length = 80
 
+[tool.typos.default.extend-words]
+certifi = "certifi"
+
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"

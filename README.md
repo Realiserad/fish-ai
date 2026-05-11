@@ -97,7 +97,7 @@ can be accessed either through the Mantle gateway or the Converse API.
 If no `api_key` is configured, a short-term token is automatically
 generated from your
 [AWS credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html).
-You can also specifyan `api_key` directly if you prefer to use a
+You can also specify an `api_key` directly if you prefer to use a
 [Bedrock API key](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
 
 Use `aws_profile` to select a named profile from your AWS configuration. If omitted,

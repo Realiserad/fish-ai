@@ -58,7 +58,7 @@ def test_redact_pem_encoded_private_key():
     input_str = textwrap.dedent("""\
         -----BEGIN RSA PRIVATE KEY-----
         Proc-Type: 4,ENCRYPTED
-        DEK-Info: DES-EDE3-CBC,B1F1B3F5F1B4F1B3
+        DEK-Info: DES-EDGE3-CBC,B1F1B3F5F1B4F1B3
         6+jVglcOq6vNfwt/Q+X9m
         -----END RSA PRIVATE KEY-----""")
     expected_output = textwrap.dedent("""\

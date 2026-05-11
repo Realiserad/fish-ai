@@ -155,7 +155,7 @@ def get_pipe(buffer):
         # no pipe detected
         return ""
     buffer = buffer[: pipe_pos - 1]
-    # start pipe at last unterminated paranthesis
+    # start pipe at last unterminated parenthesis
     escape = False
     string_char = None
     parens = [-1]

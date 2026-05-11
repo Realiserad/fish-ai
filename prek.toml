@@ -25,6 +25,13 @@ hooks = [
 ]
 
 [[repos]]
+repo = "https://github.com/crate-ci/typos"
+rev = "v1.46.1"
+hooks = [
+  { id = "typos" },
+]
+
+[[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
 rev = "v0.15.12"
 hooks = [
