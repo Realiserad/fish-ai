@@ -31,7 +31,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "pre-commit",
   "coverage",
   "pytest",
   "pyfakefs",
