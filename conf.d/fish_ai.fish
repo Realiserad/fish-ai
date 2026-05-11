@@ -246,7 +246,7 @@ function _fish_ai_autoconfig_gh_models --description "Deploy configuration for G
     echo "" >>"$_fish_ai_config_path"
     echo "[github]" >>"$_fish_ai_config_path"
     echo "provider = self-hosted" >>"$_fish_ai_config_path"
-    echo "server = https://models.inference.ai.azure.com" >>"$_fish_ai_config_path"
+    echo "server = https://models.github.ai/inference" >>"$_fish_ai_config_path"
     echo "api_key = $(gh auth token)" >>"$_fish_ai_config_path"
     echo "model = gpt-4o-mini" >>"$_fish_ai_config_path"
 
