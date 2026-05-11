@@ -6,11 +6,11 @@ jobs:
   welcome:
     runs-on: ubuntu-latest
     steps:
-    - uses: wow-actions/welcome@v1.3.1
-      with:
-        FIRST_PR_COMMENT: |
-          Hello @{{ author }}. Thank you for contributing to this project! 💛 I'll review your changes when time permits.
+      - uses: wow-actions/welcome@v1.3.1
+        with:
+          FIRST_PR_COMMENT: |
+            Hello @{{ author }}. Thank you for contributing to this project! 💛 I'll review your changes when time permits.
 
-          By contributing, you agree to the [Developer Certificate of Origin](https://developercertificate.org) and your code being licensed under the [MIT license](https://raw.githubusercontent.com/Realiserad/fish-ai/main/LICENSE).
+            By contributing, you agree to the [Developer Certificate of Origin](https://developercertificate.org) and your code being licensed under the [MIT license](https://raw.githubusercontent.com/Realiserad/fish-ai/main/LICENSE).
 
-          If this sounds like greek, please spend a minute or two to read through these documents.
+            If this sounds like greek, please spend a minute or two to read through these documents.

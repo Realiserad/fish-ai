@@ -5,20 +5,20 @@ jobs:
   check-links:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-    - name: Create a configuration file
-      uses: 1arp/create-a-file-action@0.4.5
-      with:
-        file: .linkspector.yml
-        content: |
-          dirs: ['.']
-          useGitIgnore: true
-          modifiedFilesOnly: true
-    - name: Run Linkspector
-      uses: umbrelladocs/action-linkspector@v1.5.1
-      with:
-        github_token: ${{ secrets.github_token }}
-        reporter: github-pr-review
-        fail_on_error: "true"
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Create a configuration file
+        uses: 1arp/create-a-file-action@0.4.5
+        with:
+          file: .linkspector.yml
+          content: |
+            dirs: ['.']
+            useGitIgnore: true
+            modifiedFilesOnly: true
+      - name: Run Linkspector
+        uses: umbrelladocs/action-linkspector@v1.5.1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          fail_on_error: "true"

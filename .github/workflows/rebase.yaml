@@ -13,12 +13,12 @@ jobs:
         contains(github.event.comment.body, '/autosquash')
       )
     steps:
-    - uses: actions/checkout@v6
-      with:
-        token: ${{ secrets.TOKEN }}
-        fetch-depth: 0
-    - uses: cirrus-actions/rebase@1.8
-      with:
-        autosquash: ${{ contains(github.event.comment.body, '/autosquash') || contains(github.event.comment.body, '/rebase-autosquash') }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.TOKEN }}
+          fetch-depth: 0
+      - uses: cirrus-actions/rebase@1.8
+        with:
+          autosquash: ${{ contains(github.event.comment.body, '/autosquash') || contains(github.event.comment.body, '/rebase-autosquash') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
