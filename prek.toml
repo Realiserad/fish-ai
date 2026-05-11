@@ -25,6 +25,13 @@ hooks = [
 ]
 
 [[repos]]
+repo = "https://github.com/DetachHead/basedpyright-prek-mirror"
+rev = "1.39.3"
+hooks = [
+  { id = "basedpyright" },
+]
+
+[[repos]]
 repo = "https://github.com/crate-ci/typos"
 rev = "v1.46.1"
 hooks = [
