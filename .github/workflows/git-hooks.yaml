@@ -1,0 +1,17 @@
+name: Run git hooks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: fish-shop/install-fish-shell@v2
+      - uses: j178/prek-action@v2

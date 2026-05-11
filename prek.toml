@@ -1,0 +1,79 @@
+[auto_update]
+cooldown_days = 7
+
+[[repos]]
+repo = "https://github.com/hugoh/pre-commit-fish"
+rev = "v1.2"
+hooks = [
+  { id = "fish_syntax" },
+  { id = "fish_indent" },
+]
+
+[[repos]]
+repo = "https://github.com/igorshubovych/markdownlint-cli"
+rev = "v0.48.0"
+hooks = [
+  { id = "markdownlint", args = [
+    "--fix",
+    "--config",
+    ".markdownlint.yaml",
+    "--ignore",
+    ".github/ISSUE_TEMPLATE",
+    "--disable=MD041",
+    "--disable=MD059",
+  ] },
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.15.12"
+hooks = [
+  { id = "ruff", args = ["--fix"] },
+  { id = "ruff-format" },
+]
+
+
+[[repos]]
+repo = "builtin"
+hooks = [
+    { id = "check-added-large-files", args = ["--maxkb=50"] },
+    { id = "check-case-conflict" },
+    { id = "check-executables-have-shebangs" },
+    { id = "check-shebang-scripts-are-executable" },
+    { id = "check-symlinks" },
+    { id = "check-toml" },
+    { id = "destroyed-symlinks" },
+    { id = "end-of-file-fixer" },
+    { id = "mixed-line-ending" },
+    { id = "trailing-whitespace" },
+]
+
+[[repos]]
+repo = "https://github.com/compilerla/conventional-pre-commit"
+rev = "v4.4.0"
+hooks = [
+  {
+      id = "conventional-pre-commit",
+      stages = ["commit-msg"]
+  },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+  {
+      id = "supported-versions-check",
+      name = "Supported versions check",
+      entry = "./ops/supported-versions-check.fish",
+      language = "script",
+      pass_filenames = false
+  },
+  {
+      id = "bump-version",
+      name = "Bump version",
+      entry = "./ops/bump-version.fish",
+      language = "script",
+      stages = ["post-commit"],
+      always_run = true
+  },
+]

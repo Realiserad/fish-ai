@@ -15,10 +15,10 @@ fisher install .
 
 ## Install the pre-commit hooks
 
-To install the pre-commit hooks, run:
+To install the pre-commit hooks, use [prek](https://prek.j178.dev/installation):
 
 ```shell
-pre-commit install -t pre-commit -t commit-msg -t post-commit
+prek install --hook-type pre-commit --hook-type commit-msg --hook-type post-commit
 ```
 
 ## Enable debug logging
