@@ -3,6 +3,10 @@
 If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)
 first.
 
+There are some hardcoded references in this GitHub repository that you
+may want to erase using `ops/fork.fish` if you decide to maintain your
+own fork.
+
 To create a virtual environment with the tools needed for development,
 simply run `uv sync`. When using an editor such as Zed, everything should
 work out of the box.
