@@ -201,19 +201,6 @@ provider = groq
 api_key = <your API key>
 ```
 
-#### Mistral
-
-To use [Mistral](https://mistral.ai):
-
-```ini
-[fish-ai]
-configuration = mistral
-
-[mistral]
-provider = mistral
-api_key = <your API key>
-```
-
 #### OpenAI
 
 To use [OpenAI](https://platform.openai.com):

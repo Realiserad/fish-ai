@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fish_ai"
-version = "2.12.2"
+version = "2.13.0"
 authors = [{ name = "Bastian Fredriksson", email = "realiserad@gmail.com" }]
 description = "Provides core functionality for fish-ai, an AI plugin for the fish shell."
 readme = "README.md"
@@ -18,9 +18,6 @@ dependencies = [
   "openai==2.34.0",
   "simple-term-menu==1.6.6",
   "iterfzf==1.9.0.67.0",
-  # TODO: Temporarily disabled due to being quarantined by PyPi
-  # See: https://github.com/Realiserad/fish-ai/issues/613
-  #"mistralai==2.4.4",
   "binaryornot==0.6.0",
   "anthropic==0.98.1",
   "keyring==25.7.0",

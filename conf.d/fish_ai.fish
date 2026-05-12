@@ -122,6 +122,11 @@ function _fish_ai_update --on-event fish_ai_update
             echo "👋 Please specify the Cohere model you want to use in '$_fish_ai_config_path'."
         end
     end
+    # Upgrade to fish-ai 2.13.0
+    if grep -qE 'provider\s*=\s*"?mistral"?' "$_fish_ai_config_path"
+        echo "🍿 Migrating the Mistral AI provider to OpenAI SDK."
+        sed -i -E 's|^provider\s*=\s*"?mistral"?|provider = self-hosted\nserver = https://api.mistral.ai/v1|g' "$_fish_ai_config_path"
+    end
 
     _fish_ai_set_python_version
     if type -q uv
