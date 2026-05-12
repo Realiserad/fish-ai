@@ -22,7 +22,7 @@ dependencies = [
   # See: https://github.com/Realiserad/fish-ai/issues/613
   #"mistralai==2.4.4",
   "binaryornot==0.6.0",
-  "anthropic==0.97.0",
+  "anthropic==0.98.1",
   "keyring==25.7.0",
   "groq==1.2.0",
   "google-genai==1.74.0",
