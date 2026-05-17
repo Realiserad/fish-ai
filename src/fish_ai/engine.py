@@ -371,25 +371,7 @@ def get_response(messages):
 
     custom_headers = get_custom_headers()
 
-    if get_config("provider") == "mistral":
-        from mistralai import Mistral
-
-        mistral_kwargs = {
-            "api_key": get_config("api_key"),
-            "server_url": get_config("server") or "https://api.mistral.ai",
-        }
-        if custom_headers:
-            from httpx import Client
-
-            mistral_kwargs["http_client"] = Client(headers=custom_headers)
-        client = Mistral(**mistral_kwargs)
-        params = {
-            "model": get_config("model") or "mistral-large-latest",
-            "messages": messages,
-        }
-        completions = client.chat.complete(**params)
-        response = completions.choices[0].message.content
-    elif get_config("provider") == "anthropic":
+    if get_config("provider") == "anthropic":
         from anthropic import Anthropic
 
         client = Anthropic(
