@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from simple_term_menu import TerminalMenu
-from configparser import ConfigParser
 import sys
+from configparser import ConfigParser
+
 import keyring
+from simple_term_menu import TerminalMenu
+
 from fish_ai.config import get_config_path
 
 
@@ -17,10 +19,9 @@ def select_section(config, sections):
             )
             for section in sections
         ]
-        terminal_menu = TerminalMenu(options)
-        terminal_menu.title = "Select context"
+        terminal_menu = TerminalMenu(options, title="Select context")
         index = terminal_menu.show()
-        if index is None:
+        if index is None or not isinstance(index, int):
             return
         return options[index].split(" ")[0]
 
@@ -29,8 +30,12 @@ def put_api_key():
     configuration_file = ConfigParser()
     configuration_file.read(get_config_path())
     sections = configuration_file.sections()
-    sections.remove("fish-ai")
+    if "fish-ai" in sections:
+        sections.remove("fish-ai")
     selected_section = select_section(configuration_file, sections)
+
+    if not selected_section:
+        return
 
     if configuration_file.has_option(
         section=selected_section, option="api_key"

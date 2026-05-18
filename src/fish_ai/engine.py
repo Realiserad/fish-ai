@@ -28,9 +28,9 @@ elif exists("/var/run/syslog"):
     handler = SysLogHandler(address="/var/run/syslog")
     logger.addHandler(handler)
 
-if get_config("log"):
+if log_file := get_config("log"):
     handler = RotatingFileHandler(
-        expanduser(get_config("log")), backupCount=0, maxBytes=1024 * 1024
+        expanduser(log_file), backupCount=0, maxBytes=1024 * 1024
     )
     logger.addHandler(handler)
 
@@ -122,6 +122,7 @@ def get_commandline_history(commandline, cursor_position):
             stdout=PIPE,
             stderr=DEVNULL,
         )
+        assert proc.stdout is not None
         while True:
             line = proc.stdout.readline()
             if not line:
@@ -217,8 +218,12 @@ def get_openai_client():
     if get_config("provider") == "azure":
         from openai import AzureOpenAI
 
+        server = get_config("server")
+        if not server:
+            raise Exception('Azure provider requires "server" configuration.')
+
         return AzureOpenAI(
-            azure_endpoint=get_config("server"),
+            azure_endpoint=server,
             api_version="2023-07-01-preview",
             api_key=get_config("api_key"),
             azure_deployment=get_config("azure_deployment"),
@@ -405,28 +410,32 @@ def get_response(messages):
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
     elif get_config("provider") == "google":
+        from typing import Any
+
         from google import genai
         from google.genai import types
+        from google.genai.types import ThinkingConfig, ThinkingLevel
 
-        google_kwargs = {"api_key": get_config("api_key")}
+        google_kwargs: dict[str, Any] = {
+            "api_key": get_config("api_key"),
+        }
         if custom_headers:
             from google.genai.types import HttpOptions
 
             google_kwargs["http_options"] = HttpOptions(headers=custom_headers)
         client = genai.Client(**google_kwargs)
         model = get_config("model") or "gemini-3.1-pro-preview"
-
-        model_info = client.models.get(model=model)
-        if not getattr(model_info, "thinking", False):
-            thinking_config = types.GenerateContentConfig()
-        elif "gemini-2.5" in model:
+        thinking_config: ThinkingConfig | None = None
+        if "gemini-2.5" in model:
             # Gemini 2.5 uses thinking_budget (512 to 32768 tokens)
             # Note: gemini-2.5-flash-lite supports 512 to 24576 tokens
-            thinking_config = types.ThinkingConfig(thinking_budget=1024)
+            thinking_config = ThinkingConfig(thinking_budget=1024)
         elif "gemini-3" in model:
             # Gemini 3 uses thinking_level (one of
             # ['minimal', 'low', 'medium', 'high'])
-            thinking_config = types.ThinkingConfig(thinking_level="low")
+            thinking_config = ThinkingConfig(
+                thinking_level=ThinkingLevel("low")
+            )
         else:
             get_logger().debug(
                 (
@@ -435,7 +444,6 @@ def get_response(messages):
                     "request at https://github.com/Realiserad/fish-ai/issues"
                 )
             )
-            thinking_config = None
         response = client.models.generate_content(
             model=model,
             contents=get_messages_for_gemini(messages),
@@ -470,10 +478,10 @@ def get_response(messages):
                 "stream": False,
                 "n": 1,
             }
-            if get_config("extra_body"):
+            if extra_body := get_config("extra_body"):
                 import json
 
-                params["extra_body"] = json.loads(get_config("extra_body"))
+                params["extra_body"] = json.loads(extra_body)
             completions = get_openai_client().chat.completions.create(**params)
             response = completions.choices[0].message.content
         else:
@@ -489,10 +497,10 @@ def get_response(messages):
             "stream": False,
             "n": 1,
         }
-        if get_config("extra_body"):
+        if extra_body := get_config("extra_body"):
             import json
 
-            params["extra_body"] = json.loads(get_config("extra_body"))
+            params["extra_body"] = json.loads(extra_body)
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
 
