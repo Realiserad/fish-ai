@@ -61,3 +61,6 @@ certifi = "certifi"
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = ["src/fish_ai/tests"]
+
+[tool.basedpyright]
+typeCheckingMode = "basic"
