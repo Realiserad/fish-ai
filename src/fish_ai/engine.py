@@ -150,6 +150,13 @@ def get_system_prompt():
     }
 
 
+def get_messages(instructions):
+    instructions[0]["content"] = (
+        get_system_prompt()["content"] + "\n\n" + instructions[0]["content"]
+    )
+    return instructions
+
+
 def get_custom_headers():
     """
     Parse custom headers from config.
