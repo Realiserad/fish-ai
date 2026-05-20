@@ -150,6 +150,27 @@ def get_system_prompt():
     }
 
 
+def get_messages(instructions):
+    messages = [get_system_prompt()] + instructions
+    combined_messages = []
+    system_content = []
+    for message in messages:
+        if message.get("role") == "system":
+            system_content.append(message.get("content").strip())
+        else:
+            if system_content:
+                combined_messages.append(
+                    {"role": "system", "content": "\n\n".join(system_content)}
+                )
+                system_content = []
+            combined_messages.append(message)
+    if system_content:
+        combined_messages.append(
+            {"role": "system", "content": "\n\n".join(system_content)}
+        )
+    return combined_messages
+
+
 def get_custom_headers():
     """
     Parse custom headers from config.

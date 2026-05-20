@@ -2,7 +2,53 @@
 
 from unittest.mock import MagicMock, patch
 
-from fish_ai.engine import get_commandline_history, get_response
+from fish_ai.engine import (
+    get_commandline_history,
+    get_messages,
+    get_response,
+)
+
+
+@patch("fish_ai.engine.get_os", return_value="Linux")
+@patch("fish_ai.engine.get_config")
+def test_get_messages_merging(mock_get_config, mock_get_os):
+    mock_get_config.return_value = None
+    instructions = [
+        {"role": "system", "content": "Instruction 1"},
+        {"role": "system", "content": "Instruction 2"},
+        {"role": "user", "content": "User message"},
+    ]
+    messages = get_messages(instructions)
+
+    # engine.get_system_prompt() adds one system message
+    # instructions adds two more
+    # All three should be merged into one
+    assert len(messages) == 2
+    assert messages[0]["role"] == "system"
+    assert "You are a shell scripting assistant" in messages[0]["content"]
+    assert "Instruction 1" in messages[0]["content"]
+    assert "Instruction 2" in messages[0]["content"]
+    assert messages[1] == {"role": "user", "content": "User message"}
+
+
+@patch("fish_ai.engine.get_os", return_value="Linux")
+@patch("fish_ai.engine.get_config")
+def test_get_messages_multiple_merges(mock_get_config, mock_get_os):
+    mock_get_config.return_value = None
+    instructions = [
+        {"role": "user", "content": "User 1"},
+        {"role": "system", "content": "System 1"},
+        {"role": "system", "content": "System 2"},
+        {"role": "user", "content": "User 2"},
+    ]
+    messages = get_messages(instructions)
+
+    # Initial system prompt + User 1 + (System 1 & 2 merged) + User 2
+    assert len(messages) == 4
+    assert messages[0]["role"] == "system"
+    assert messages[1] == {"role": "user", "content": "User 1"}
+    assert messages[2] == {"role": "system", "content": "System 1\n\nSystem 2"}
+    assert messages[3] == {"role": "user", "content": "User 2"}
 
 
 @patch("fish_ai.engine.get_config")

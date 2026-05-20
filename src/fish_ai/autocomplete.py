@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from fish_ai import engine
-from iterfzf import iterfzf
 import textwrap
+from base64 import b64decode, b64encode
+from subprocess import DEVNULL, PIPE, run
+
+from iterfzf import iterfzf
+
+from fish_ai import engine
 from fish_ai.config import get_config
-from subprocess import run, PIPE, DEVNULL
-from base64 import b64encode, b64decode
 
 
 def get_instructions(
@@ -182,11 +184,13 @@ def get_pipe(buffer):
 def get_messages(
     commandline, cursor_position, completions_count, additional_instructions
 ):
-    return [engine.get_system_prompt()] + get_instructions(
-        commandline=commandline,
-        cursor_position=cursor_position,
-        completions_count=completions_count,
-        additional_instructions=additional_instructions,
+    return engine.get_messages(
+        get_instructions(
+            commandline=commandline,
+            cursor_position=cursor_position,
+            completions_count=completions_count,
+            additional_instructions=additional_instructions,
+        )
     )
 
 

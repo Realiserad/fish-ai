@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
-from fish_ai import engine
 import textwrap
+
+from fish_ai import engine
 
 
 def get_instructions(command, error_message):
@@ -56,9 +57,7 @@ def get_instructions(command, error_message):
 
 
 def get_messages(command, error_message):
-    return [engine.get_system_prompt()] + get_instructions(
-        command, error_message
-    )
+    return engine.get_messages(get_instructions(command, error_message))
 
 
 def get_error_message(previous_command):
