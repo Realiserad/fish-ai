@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from fish_ai import engine
 import textwrap
+
+from fish_ai import engine
 
 
 def get_instructions(commandline):
@@ -43,7 +44,7 @@ def get_instructions(commandline):
 
 
 def get_messages(commandline):
-    return [engine.get_system_prompt()] + get_instructions(commandline)
+    return engine.get_messages(get_instructions(commandline))
 
 
 def explain():

@@ -2,7 +2,29 @@
 
 from unittest.mock import MagicMock, patch
 
-from fish_ai.engine import get_commandline_history, get_response
+from fish_ai.engine import (
+    get_commandline_history,
+    get_messages,
+    get_response,
+)
+
+
+def test_get_messages():
+    instructions = [
+        {"role": "system", "content": "System message 1"},
+        {"role": "user", "content": "User message 1"},
+        {"role": "user", "content": "User message 2"},
+    ]
+    messages = get_messages(instructions)
+
+    assert len(messages) == 3
+    assert messages[0]["role"] == "system"
+    assert messages[0]["content"].__contains__(
+        "You are a shell scripting assistant working inside a fish shell."
+    )
+    assert messages[0]["content"].__contains__("System message 1")
+    assert messages[1]["role"] == "user"
+    assert messages[2]["role"] == "user"
 
 
 @patch("fish_ai.engine.get_config")
