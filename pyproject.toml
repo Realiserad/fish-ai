@@ -21,7 +21,7 @@ dependencies = [
   "binaryornot==0.6.0",
   "anthropic==0.104.1",
   "keyring==25.7.0",
-  "groq==1.2.0",
+  "groq==1.4.0",
   "google-genai==2.6.0",
   "httpx[socks]==0.28.1",
   "boto3==1.43.16",
