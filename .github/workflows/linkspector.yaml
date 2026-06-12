@@ -9,7 +9,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Create a configuration file
-        uses: 1arp/create-a-file-action@0.4.5
+        uses: 1arp/create-a-file-action@0.4.6
         with:
           file: .linkspector.yml
           content: |
