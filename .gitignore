@@ -10,3 +10,6 @@ pdm.lock
 .pdm-python
 
 uv.lock
+
+# Auto-translated
+README-*.md
