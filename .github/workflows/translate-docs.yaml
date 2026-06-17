@@ -1,0 +1,18 @@
+name: Translate docs
+on:
+  push:
+    branches:
+      - main
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Translate to portuguese
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          gh models run "gpt-4o-mini" "Translate to portuguese. Only output the translated text: $(cat README.md)" > README-PT.md
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "docs: update translations [skip ci]"
