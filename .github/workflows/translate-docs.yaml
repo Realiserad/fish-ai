@@ -16,6 +16,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TOKEN }}
         run: |
+          gh extension install https://github.com/github/gh-models
           gh models run "gpt-4o-mini" "Translate to portuguese. Only output the translated text: $(cat README.md)" > README-PT.md
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
