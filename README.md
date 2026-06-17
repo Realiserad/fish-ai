@@ -2,6 +2,8 @@
 ![Popularity badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2FRealiserad%2Fd3ec7fdeecc35aeeb315b4efba493326%2Fraw%2Fpopularity.json)
 [![Donate XMR](https://img.shields.io/badge/Donate_XMR-grey?style=for-the-badge&logo=monero)](https://github.com/user-attachments/assets/07a2947f-6e5a-480f-990a-77204933411f)
 
+Read in [Português 🇧🇷](README-PT.md) or [English 🇺🇸](README.md).
+
 # About
 
 `fish-ai` adds AI functionality to [Fish](https://fishshell.com).
