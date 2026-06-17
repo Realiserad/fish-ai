@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      models: read
     steps:
       - uses: actions/checkout@v6
       - name: Translate to portuguese
         env:
-          GH_TOKEN: ${{ secrets.TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh extension install https://github.com/github/gh-models
           gh models run openai/gpt-4o-mini "Translate to portuguese. Only output the translated text: $(cat README.md)" > README-PT.md
