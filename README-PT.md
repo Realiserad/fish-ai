@@ -6,7 +6,7 @@ Leia em [Português 🇧🇷](README-PT.md) ou [Inglês 🇺🇸](README.md).
 
 # Sobre
 
-`fish-ai` adiciona funcionalidades de IA ao [Fish](https://fishshell.com). 
+`fish-ai` adiciona funcionalidades de IA ao [Fish](https://fishshell.com).
 É incrível! Eu o construí para facilitar minha vida e espero que ele facilite a sua também. Aqui está a apresentação completa:
 
 - Ele pode transformar um comentário em um comando de shell e vice-versa, o que significa menos tempo gasto lendo manpages, buscando no Google e copiando e colando do Stack Overflow. Excelente quando trabalhando com `git`, `kubectl`, `curl` e outras ferramentas com muitos parâmetros e opções.

@@ -17,8 +17,8 @@ hooks = [
     "--fix",
     "--config",
     ".markdownlint.yaml",
-    "--ignore",
-    ".github/ISSUE_TEMPLATE",
+    "--ignore", ".github/ISSUE_TEMPLATE",
+    "--ignore", "README-*.md",
     "--disable=MD041",
     "--disable=MD059",
   ] },
@@ -28,7 +28,10 @@ hooks = [
 repo = "https://github.com/crate-ci/typos"
 rev = "v1.46.1"
 hooks = [
-  { id = "typos" },
+  {
+      id = "typos",
+      exclude = "^README-.+\\.md$"
+  },
 ]
 
 [[repos]]
