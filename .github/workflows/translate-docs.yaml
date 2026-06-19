@@ -13,7 +13,7 @@ jobs:
       contents: write
       models: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Translate to portuguese
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
