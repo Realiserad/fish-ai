@@ -1,6 +1,6 @@
 # Development
 
-If you want to contribute, I recommend to read [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)
+If you want to contribute, I recommend reading [`ARCHITECTURE.md`](https://github.com/Realiserad/fish-ai/blob/main/ARCHITECTURE.md)
 first.
 
 There are some hardcoded references in this GitHub repository that you
@@ -48,7 +48,7 @@ The Python modules containing most of the business logic can be tested using `py
 
 Use [conventional commits](https://www.conventionalcommits.org) when writing
 commit messages. This repository uses tooling which relies on the conventional
-commits specification for incrementing the version number and compute changelogs.
+commits specification for incrementing the version number and computing changelogs.
 
 ## Create a release
 
