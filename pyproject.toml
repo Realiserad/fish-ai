@@ -22,7 +22,7 @@ dependencies = [
   "anthropic==0.117.0",
   "keyring==25.7.0",
   "groq==1.5.0",
-  "google-genai==2.12.0",
+  "google-genai==2.12.1",
   "httpx[socks]==0.28.1",
   "boto3==1.43.49",
   "aws-bedrock-token-generator==1.1.0"
