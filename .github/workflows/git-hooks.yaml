@@ -18,4 +18,4 @@ jobs:
       - name: Install dependencies
         run: uv sync
       - uses: fish-shop/install-fish-shell@v2
-      - uses: j178/prek-action@v2.0.6
+      - uses: j178/prek-action@v3.0.0
