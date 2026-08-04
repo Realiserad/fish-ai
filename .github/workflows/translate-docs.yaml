@@ -11,15 +11,33 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      models: read
     steps:
       - uses: actions/checkout@v7
-      - name: Translate to portuguese
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Read README.md
         run: |
-          gh extension install https://github.com/github/gh-models
-          gh models run openai/gpt-4o-mini "Translate to portuguese. Only output the translated text: $(cat README.md)" > README-PT.md
+          {
+            echo 'README<<EOF'
+            cat README.md
+            echo 'EOF'
+          } >> $GITHUB_ENV
+      - name: Translate to Portuguese
+        id: portuguese
+        uses: google-github-actions/run-gemini-cli@v0.1.22
+        env:
+          GEMINI_CLI_TRUST_WORKSPACE: "true"
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          gemini_model: gemini-3.5-flash-lite
+          prompt: |
+            Translate to Portuguese. Maintain all original Markdown formatting, headers, links, and code blocks.
+            Output ONLY the translated text and nothing else.
+
+            ${{ env.README }}
+      - name: Write README-PT.md
+        run: |
+          cat << 'EOF' > README-PT.md
+          ${{ steps.portuguese.outputs.text }}
+          EOF
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "docs: update translations [skip ci]"
