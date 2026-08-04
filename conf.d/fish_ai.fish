@@ -73,7 +73,6 @@ function _fish_ai_install --on-event fish_ai_install
     end
     _fish_ai_python_version_check
     _fish_ai_symlink_truststore
-    _fish_ai_autoconfig_gh_models
     _fish_ai_bind
     if ! test -f "$_fish_ai_config_path"
         echo "🤗 You must create a configuration file before the plugin can be used!"
@@ -231,31 +230,6 @@ function _fish_ai_warn_plaintext_api_keys --description "Warn about plaintext AP
         set_color normal
         echo "."
     end
-end
-
-function _fish_ai_autoconfig_gh_models --description "Deploy configuration for GitHub Models."
-    if test -f "$_fish_ai_config_path"
-        return
-    end
-    if ! type -q gh
-        return
-    end
-    if test -z (gh auth token 2>/dev/null)
-        return
-    end
-    if test -z (gh ext ls | grep "gh models" 2>/dev/null)
-        return
-    end
-    echo "[fish-ai]" >>"$_fish_ai_config_path"
-    echo "configuration = github" >>"$_fish_ai_config_path"
-    echo "" >>"$_fish_ai_config_path"
-    echo "[github]" >>"$_fish_ai_config_path"
-    echo "provider = self-hosted" >>"$_fish_ai_config_path"
-    echo "server = https://models.github.ai/inference" >>"$_fish_ai_config_path"
-    echo "api_key = $(gh auth token)" >>"$_fish_ai_config_path"
-    echo "model = gpt-4o-mini" >>"$_fish_ai_config_path"
-
-    echo "😺 Access to GitHub Models has been automatically configured for you!"
 end
 
 function _fish_ai_show_progress_indicator --description "Show a progress indicator."

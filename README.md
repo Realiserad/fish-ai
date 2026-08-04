@@ -62,8 +62,7 @@ fisher install realiserad/fish-ai
 
 Create a configuration file `$XDG_CONFIG_HOME/fish-ai.ini` (use
 `~/.config/fish-ai.ini` if `$XDG_CONFIG_HOME` is not set) where
-you specify which LLM `fish-ai` should talk to. If you're not sure,
-use GitHub Models.
+you specify which LLM `fish-ai` should talk to.
 
 #### Anthropic
 
@@ -162,21 +161,6 @@ To use [DeepSeek](https://www.deepseek.com):
 provider = deepseek
 api_key = <your API key>
 model = deepseek-chat
-```
-
-#### GitHub Models
-
-To use [GitHub Models](https://github.com/marketplace/models):
-
-```ini
-[fish-ai]
-configuration = github
-
-[github]
-provider = self-hosted
-server = https://models.github.ai/inference
-api_key = <paste GitHub PAT here>
-model = gpt-4o-mini
 ```
 
 You can create a personal access token (PAT) [here](https://github.com/settings/tokens).
