@@ -35,7 +35,7 @@ jobs:
             ${{ env.README }}
       - name: Write README-PT.md
         env:
-          TRANSLATED_TEXT: ${{ steps.portuguese.outputs.text }}
+          TRANSLATED_TEXT: ${{ steps.portuguese.outputs.summary }}
         run: |
           printf '%s' "$TRANSLATED_TEXT" > README-PT.md
       - uses: stefanzweifel/git-auto-commit-action@v7
