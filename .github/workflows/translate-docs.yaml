@@ -34,10 +34,10 @@ jobs:
 
             ${{ env.README }}
       - name: Write README-PT.md
+        env:
+          TRANSLATED_TEXT: ${{ steps.portuguese.outputs.text }}
         run: |
-          cat << 'EOF' > README-PT.md
-          ${{ steps.portuguese.outputs.text }}
-          EOF
+          printf '%s' "$TRANSLATED_TEXT" > README-PT.md
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "docs: update translations [skip ci]"
