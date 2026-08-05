@@ -13,3 +13,6 @@ uv.lock
 
 # Auto-translated
 README-*.md
+
+gemini-artifacts
+.gemini
