@@ -37,7 +37,7 @@ jobs:
         env:
           TRANSLATED_TEXT: ${{ steps.portuguese.outputs.summary }}
         run: |
-          printf '%s' "$TRANSLATED_TEXT" > README-PT.md
+          printf '%s\n' "$TRANSLATED_TEXT" > README-PT.md
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "docs: update translations [skip ci]"
