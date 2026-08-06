@@ -1,31 +1,37 @@
 #!/usr/bin/env fish
 
 function fish_ai_bug_report
-    print_header Environment
+    argparse markdown -- $argv
+    or return 1
+
+    # Store whether the flag was present as a boolean
+    set -l is_markdown (set -q _flag_markdown; and echo true; or echo false)
+
+    print_header Environment $is_markdown
     print_environment
 
-    print_header "Key bindings"
+    print_header "Key bindings" $is_markdown
     print_key_bindings
 
-    print_header "Proxy settings"
+    print_header "Proxy settings" $is_markdown
     print_proxy_settings
 
-    print_header Dependencies
+    print_header Dependencies $is_markdown
     print_dependencies
 
-    print_header "Fish plugins"
+    print_header "Fish plugins" $is_markdown
     print_fish_plugins
 
-    print_header Configuration
+    print_header Configuration $is_markdown
     print_configuration
 
-    print_header "Functionality tests"
+    print_header "Functionality tests" $is_markdown
     perform_functionality_tests
 
-    print_header "Compatibility check"
+    print_header "Compatibility check" $is_markdown
     perform_compatibility_check
 
-    print_header "Logs from the last session"
+    print_header "Logs from the last session" $is_markdown
     print_logs
 
     if test "$_fish_ai_error_found" = true
@@ -34,18 +40,25 @@ function fish_ai_bug_report
     end
 end
 
-function print_header --argument-names title
-    set_color --bold blue
-    echo "$title"
-    echo ""
-    set_color normal
+function print_header --argument-names title is_markdown
+    if test "$is_markdown" = true
+        echo "### $title"
+        echo ""
+    else
+        set_color --bold blue
+        echo "$title"
+        echo ""
+        set_color normal
+    end
 end
 
 function print_proxy_settings
     # https://www.python-httpx.org/environment_variables
     set proxy_variables (string join '|' 'HTTP_PROXY' 'HTTPS_PROXY' 'ALL_PROXY' 'NO_PROXY')
     if test (env | grep -qiE "$proxy_variables")
+        echo "```"
         env | grep -iE "$proxy_variables"
+        echo "```"
     else
         echo "No proxy is configured."
     end
@@ -55,11 +68,11 @@ end
 
 function print_environment
     if test -f /etc/os-release
-        echo "Running on $(cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"')"
-        echo "Machine hardware: $(uname -m)"
+        echo "Running on `$(cat /etc/os-release | grep PRETTY | cut -d= -f2 | tr -d '\"')`"
+        echo "Machine hardware: `$(uname -m)`"
     else if type -q sw_vers
-        echo "Running on macOS $(sw_vers --productVersion)"
-        echo "Machine hardware: $(uname -m)"
+        echo "Running on macOS `$(sw_vers --productVersion)`"
+        echo "Machine hardware: `$(uname -m)`"
     else
         echo "❌ Running on an unsupported platform."
         set -g _fish_ai_error_found true
@@ -69,9 +82,11 @@ function print_environment
 end
 
 function print_key_bindings
+    echo "```"
     bind | grep --color=never _fish_ai
+    echo "```"
     echo ""
-    echo "Key bindings in use: $fish_key_bindings"
+    echo "Key bindings in use: `$fish_key_bindings`"
     echo ""
 end
 
@@ -85,16 +100,18 @@ function print_dependencies
     if type -q uv
         echo "😎 This system has uv installed."
     end
-    echo "Python version used by fish-ai: $($_fish_ai_install_dir/bin/python3 --version)"
+    echo "Python version used by fish-ai: `$($_fish_ai_install_dir/bin/python3 --version)`"
     if type -q python3
-        echo "Python version used by the system: $(python3 --version)"
+        echo "Python version used by the system: `$(python3 --version)`"
     end
-    fish --version
-    fisher --version
-    git --version
+    echo "Fish version: `$(fish --version | awk '{print $3}')`"
+    echo "Fisher version: `$(fisher --version | awk '{print $3}')`"
+    echo "Git version: `$(git version | awk '{print $3}')`"
     echo ""
 
+    echo "```"
     "$_fish_ai_install_dir/bin/pip" list
+    echo "```"
     if ! test ("$_fish_ai_install_dir/bin/pip" list | grep fish_ai)
         echo "❌ The Python package 'fish_ai' could not be found."
         set -g _fish_ai_error_found true
@@ -104,7 +121,9 @@ function print_dependencies
 end
 
 function print_fish_plugins
+    echo "```"
     fisher list
+    echo "```"
     echo ""
 end
 
@@ -112,9 +131,11 @@ function print_configuration
     if ! test -f "$_fish_ai_config_path"
         echo "😕 The configuration file '$_fish_ai_config_path' does not exist."
     else
+        echo "```ini"
         # Remove api_key and password from the configuration
         # password is no longer used but may be present in old configurations
         sed /api_key/d "$_fish_ai_config_path" | sed /password/d
+        echo "```"
     end
 
     echo ""
@@ -128,7 +149,8 @@ function perform_functionality_tests
     end
 
     echo "🔥 Running functionality tests..."
-
+    echo ""
+    echo "```"
     set -l start (date +%s)
     set -l result (_fish_ai_codify 'print the current date')
     set -l duration (math (date +%s) - $start)
@@ -140,6 +162,7 @@ function perform_functionality_tests
         string shorten --max 50)
     set -l duration (math (date +%s) - $start)
     echo "explain 'date' -> '$result' (in $duration seconds)"
+    echo "```"
     echo ""
 end
 
@@ -147,7 +170,7 @@ function perform_compatibility_check
     set -f current_python_version ("$_fish_ai_install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
     if ! contains $current_python_version $_fish_ai_supported_versions
         echo "🔔 This plugin has not been tested with Python $_fish_ai_python_version and may not function correctly."
-        echo "The following versions are supported: $_fish_ai_supported_versions"
+        echo "The following versions are supported: `$_fish_ai_supported_versions`"
         set -g _fish_ai_error_found true
     else
         echo "👍 Python $_fish_ai_python_version is supported."
@@ -159,14 +182,16 @@ function print_logs
     set -f log_file ("$_fish_ai_install_dir/bin/lookup_setting" log)
     if ! test -f "$log_file"
         echo "😴 No log file available."
-        echo "Enable with '$_fish_ai_install_dir/bin/put_setting fish-ai log /tmp/fish-ai.log'."
+        echo "Enable with `$_fish_ai_install_dir/bin/put_setting fish-ai log /tmp/fish-ai.log`."
         return
     end
+    echo "```"
     print_last_section "$log_file"
+    echo "```"
     if test ("$_fish_ai_install_dir/bin/lookup_setting" debug) != True
         echo ""
         echo "🙏 Consider enabling debug mode to get more log output."
-        echo "Turn on with '$_fish_ai_install_dir/bin/put_setting fish-ai debug True'."
+        echo "Turn on with `$_fish_ai_install_dir/bin/put_setting fish-ai debug True`."
     end
 end
 

@@ -28,7 +28,7 @@ jobs:
           echo '::endgroup::'
 
           echo '::group:: 🐞 Show bug report'
-          fish_ai_bug_report
+          fish_ai_bug_report --markdown
           echo '::endgroup::'
 
   linux-installation-tests:

@@ -6,14 +6,12 @@ labels: type/bug
 assignees: Realiserad
 ---
 
-### 📝 Environment
+## 📝 Environment
 
-```shell
-> fish_ai_bug_report
+> fish_ai_bug_report --markdown
 <paste output here>
-```
 
-### 🙉 To reproduce
+## 🙉 To reproduce
 
 Follow these steps to reproduce the bug.
 
@@ -33,6 +31,6 @@ Follow these steps to reproduce the bug.
 4.
     *Describe what happens*
 
-### 🕊 Expected behavior
+## 🕊 Expected behavior
 
 A clear and concise description of what you expected to happen.
