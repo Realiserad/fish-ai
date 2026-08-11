@@ -17,10 +17,10 @@ when working with `git`, `kubectl`, `curl` and other tools with loads
 of parameters and switches.
 - Did you make a typo? It can also fix a broken command (similarly to
 [`thefuck`](https://github.com/nvbn/thefuck)).
-- Not sure what to type next or just lazy? Let the LLM autocomplete
+- Not sure what to type next or just lazy? Let the language model autocomplete
 your commands with a built in fuzzy finder.
 - Everything is done using two (configurable) keyboard shortcuts, no mouse needed!
-- It can be hooked up to the LLM of your choice (even a self-hosted one!).
+- It can be hooked up to the language model of your choice (even a self-hosted one!).
 - The whole thing is open source, hopefully somewhat easy to read and
 around 2000 lines of code, which means that you can audit the code
 yourself in an afternoon.
@@ -62,7 +62,7 @@ fisher install realiserad/fish-ai
 
 Create a configuration file `$XDG_CONFIG_HOME/fish-ai.ini` (use
 `~/.config/fish-ai.ini` if `$XDG_CONFIG_HOME` is not set) where
-you specify which LLM `fish-ai` should talk to.
+you specify which language modelM `fish-ai` should talk to.
 
 #### Anthropic
 
@@ -92,8 +92,9 @@ api_key = <your API key>
 
 #### Bedrock
 
-[AWS Bedrock](https://aws.amazon.com/bedrock) provides LLMs hosted by AWS. They
-can be accessed either through the Mantle gateway or the Converse API.
+[AWS Bedrock](https://aws.amazon.com/bedrock) provides language models hosted
+by AWS. They can be accessed either through the Mantle gateway or the
+Converse API.
 
 If no `api_key` is configured, a short-term token is automatically
 generated from your
@@ -220,7 +221,7 @@ extra_body = {"reasoning": {"effort": "minimal", "exclude": true}}
 
 #### Self-hosted
 
-To use a self-hosted LLM (behind an OpenAI-compatible API):
+To use a self-hosted language model (behind an OpenAI-compatible API):
 
 ```ini
 [fish-ai]
@@ -262,8 +263,8 @@ an existing API key to your keyring, run `fish_ai_put_api_key`.
 ### Transform comments into commands and vice versa
 
 Type a comment (anything starting with `#`), and press **Ctrl + P** to turn it
-into shell command! Note that if your comment is very brief or vague, the LLM
-may decide to improve the comment instead of providing a shell command. You
+into shell command! Note that if your comment is very brief or vague, the language
+model may decide to improve the comment instead of providing a shell command. You
 then need to press **Ctrl + P** again.
 
 You can also run it in reverse. Type a command and press **Ctrl + P** to turn it
@@ -332,13 +333,14 @@ to the name of the language. For example:
 language = Swedish
 ```
 
-This will only work well if the LLM you are using has been trained on a dataset
-with the chosen language.
+This will only work well if the language model you are using has been trained
+on a dataset with the chosen language.
 
 ### Number of completions
 
-To change the number of completions suggested by the LLM when pressing
-**Ctrl + Space**, set the `completions` option. The default value is `5`.
+To change the number of completions suggested by the language model when
+pressing **Ctrl + Space**, set the `completions` option. The default value
+is `5`.
 
 Here is an example of how you can increase the number of completions to `10`:
 
@@ -347,9 +349,9 @@ Here is an example of how you can increase the number of completions to `10`:
 completions = 10
 ```
 
-To change the number of refined completions suggested by the LLM when pressing
-**Ctrl + P** in `fzf`, set the `refined_completions` option. The default value
-is `3`.
+To change the number of refined completions suggested by the language model
+when pressing **Ctrl + P** in `fzf`, set the `refined_completions` option.
+The default value is `3`.
 
 ```ini
 [fish-ai]
@@ -358,12 +360,12 @@ refined_completions = 5
 
 ### Personalise completions using commandline history
 
-You can personalise completions suggested by the LLM by sending
+You can personalise completions suggested by the language model by sending
 an excerpt of your commandline history.
 
 To enable it, specify the maximum number of commands from the history
-to send to the LLM using the `history_size` option. The default value
-is `0` (do not send any commandline history).
+to send to the language model using the `history_size` option. The default
+value is `0` (do not send any commandline history).
 
 ```ini
 [fish-ai]
@@ -375,8 +377,8 @@ to automatically remove broken commands from your commandline history.
 
 ### Preview pipes
 
-To send the output of a pipe to the LLM when completing a command, use the
-`preview_pipe` option.
+To send the output of a pipe to the language model when completing a command,
+use the `preview_pipe` option.
 
 ```ini
 [fish-ai]
@@ -385,7 +387,8 @@ preview_pipe = True
 
 This will send the output of the longest consecutive pipe after the last
 unterminated parenthesis before the cursor. For example, if you autocomplete
-`az vm list | jq`, the output from `az vm list` will be sent to the LLM.
+`az vm list | jq`, the output from `az vm list` will be sent to the language
+model.
 
 This behaviour is disabled by default, as it may slow down the completion
 process and lead to commands being executed twice.
@@ -393,7 +396,7 @@ process and lead to commands being executed twice.
 ### Configure the progress indicator
 
 You can change the progress indicator (the default is ⏳) shown when the
-plugin is waiting for a response from the LLM.
+plugin is waiting for a response from the language model.
 
 To change the default, set the `progress_indicator` option to zero or
 more characters.
@@ -421,28 +424,28 @@ You can switch between different sections in the configuration using the
 ## 🐾 Data privacy
 
 When using the plugin, `fish-ai` submits the name of your OS and the
-commandline buffer to the LLM.
+commandline buffer to the language model.
 
 When you codify or complete a command, it also sends the contents of any
 files you mention (as long as the file is readable), and when you explain
 or complete a command, the output from `<command> --help` is provided to
-the LLM for reference.
+the language model for reference.
 
 `fish-ai` can also send an excerpt of your commandline history
 when completing a command. This is disabled by default.
 
 Finally, to fix the previous command, the previous commandline buffer,
 along with any terminal output and the corresponding exit code is sent
-to the LLM.
+to the language model.
 
 If you are concerned with data privacy, you should use a self-hosted
-LLM. When hosted locally, no data ever leaves your machine.
+language model. When hosted locally, no data ever leaves your machine.
 
 ### Redaction of sensitive information
 
 The plugin attempts to redact sensitive information from the prompt
-before submitting it to the LLM. Sensitive information is replaced by
-the `<REDACTED>` placeholder.
+before submitting it to the language model. Sensitive information is
+replaced by the `<REDACTED>` placeholder.
 
 The following information is redacted:
 
@@ -450,5 +453,5 @@ The following information is redacted:
 - PEM-encoded private keys stored in files
 - Bearer tokens, provided to e.g. cURL
 
-If you trust the LLM provider (e.g. because you are hosting locally)
-you can disable redaction using the `redact = False` option.
+If you trust the language model provider (e.g. because you are hosting
+locally) you can disable redaction using the `redact = False` option.
