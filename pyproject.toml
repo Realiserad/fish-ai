@@ -24,7 +24,7 @@ dependencies = [
   "groq==1.6.0",
   "google-genai==2.16.0",
   "httpx[socks]==0.28.1",
-  "boto3==1.43.63",
+  "boto3==1.43.64",
   "aws-bedrock-token-generator==1.1.0"
 ]
 
