@@ -8,8 +8,8 @@ assignees: Realiserad
 
 ## 📝 Environment
 
-> fish_ai_bug_report --markdown
-<paste output here>
+Run `fish_ai_bug_report --markdown` and paste the
+output here.
 
 ## 🙉 To reproduce
 
