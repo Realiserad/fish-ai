@@ -502,7 +502,6 @@ def get_response(messages):
             "model": get_config("model") or "gpt-4o",
             "messages": messages,
             "stream": False,
-            "n": 1,
         }
         if extra_body := get_config("extra_body"):
             import json
