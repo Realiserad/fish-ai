@@ -250,8 +250,6 @@ model = llama3.3
 server = http://localhost:11434/v1
 ```
 
-Available models are listed [here](https://openrouter.ai/models).
-
 ### Put the API key on your keyring
 
 Instead of putting the API key in the configuration file, you can let
