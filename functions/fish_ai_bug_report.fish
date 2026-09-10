@@ -28,9 +28,6 @@ function fish_ai_bug_report
     print_header "Functionality tests" $is_markdown
     perform_functionality_tests
 
-    print_header "Compatibility check" $is_markdown
-    perform_compatibility_check
-
     print_header "Logs from the last session" $is_markdown
     print_logs
 
@@ -98,21 +95,18 @@ function print_dependencies
     end
 
     if type -q uv
-        echo "😎 This system has uv installed."
+        echo "uv version: `$(uv --version)`"
     end
-    echo "Python version used by fish-ai: `$($_fish_ai_install_dir/bin/python3 --version)`"
-    if type -q python3
-        echo "Python version used by the system: `$(python3 --version)`"
-    end
-    echo "Fish version: `$(fish --version | awk '{print $3}')`"
-    echo "Fisher version: `$(fisher --version | awk '{print $3}')`"
-    echo "Git version: `$(git version | awk '{print $3}')`"
+    echo "python version: `$($_fish_ai_install_dir/bin/python -VV)`"
+    echo "fish version: `$(fish --version | awk '{print $3}')`"
+    echo "fisher version: `$(fisher --version | awk '{print $3}')`"
+    echo "git version: `$(git version | awk '{print $3}')`"
     echo ""
 
     echo "```"
-    "$_fish_ai_install_dir/bin/pip" list
+    uv pip list --directory "$_fish_ai_install_dir"
     echo "```"
-    if ! test ("$_fish_ai_install_dir/bin/pip" list | grep fish_ai)
+    if ! test (uv pip list --directory "$_fish_ai_install_dir" | grep fish_ai)
         echo "❌ The Python package 'fish_ai' could not be found."
         set -g _fish_ai_error_found true
     end
@@ -163,18 +157,6 @@ function perform_functionality_tests
     set -l duration (math (date +%s) - $start)
     echo "explain 'date' -> '$result' (in $duration seconds)"
     echo "```"
-    echo ""
-end
-
-function perform_compatibility_check
-    set -f current_python_version ("$_fish_ai_install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
-    if ! contains $current_python_version $_fish_ai_supported_versions
-        echo "🔔 This plugin has not been tested with Python $_fish_ai_python_version and may not function correctly."
-        echo "The following versions are supported: `$_fish_ai_supported_versions`"
-        set -g _fish_ai_error_found true
-    else
-        echo "👍 Python $_fish_ai_python_version is supported."
-    end
     echo ""
 end
 

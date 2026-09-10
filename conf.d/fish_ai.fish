@@ -1,9 +1,3 @@
-##
-## Supported major.minor versions of Python.
-## Unit tests are run in CI against these versions.
-##
-set -g _fish_ai_supported_versions 3.10 3.11 3.12 3.13 3.14
-
 set -g _fish_ai_install_dir (test -z "$XDG_DATA_HOME"; and echo "$HOME/.local/share/fish-ai"; or echo "$XDG_DATA_HOME/fish-ai")
 set -g _fish_ai_config_path (test -z "$XDG_CONFIG_HOME"; and echo "$HOME/.config/fish-ai.ini"; or echo "$XDG_CONFIG_HOME/fish-ai.ini")
 
@@ -52,26 +46,19 @@ end
 ## manager.
 ##
 function _fish_ai_install --on-event fish_ai_install
-    _fish_ai_set_python_version
-    if type -q uv
-        echo "🥡 Setting up a virtual environment using uv..."
-        uv venv --quiet --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
-    else
-        echo "🥡 Setting up a virtual environment using venv..."
-        python$_fish_ai_python_version -m venv "$_fish_ai_install_dir"
-    end
+    echo "🥡 Setting up a virtual environment..."
+    uv venv --quiet "$_fish_ai_install_dir"
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 1
     end
 
     echo "🍬 Installing dependencies. This may take a few seconds..."
-    "$_fish_ai_install_dir/bin/pip" -qq install "$(_fish_ai_get_installation_url)"
+    uv sync --frozen
     if test $status -ne 0
         echo "💔 Installation from '$(_fish_ai_get_installation_url)' failed. Check previous terminal output for details."
         return 2
     end
-    _fish_ai_python_version_check
     _fish_ai_symlink_truststore
     _fish_ai_bind
     if ! test -f "$_fish_ai_config_path"
@@ -126,26 +113,19 @@ function _fish_ai_update --on-event fish_ai_update
         echo "🍿 Migrating the Mistral AI provider to OpenAI SDK."
         sed -i -E 's|^provider\s*=\s*"?mistral"?|provider = self-hosted\nserver = https://api.mistral.ai/v1|g' "$_fish_ai_config_path"
     end
-
-    _fish_ai_set_python_version
-    if type -q uv
-        uv venv --quiet --clear --seed --python $_fish_ai_python_version "$_fish_ai_install_dir"
-    else
-        python$_fish_ai_python_version -m venv --upgrade "$_fish_ai_install_dir"
-    end
-    if test $status -ne 0
-        echo "💔 Installation failed. Check previous terminal output for details."
+    # Upgrade to fish-ai 2.16.0
+    if not type -q uv
+        echo "💣 Install uv to use fish-ai 2.16 or later."
+        echo "👉 https://docs.astral.sh/uv/getting-started/installation"
         return 1
     end
 
-    echo "🐍 Now using $($_fish_ai_install_dir/bin/python3 --version)."
-    echo "🍬 Upgrading dependencies. This may take a few seconds..."
-    $_fish_ai_install_dir/bin/pip install -qq --upgrade "$(_fish_ai_get_installation_url)"
+    echo "🍬 Upgrading fish-ai. This may take a few seconds..."
+    uv sync --frozen
     if test $status -ne 0
         echo "💔 Installation failed. Check previous terminal output for details."
         return 2
     end
-    _fish_ai_python_version_check
     _fish_ai_symlink_truststore
     _fish_ai_warn_plaintext_api_keys
 end
@@ -154,19 +134,6 @@ function _fish_ai_uninstall --on-event fish_ai_uninstall
     if test -d "$_fish_ai_install_dir"
         echo "💣 Nuking the virtual environment..."
         rm -r "$_fish_ai_install_dir"
-    end
-end
-
-function _fish_ai_set_python_version
-    if test -n "$FISH_AI_PYTHON_VERSION"
-        echo "🐍 Using Python $FISH_AI_PYTHON_VERSION as specified by the environment variable 'FISH_AI_PYTHON_VERSION'."
-        set -g _fish_ai_python_version $FISH_AI_PYTHON_VERSION
-    else if type -q uv
-        # Use the last supported version of Python
-        set -g _fish_ai_python_version $_fish_ai_supported_versions[-1]
-    else
-        # Use the Python version provided by the system
-        set -g _fish_ai_python_version 3
     end
 end
 
@@ -183,22 +150,6 @@ function _fish_ai_get_installation_url
     else
         # Install from GitHub
         echo -n "fish-ai@git+https://github.com/$plugin"
-    end
-end
-
-function _fish_ai_python_version_check
-    set -f current_python_version ("$_fish_ai_install_dir/bin/python3" -c 'import platform; major, minor, _ = platform.python_version_tuple(); print(major, end="."); print(minor, end="")')
-    if ! contains $current_python_version $_fish_ai_supported_versions
-        echo "🔔 This plugin has not been tested with Python $_fish_ai_python_version and may not function correctly."
-        echo "The following versions are supported: $_fish_ai_supported_versions"
-        echo "Consider setting the environment variable 'FISH_AI_PYTHON_VERSION' to a supported version and reinstalling the plugin. For example:"
-        set_color --italics blue
-        echo ""
-        echo "  fisher remove realiserad/fish-ai"
-        echo "  set -U FISH_AI_PYTHON_VERSION $_fish_ai_supported_versions[-1]"
-        echo "  fisher install realiserad/fish-ai"
-        echo ""
-        set_color normal
     end
 end
 

@@ -25,6 +25,10 @@ for commit in $commits
     if string match --regex --quiet 'feat(\([a-z]+\))?!?' "$commit_type"
         set -a feats (echo -n $message)
     end
+    if string match --regex --quiet 'build(\([a-z]+\))?!?' "$commit_type"
+        # Build changes should also go into the "New features and improvements" section in the changelog
+        set -a feats (echo -n $message)
+    end
     if string match --regex --quiet 'perf(\([a-z]+\))?!?' "$commit_type"
         set -a perfs (echo -n $message)
     end
