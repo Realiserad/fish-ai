@@ -309,6 +309,14 @@ def get_openai_client():
             base_url="https://api.cohere.ai/compatibility/v1",
             default_headers=custom_headers,
         )
+    elif get_config("provider") == "orcarouter":
+        from openai import OpenAI
+
+        return OpenAI(
+            api_key=get_config("api_key"),
+            base_url="https://api.orcarouter.ai/v1",
+            default_headers=custom_headers,
+        )
     else:
         raise Exception('Unknown provider "{}".'.format(get_config("provider")))
 
@@ -497,6 +505,24 @@ def get_response(messages):
                     bedrock_api
                 )
             )
+    elif get_config("provider") == "orcarouter":
+        params = {
+            "model": get_config("model") or "orcarouter/auto",
+            "messages": messages,
+            "stream": False,
+        }
+
+        if extra_body := get_config("extra_body"):
+            import json
+
+            params["extra_body"] = json.loads(extra_body)
+        else:
+            params["extra_body"] = {
+                "reasoning": {"effort": "minimal", "exclude": True}
+            }
+
+        completions = get_openai_client().chat.completions.create(**params)
+        response = completions.choices[0].message.content
     else:
         params = {
             "model": get_config("model") or "gpt-4o",
