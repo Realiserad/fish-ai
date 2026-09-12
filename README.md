@@ -219,6 +219,19 @@ api_key = <your API key>
 extra_body = {"reasoning": {"effort": "minimal", "exclude": true}}
 ```
 
+#### OrcaRouter
+
+To use [OrcaRouter](https://www.orcarouter.ai):
+
+```ini
+[fish-ai]
+configuration = orcarouter
+
+[orcarouter]
+provider = orcarouter
+api_key = <your API key>
+```
+
 #### Self-hosted
 
 To use a self-hosted language model (behind an OpenAI-compatible API):
