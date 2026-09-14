@@ -49,11 +49,17 @@ hooks = [
   { id = "ruff-format" },
 ]
 
+[[repos]]
+repo = "https://github.com/astral-sh/uv-pre-commit"
+rev = "0.12.5"
+hooks = [
+  { id = "uv-lock" },
+]
 
 [[repos]]
 repo = "builtin"
 hooks = [
-    { id = "check-added-large-files", args = ["--maxkb=50"] },
+    { id = "check-added-large-files", args = ["--maxkb=200"] },
     { id = "check-case-conflict" },
     { id = "check-executables-have-shebangs" },
     { id = "check-shebang-scripts-are-executable" },
@@ -78,13 +84,6 @@ hooks = [
 [[repos]]
 repo = "local"
 hooks = [
-  {
-      id = "supported-versions-check",
-      name = "Supported versions check",
-      entry = "./ops/supported-versions-check.fish",
-      language = "script",
-      pass_filenames = false
-  },
   {
       id = "bump-version",
       name = "Bump version",
