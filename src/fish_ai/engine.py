@@ -392,21 +392,49 @@ def get_response(messages):
     custom_headers = get_custom_headers()
 
     if get_config("provider") == "anthropic":
-        from anthropic import Anthropic
+        if get_config("use_subscription") == "True":
+            # Use the subscription through the Claude CLI
+            try:
+                import subprocess
+                import sys
 
-        client = Anthropic(
-            api_key=get_config("api_key"),
-            default_headers=custom_headers,
-        )
-        system_messages, user_messages = get_messages_for_anthropic(messages)
-        params = {
-            "model": get_config("model") or "claude-sonnet-4-6",
-            "system": "\n".join(system_messages),
-            "messages": user_messages,
-            "max_tokens": 4096,
-        }
-        completions = client.messages.create(**params)
-        response = completions.content[0].text
+                result = subprocess.run(
+                    ["claude", "-p", str(messages)],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                )
+                return result.stdout
+            except FileNotFoundError:
+                print(
+                    "Error: The 'claude' CLI command was not found in your PATH.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+            except subprocess.CalledProcessError as e:
+                print(
+                    f"Error running Claude CLI (exit code {e.returncode}):\n{e.stderr}",
+                    file=sys.stderr,
+                )
+                sys.exit(e.returncode)
+        else:
+            from anthropic import Anthropic
+
+            client = Anthropic(
+                api_key=get_config("api_key"),
+                default_headers=custom_headers,
+            )
+            system_messages, user_messages = get_messages_for_anthropic(
+                messages
+            )
+            params = {
+                "model": get_config("model") or "claude-haiku-4-5-20251001",
+                "system": "\n".join(system_messages),
+                "messages": user_messages,
+                "max_tokens": 4096,
+            }
+            completions = client.messages.create(**params)
+            response = completions.content[0].text
     elif get_config("provider") == "groq":
         default_groq_model = "qwen/qwen3-32b"
         groq_qwen_reasoning_models = ["qwen/qwen3-32b", "qwen-qwq-32b"]

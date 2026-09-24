@@ -66,13 +66,23 @@ you specify which language modelM `fish-ai` should talk to.
 
 #### Anthropic
 
-To use [Anthropic](https://www.anthropic.com):
+To use [Anthropic](https://www.anthropic.com)
+with an API key:
 
 ```ini
 [anthropic]
 provider = anthropic
 api_key = <your API key>
-model = claude-sonnet-4-6
+```
+
+To use [Anthropic](https://www.anthropic.com) with a
+subscription (requires the [Claude Code CLI](https://code.claude.com/docs/en/quickstart)
+to be installed):
+
+```ini
+[anthropic]
+provider = anthropic
+use_subscription = True
 ```
 
 #### Azure OpenAI
