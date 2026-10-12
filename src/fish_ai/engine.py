@@ -433,8 +433,18 @@ def get_response(messages):
                 "messages": user_messages,
                 "max_tokens": 4096,
             }
+            if extra_body := get_config("extra_body"):
+                import json
+
+                params["extra_body"] = json.loads(extra_body)
             completions = client.messages.create(**params)
-            response = completions.content[0].text
+            # Models with thinking enabled return one or more thinking blocks
+            # before the text block(s) holding the actual answer.
+            response = "".join(
+                block.text
+                for block in completions.content
+                if block.type == "text"
+            )
     elif get_config("provider") == "groq":
         default_groq_model = "qwen/qwen3-32b"
         groq_qwen_reasoning_models = ["qwen/qwen3-32b", "qwen-qwq-32b"]

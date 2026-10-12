@@ -73,6 +73,9 @@ with an API key:
 [anthropic]
 provider = anthropic
 api_key = <your API key>
+; Claude models decides on its own when to think. To make them respond
+; faster, thinking can be turned off by uncommenting the line below:
+;extra_body = {"thinking": {"type": "disabled"}}
 ```
 
 To use [Anthropic](https://www.anthropic.com) with a
