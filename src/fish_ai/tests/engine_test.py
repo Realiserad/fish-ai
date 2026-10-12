@@ -462,3 +462,111 @@ def test_bedrock_invalid_api_raises(mock_get_config):
                 {"role": "user", "content": "hello"},
             ]
         )
+
+
+def create_content_block(block_type, **attributes):
+    """
+    Create a content block as returned by the Anthropic API. A thinking
+    block has no text attribute, just like the real thing.
+    """
+    block = MagicMock(spec=["type", *attributes.keys()])
+    block.type = block_type
+    for name, value in attributes.items():
+        setattr(block, name, value)
+    return block
+
+
+@patch("fish_ai.engine.get_config")
+def test_anthropic_happy_path(mock_get_config):
+    def config_side_effect(key):
+        config = {
+            "provider": "anthropic",
+            "api_key": "test-api-key",
+            "model": "claude-haiku-5-5",
+            "redact": "False",
+        }
+        return config.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+
+    mock_completions = MagicMock()
+    mock_completions.content = [create_content_block("text", text="echo hello")]
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = mock_completions
+
+    with patch("anthropic.Anthropic", return_value=mock_client):
+        response = get_response(
+            [
+                {"role": "system", "content": "You are helpful."},
+                {"role": "user", "content": "hello"},
+            ]
+        )
+        mock_client.messages.create.assert_called_once()
+        call_kwargs = mock_client.messages.create.call_args[1]
+        assert call_kwargs["model"] == "claude-haiku-5-5"
+        assert call_kwargs["system"] == "You are helpful."
+        assert call_kwargs["messages"] == [{"role": "user", "content": "hello"}]
+        assert "extra_body" not in call_kwargs
+        assert response == "echo hello"
+
+
+@patch("fish_ai.engine.get_config")
+def test_anthropic_ignores_thinking_blocks(mock_get_config):
+    """Models which are thinking return a thinking block first."""
+
+    def config_side_effect(key):
+        config = {
+            "provider": "anthropic",
+            "api_key": "test-api-key",
+            "model": "claude-haiku-5-5",
+            "redact": "False",
+        }
+        return config.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+
+    mock_completions = MagicMock()
+    mock_completions.content = [
+        create_content_block("thinking", thinking="reasoning"),
+        create_content_block("text", text="echo hello"),
+    ]
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = mock_completions
+
+    with patch("anthropic.Anthropic", return_value=mock_client):
+        response = get_response(
+            [
+                {"role": "system", "content": "You are helpful."},
+                {"role": "user", "content": "hello"},
+            ]
+        )
+        assert response == "echo hello"
+
+
+@patch("fish_ai.engine.get_config")
+def test_anthropic_extra_body(mock_get_config):
+    def config_side_effect(key):
+        config = {
+            "provider": "anthropic",
+            "api_key": "test-api-key",
+            "model": "claude-haiku-5-5",
+            "extra_body": '{"thinking": {"type": "disabled"}}',
+            "redact": "False",
+        }
+        return config.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+
+    mock_completions = MagicMock()
+    mock_completions.content = [create_content_block("text", text="echo hello")]
+    mock_client = MagicMock()
+    mock_client.messages.create.return_value = mock_completions
+
+    with patch("anthropic.Anthropic", return_value=mock_client):
+        get_response(
+            [
+                {"role": "user", "content": "hello"},
+            ]
+        )
+        call_kwargs = mock_client.messages.create.call_args[1]
+        assert call_kwargs["extra_body"] == {"thinking": {"type": "disabled"}}
