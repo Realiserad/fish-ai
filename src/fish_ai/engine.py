@@ -317,6 +317,14 @@ def get_openai_client():
             base_url="https://api.orcarouter.ai/v1",
             default_headers=custom_headers,
         )
+    elif get_config("provider") == "atlascloud":
+        from openai import OpenAI
+
+        return OpenAI(
+            api_key=get_config("api_key"),
+            base_url="https://api.atlascloud.ai/v1",
+            default_headers=custom_headers,
+        )
     else:
         raise Exception('Unknown provider "{}".'.format(get_config("provider")))
 
@@ -559,6 +567,18 @@ def get_response(messages):
                 "reasoning": {"effort": "minimal", "exclude": True}
             }
 
+        completions = get_openai_client().chat.completions.create(**params)
+        response = completions.choices[0].message.content
+    elif get_config("provider") == "atlascloud":
+        params = {
+            "model": get_config("model") or "deepseek-ai/deepseek-v4-flash",
+            "messages": messages,
+            "stream": False,
+        }
+        if extra_body := get_config("extra_body"):
+            import json
+
+            params["extra_body"] = json.loads(extra_body)
         completions = get_openai_client().chat.completions.create(**params)
         response = completions.choices[0].message.content
     else:
