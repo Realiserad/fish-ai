@@ -11,7 +11,10 @@ def get_instructions(command, error_message):
         {
             "role": "system",
             "content": textwrap.dedent("""\
-            Provide a fixed shell command given an error message from stdout.
+            Fix a shell command given an error message from stdout.
+
+            Preserve any indentation. Do not explain. Do not use markdown formatting. Only
+            respond with the working command.
             """),
         },
         {
@@ -49,9 +52,7 @@ def get_instructions(command, error_message):
             Error message:
 
             {}
-
-            Output only the shell command that fixes the problem.
-            Do not explain your solution.""").format(command, error_message),
+            """).format(command, error_message),
         },
     ]
 
