@@ -85,6 +85,19 @@ provider = anthropic
 use_subscription = True
 ```
 
+#### Atlas Cloud
+
+To use [Atlas Cloud](https://www.atlascloud.ai):
+
+```ini
+[atlascloud]
+provider = atlascloud
+api_key = <your API key>
+model = deepseek-ai/deepseek-v4-flash
+```
+
+You can create an API key [here](https://console.atlascloud.ai/api-keys).
+
 #### Azure OpenAI
 
 To use [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service):
