@@ -168,6 +168,19 @@ aws_profile = default
 
 It requires the `bedrock-mantle:CreateInference` permission.
 
+#### Cheaper Inference
+
+To use [Cheaper Inference](https://cheaperinference.com):
+
+```ini
+[cheaperinference]
+provider = cheaperinference
+api_key = <your API key>
+model = gpt-5.4-mini
+```
+
+You can create an API key [here](https://cheaperinference.com/signup).
+
 #### Cohere
 
 To use [Cohere](https://cohere.com):
