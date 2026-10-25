@@ -406,8 +406,12 @@ def get_response(messages):
                 import subprocess
                 import sys
 
+                args = ["claude", "-p", str(messages)]
+                model = get_config("model")
+                if model:
+                    args += ["--model", model]
                 result = subprocess.run(
-                    ["claude", "-p", str(messages)],
+                    args,
                     capture_output=True,
                     text=True,
                     check=True,
