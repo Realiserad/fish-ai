@@ -293,6 +293,19 @@ provider = orcarouter
 api_key = <sua chave de API>
 ```
 
+#### Runcrate
+
+Para usar [Runcrate](https://runcrate.ai):
+
+```ini
+[runcrate]
+provider = runcrate
+api_key = <sua chave de API>
+model = deepseek-ai/DeepSeek-V4.1-Flash
+```
+
+Você pode criar uma chave de API [aqui](https://runcrate.ai/dashboard/api-keys).
+
 #### Auto-hospedado
 
 Para usar um modelo de linguagem auto-hospedado (atrás de uma API compatível com OpenAI):
