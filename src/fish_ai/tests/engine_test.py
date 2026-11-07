@@ -612,3 +612,24 @@ def test_cheaperinference_default_model(mock_get_openai_client, mock_get_config)
     kwargs = mock_client.chat.completions.create.call_args.kwargs
     assert kwargs["model"] == "gpt-5.4-mini"
     assert kwargs["stream"] is False
+
+
+@patch("fish_ai.engine.get_config")
+@patch("fish_ai.engine.get_openai_client")
+def test_runcrate_default_model(mock_get_openai_client, mock_get_config):
+    def config_side_effect(key):
+        return {"provider": "runcrate", "redact": "False"}.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value.choices = [
+        MagicMock(message=MagicMock(content="echo hello"))
+    ]
+    mock_get_openai_client.return_value = mock_client
+
+    response = get_response([{"role": "user", "content": "say hello"}])
+
+    assert response == "echo hello"
+    kwargs = mock_client.chat.completions.create.call_args.kwargs
+    assert kwargs["model"] == "deepseek-ai/DeepSeek-V4.1-Flash"
+    assert kwargs["stream"] is False
