@@ -181,6 +181,19 @@ model = gpt-5.4-mini
 
 You can create an API key [here](https://cheaperinference.com/signup).
 
+#### CloudGPU
+
+To use [CloudGPU](https://cloudgpu.app):
+
+```ini
+[cloudgpu]
+provider = cloudgpu
+api_key = <your API key>
+model = deepseek-v4-flash
+```
+
+`GET https://cloudgpu.app/v1/models` lists the available model IDs.
+
 #### Cohere
 
 To use [Cohere](https://cohere.com):
