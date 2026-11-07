@@ -333,6 +333,14 @@ def get_openai_client():
             base_url="https://api.cheaperinference.com/v1",
             default_headers=custom_headers,
         )
+    elif get_config("provider") == "cloudgpu":
+        from openai import OpenAI
+
+        return OpenAI(
+            api_key=get_config("api_key"),
+            base_url="https://cloudgpu.app/v1",
+            default_headers=custom_headers,
+        )
     else:
         raise Exception('Unknown provider "{}".'.format(get_config("provider")))
 
@@ -596,6 +604,18 @@ def get_response(messages):
     elif get_config("provider") == "cheaperinference":
         params = {
             "model": get_config("model") or "gpt-5.4-mini",
+            "messages": messages,
+            "stream": False,
+        }
+        if extra_body := get_config("extra_body"):
+            import json
+
+            params["extra_body"] = json.loads(extra_body)
+        completions = get_openai_client().chat.completions.create(**params)
+        response = completions.choices[0].message.content
+    elif get_config("provider") == "cloudgpu":
+        params = {
+            "model": get_config("model") or "deepseek-v4-flash",
             "messages": messages,
             "stream": False,
         }
