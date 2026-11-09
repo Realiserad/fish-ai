@@ -242,6 +242,16 @@ api_key = <your API key>
 organization = <your organization>
 ```
 
+#### OpenCode
+
+To use [OpenCode](https://opencode.ai) (requires the
+[OpenCode CLI](https://opencode.ai/docs) to be installed):
+
+```ini
+[opencode]
+provider = opencode
+```
+
 #### OpenRouter
 
 To use [OpenRouter](https://openrouter.ai):

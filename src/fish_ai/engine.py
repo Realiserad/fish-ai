@@ -465,6 +465,38 @@ def get_response(messages):
                 for block in completions.content
                 if block.type == "text"
             )
+    elif get_config("provider") == "opencode":
+        import json
+        import subprocess
+        import sys
+
+        try:
+            result = subprocess.run(
+                ["opencode", "run", "--format", "json", str(messages)],
+                capture_output=True,
+                text=True,
+            )
+        except FileNotFoundError:
+            print(
+                "Error: The 'opencode' CLI command was not found in your PATH.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        if result.returncode != 0:
+            print(
+                f"Error running OpenCode CLI (exit code {result.returncode}):\n"
+                f"{result.stdout}",
+                file=sys.stderr,
+            )
+            sys.exit(result.returncode)
+        texts = []
+        for line in result.stdout.splitlines():
+            if not line.strip():
+                continue
+            event = json.loads(line)
+            if event.get("type") == "text":
+                texts.append(event.get("part", {}).get("text", ""))
+        response = "\n".join(texts)
     elif get_config("provider") == "groq":
         default_groq_model = "qwen/qwen3-32b"
         groq_qwen_reasoning_models = ["qwen/qwen3-32b", "qwen-qwq-32b"]

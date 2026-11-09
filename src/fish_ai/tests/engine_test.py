@@ -2,6 +2,8 @@
 
 from unittest.mock import MagicMock, patch
 
+import pytest
+
 from fish_ai.engine import (
     get_commandline_history,
     get_messages,
@@ -595,7 +597,9 @@ def test_atlascloud_default_model(mock_get_openai_client, mock_get_config):
 
 @patch("fish_ai.engine.get_config")
 @patch("fish_ai.engine.get_openai_client")
-def test_cheaperinference_default_model(mock_get_openai_client, mock_get_config):
+def test_cheaperinference_default_model(
+    mock_get_openai_client, mock_get_config
+):
     def config_side_effect(key):
         return {"provider": "cheaperinference", "redact": "False"}.get(key)
 
@@ -612,3 +616,44 @@ def test_cheaperinference_default_model(mock_get_openai_client, mock_get_config)
     kwargs = mock_client.chat.completions.create.call_args.kwargs
     assert kwargs["model"] == "gpt-5.4-mini"
     assert kwargs["stream"] is False
+
+
+@patch("fish_ai.engine.get_config")
+@patch("subprocess.run")
+def test_opencode_happy_path(mock_run, mock_get_config):
+    def config_side_effect(key):
+        return {"provider": "opencode", "redact": "False"}.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+    mock_run.return_value = MagicMock(
+        returncode=0,
+        stdout="\n".join(
+            [
+                '{"type":"step_start","part":{"type":"step-start"}}',
+                '{"type":"text","part":{"type":"text","text":"echo hello"}}',
+                '{"type":"step_finish","part":{"type":"step-finish"}}',
+            ]
+        ),
+    )
+
+    response = get_response([{"role": "user", "content": "say hello"}])
+
+    assert response == "echo hello"
+    args = mock_run.call_args.args[0]
+    assert args[:4] == ["opencode", "run", "--format", "json"]
+
+
+@patch("fish_ai.engine.get_config")
+@patch("subprocess.run")
+def test_opencode_non_zero_exit_code(mock_run, mock_get_config, capsys):
+    def config_side_effect(key):
+        return {"provider": "opencode", "redact": "False"}.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+    mock_run.return_value = MagicMock(returncode=2, stdout="something broke")
+
+    with pytest.raises(SystemExit) as e:
+        get_response([{"role": "user", "content": "say hello"}])
+
+    assert e.value.code == 2
+    assert "something broke" in capsys.readouterr().err
