@@ -699,3 +699,31 @@ def test_runcrate_default_model(mock_get_openai_client, mock_get_config):
     kwargs = mock_client.chat.completions.create.call_args.kwargs
     assert kwargs["model"] == "deepseek-ai/DeepSeek-V4.1-Flash"
     assert kwargs["stream"] is False
+
+
+@patch("fish_ai.engine.get_config")
+def test_anthropic_subscription_runs_claude_without_tools_in_safe_mode(
+    mock_get_config,
+):
+    """A project's hooks and MCP servers must not run for a text reply."""
+
+    def config_side_effect(key):
+        config = {
+            "provider": "anthropic",
+            "use_subscription": "True",
+            "model": "haiku",
+            "redact": "False",
+        }
+        return config.get(key)
+
+    mock_get_config.side_effect = config_side_effect
+
+    with patch("subprocess.run") as mock_run:
+        mock_run.return_value = MagicMock(stdout="echo hello")
+        response = get_response([{"role": "user", "content": "hello"}])
+
+    assert response == "echo hello"
+    args = mock_run.call_args.args[0]
+    assert args[:2] == ["claude", "-p"]
+    assert args[3:] == ["--tools", "", "--model", "haiku"]
+    assert mock_run.call_args.kwargs["env"]["CLAUDE_CODE_SAFE_MODE"] == "1"
