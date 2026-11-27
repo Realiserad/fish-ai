@@ -430,7 +430,11 @@ def get_response(messages):
                 import subprocess
                 import sys
 
-                args = ["claude", "-p", str(messages)]
+                # No tools, and safe mode: no hooks, MCP servers, plugins or
+                # CLAUDE.md, which a project's .claude/ could otherwise add
+                # (and run) wherever the shell happens to be. An environment
+                # variable, which a Claude Code before 2.1.169 ignores.
+                args = ["claude", "-p", str(messages), "--tools", ""]
                 model = get_config("model")
                 if model:
                     args += ["--model", model]
@@ -439,6 +443,7 @@ def get_response(messages):
                     capture_output=True,
                     text=True,
                     check=True,
+                    env={**environ, "CLAUDE_CODE_SAFE_MODE": "1"},
                 )
                 return result.stdout
             except FileNotFoundError:
