@@ -91,6 +91,12 @@ function _fish_ai_update --on-event fish_ai_update
             mv "$HOME/.config/fish-ai.ini" "$_fish_ai_config_path"
         end
     end
+    # Not installed yet: fisher counts a plugin as installed when its fish
+    # variables say so, e.g. when they were copied from another machine.
+    if not test -x "$_fish_ai_install_dir/bin/lookup_setting"
+        _fish_ai_install
+        return
+    end
     # Upgrade to fish-ai 2.0.0
     set -l provider ("$_fish_ai_install_dir/bin/lookup_setting" provider)
     if test "$provider" = huggingface
